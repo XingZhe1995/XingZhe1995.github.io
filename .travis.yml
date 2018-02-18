@@ -1,0 +1,35 @@
+language: node_js
+
+node_js: stable
+
+cache:
+  directories:
+    - "node_modules"
+
+branches:
+  only:
+    - hexo
+
+install:
+  - npm install
+
+script:
+  - hexo g
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: ./public
+  target-branch: master
+  email: 3137650480@qq.com
+  name: cyl
+  on:
+    branch:
+      - hexo
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
