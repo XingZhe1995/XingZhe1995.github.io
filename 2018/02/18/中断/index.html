@@ -103,24 +103,24 @@
   <meta name="keywords" content="Hexo, NexT" />
 
 
-<meta name="description" content="Index Index">
+<meta name="description" content="中断  整个中断过程由如下三部分组成:  中断发生CPU在处理某一事件A时，发生了另一事件B请求CPU迅速去处理（中断发生  中断响应和中断服务CPU暂时中断当前的工作，转去处理事件B（中断响应和中断服务）  中断返回待CPU将事件B处理完毕后，再回到原来事件A被中断的地方继续处理事件A（中断返回）   示意图：中断系统.png 其它概念中断源：引起CPU中断的根源中断源向CPU提出的中断请求。C">
 <meta property="og:type" content="article">
-<meta property="og:title" content="index">
-<meta property="og:url" content="http://blog.yilinfeng.top/2018/02/18/index/index.html">
+<meta property="og:title" content="中断">
+<meta property="og:url" content="http://blog.yilinfeng.top/2018/02/18/中断/index.html">
 <meta property="og:site_name" content="每天一点">
-<meta property="og:description" content="Index Index">
+<meta property="og:description" content="中断  整个中断过程由如下三部分组成:  中断发生CPU在处理某一事件A时，发生了另一事件B请求CPU迅速去处理（中断发生  中断响应和中断服务CPU暂时中断当前的工作，转去处理事件B（中断响应和中断服务）  中断返回待CPU将事件B处理完毕后，再回到原来事件A被中断的地方继续处理事件A（中断返回）   示意图：中断系统.png 其它概念中断源：引起CPU中断的根源中断源向CPU提出的中断请求。C">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-02-18T14:24:49.163Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="index">
-<meta name="twitter:description" content="Index Index">
+<meta name="twitter:title" content="中断">
+<meta name="twitter:description" content="中断  整个中断过程由如下三部分组成:  中断发生CPU在处理某一事件A时，发生了另一事件B请求CPU迅速去处理（中断发生  中断响应和中断服务CPU暂时中断当前的工作，转去处理事件B（中断响应和中断服务）  中断返回待CPU将事件B处理完毕后，再回到原来事件A被中断的地方继续处理事件A（中断返回）   示意图：中断系统.png 其它概念中断源：引起CPU中断的根源中断源向CPU提出的中断请求。C">
 
 
 
 
 
 
-  <link rel="canonical" href="http://blog.yilinfeng.top/2018/02/18/index/"/>
+  <link rel="canonical" href="http://blog.yilinfeng.top/2018/02/18/中断/"/>
 
 
 
@@ -129,7 +129,7 @@
     sidebar: "",
   };
 </script>
-  <title>index | 每天一点</title>
+  <title>中断 | 每天一点</title>
   
 
 
@@ -264,7 +264,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yilinfeng.top/2018/02/18/index/">
+    <link itemprop="mainEntityOfPage" href="http://blog.yilinfeng.top/2018/02/18/中断/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="月下休憩">
@@ -281,7 +281,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">index</h1>
+          <h1 class="post-title" itemprop="name headline">中断</h1>
         
 
         <div class="post-meta">
@@ -293,7 +293,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-18T07:47:27+00:00">2018-02-18</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-18T14:21:41+00:00">2018-02-18</time>
             
 
             
@@ -330,7 +330,40 @@
       
 
       
-        <h1 id="Index-Index"><a href="#Index-Index" class="headerlink" title="Index Index"></a>Index Index</h1>
+        <h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><p>  整个中断过程由如下三部分组成:</p>
+<ul>
+<li><p>中断发生<br>CPU在处理某一事件A时，发生了另一事件B请求CPU迅速去处理（中断<br>发生</p>
+</li>
+<li><p>中断响应和中断服务<br>CPU暂时中断当前的工作，转去处理事件B（中断响应和中断服务）</p>
+</li>
+<li><p>中断返回<br>待CPU将事件B处理完毕后，再回到原来事件A被中断的地方继续处理事件A（中断返回）</p>
+</li>
+</ul>
+<p>示意图：中断系统.png</p>
+<p>其它概念<br>中断源：引起CPU中断的根源<br>中断源向CPU提出的中断请求。CPU暂时中断原来的事务A，转去处理事件B，对事件B处理完毕后，再回到原来被中断的地方（即<strong>断点</strong>），称为中断返回，实现上述中断功能的部件称为 <strong>中断系统</strong><br>示意图：中断系统02.png</p>
+<p>作用：解决了快速主机与慢速I/O设备的数据传送问题<br>特点：<br>分时操作：CPU可以分时为多个I/O设备服务，提高了计算机的利用率<br>实时响应：CPU能够及时处理应用系统的随机事件，系统的实时性大大增强<br>可靠性高：CPU具有处理设备故障及掉电等突发性事件能力，从而使系统可靠性提高</p>
+<p>中断允许控制<br>CPU对中断系统所有中断以及某个中断源的开放和屏蔽是由中断允许寄存器IE控制的<br>中断请求标志</p>
+<p>中断优先级<br>同一优先级中的中断请求不止一个时，则有中断优先权排队问题。同一优先级的中断优先权排队，由中断系统硬件确定的自然优先级形成</p>
+<p>51单片机的中断优先级三原则：</p>
+<ol>
+<li>CPU同时接收到几个中断时，首先响应优先级别最高的中断请求</li>
+<li>正在进行的中断过程不能被新的同级或低优先级的中断请求所中断</li>
+<li>正在进行的低优先级中断服务，能被高优先级中断请求所中断</li>
+</ol>
+<p>为了实现上述后两条原则，中断系统内部设有两个用户不能寻址的优先级状态触发器，其中一个置1，表示正在响应高优先级的中断，它将阻断后来所有的中断请求，另一个置1，表示正在响应低优先级中断，它将阻断后来所有的低优先级中断请求。</p>
+<p>中断响应条件</p>
+<ol>
+<li>中断源有中断请求</li>
+<li>此中断源的中断允许位为1</li>
+<li>CPU开中断<br>以上三条同时满足市，CPU才有可能响应中断</li>
+</ol>
+<p>使用中断，程序员需要做什么？</p>
+<ol>
+<li>你想使用的中断是那个？选择相应的中断号</li>
+<li>你所希望的触发条件是什么？</li>
+<li>你希望在中断之后干什么？</li>
+</ol>
+
       
     </div>
 
@@ -357,15 +390,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/02/18/定时器/" rel="next" title="定时器">
+                <i class="fa fa-chevron-left"></i> 定时器
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/18/CPU时序/" rel="prev" title="CPU时序">
-                CPU时序 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -479,7 +512,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Index-Index"><span class="nav-number">1.</span> <span class="nav-text">Index Index</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#中断"><span class="nav-number">1.</span> <span class="nav-text">中断</span></a></li></ol></div>
             
 
           </div>
