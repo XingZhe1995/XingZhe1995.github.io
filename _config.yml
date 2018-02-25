@@ -79,9 +79,6 @@ theme: next
 deploy:
   type:
 
-# 压缩文件
-all_minifier: true
-
 # set theme config
 theme_config:
   # 主题
@@ -103,6 +100,7 @@ theme_config:
   github_banner: https://github.com/InitNext || Follow me on GitHub
   social:
     GitHub: https://github.com/InitNext || github
+    E-Mail: mailto:3137650480@qq.com || envelope
 
   # 二次元模型
   live2d:
