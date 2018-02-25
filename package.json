@@ -5,7 +5,8 @@
     "start": "hexo s",
     "new": "hexo new",
     "build": "hexo clean && hexo g",
-    "clean": "hexo clean"
+    "clean": "hexo clean",
+    "dev": "hexo s --debug"
   },
   "hexo": {
     "version": "3.5.0"
