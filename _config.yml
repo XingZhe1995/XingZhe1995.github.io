@@ -92,6 +92,7 @@ live2d:
     # height: 300
   mobile:
     show: true
+    scale: 0.1
 
 # set theme config
 theme_config:
