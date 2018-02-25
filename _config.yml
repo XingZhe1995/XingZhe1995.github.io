@@ -79,6 +79,20 @@ theme: next
 deploy:
   type:
 
+# 看板娘
+live2d:
+  enable: true
+  # jsdeliver CDN
+  scriptFrom: jsdelivr
+  model:
+    use: https://cdn.jsdelivr.net/npm/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json
+  display:
+    position: left
+    width: 100
+    # height: 300
+  mobile:
+    show: true
+
 # set theme config
 theme_config:
   # 主题
@@ -101,17 +115,3 @@ theme_config:
   social:
     GitHub: https://github.com/InitNext || github
     E-Mail: mailto:3137650480@qq.com || envelope
-
-  # 二次元模型
-  live2d:
-    enable: true
-    # jsdelivr CDN
-    scriptFrom: jsdelivr
-    model:
-      use: https://cdn.jsdelivr.net/npm/live2d-widget-model-koharu@1.0.5/package.json
-    display:
-      position: left
-      width: 150
-      height: 300
-    mobile:
-      show: true
