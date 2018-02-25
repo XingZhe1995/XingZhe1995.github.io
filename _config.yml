@@ -5,7 +5,7 @@
 # Site
 title: 每天一点
 subtitle: 做一个混吃等死的程序猿
-description:
+description: 持之以恒 切忌浮躁
 author: 月下休憩
 language: zh-CN
 timezone: Asia/Shanghai
@@ -81,11 +81,14 @@ deploy:
 
 # set theme config
 theme_config:
+  # 主题
   scheme: Mist
+  # 头像
+  avatar: /images/avatar.png
+  # 菜单
   menu:
     home: / || home
     tags: /tags/ || tags
     categories: /categories/ || th
     archives: /archives/ || archive
     commonweal: /404.html || heartbeat
-  canvas_nest: true
