@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "hexo s",
-    "new":"hexo new",
+    "new": "hexo new",
     "build": "hexo clean && hexo g",
     "clean": "hexo clean"
   },

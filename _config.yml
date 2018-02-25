@@ -78,3 +78,14 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type:
+
+# set theme config
+theme_config:
+  scheme: Mist
+  menu:
+    home: / || home
+    tags: /tags/ || tags
+    categories: /categories/ || th
+    archives: /archives/ || archive
+    commonweal: /404.html || heartbeat
+  canvas_nest: true
