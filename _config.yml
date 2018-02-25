@@ -79,6 +79,9 @@ theme: next
 deploy:
   type:
 
+# 压缩文件
+all_minifier: true
+
 # set theme config
 theme_config:
   # 主题
@@ -100,3 +103,17 @@ theme_config:
   github_banner: https://github.com/InitNext || Follow me on GitHub
   social:
     GitHub: https://github.com/InitNext || github
+
+  # 二次元模型
+  live2d:
+    enable: true
+    # jsdelivr CDN
+    scriptFrom: jsdelivr
+    model:
+      use: https://cdn.jsdelivr.net/npm/live2d-widget-model-koharu@1.0.5/package.json
+    display:
+      position: left
+      width: 150
+      height: 300
+    mobile:
+      show: true
