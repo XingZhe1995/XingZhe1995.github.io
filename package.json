@@ -2,7 +2,8 @@
   "name": "blog",
   "version": "1.0.0",
   "scripts": {
-    "start": "hexo s",
+    "start": "hexo s --draft",
+    "server": "hexo s",
     "new": "hexo new",
     "build": "hexo clean && hexo g",
     "clean": "hexo clean",

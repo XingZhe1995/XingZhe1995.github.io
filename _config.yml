@@ -106,10 +106,6 @@ theme_config:
     categories: /categories/ || th
     archives: /archives/ || archive
     commonweal: /404.html || heartbeat
-  # 自动文章摘要，显示阅读全文按钮
-  auto_excerpt:
-    enable: true
-    length: 150
   # github fork me 标志
   github_banner: https://github.com/InitNext || Follow me on GitHub
   social:
