@@ -111,3 +111,8 @@ theme_config:
   social:
     GitHub: https://github.com/InitNext || github
     E-Mail: mailto:3137650480@qq.com || envelope
+
+  font:
+    enable: true
+    global:
+      size: 18
