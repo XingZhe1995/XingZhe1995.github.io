@@ -115,4 +115,4 @@ theme_config:
   font:
     enable: true
     global:
-      size: 18
+      size: 16

@@ -1,5 +1,4 @@
 # 月下休憩的个人博客
----
 
 [![Build Status](https://www.travis-ci.org/InitNext/InitNext.github.io.svg?branch=hexo)](https://www.travis-ci.org/InitNext/InitNext.github.io)
 
