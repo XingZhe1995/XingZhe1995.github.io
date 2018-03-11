@@ -1,0 +1,132 @@
+---
+title: Python之科学计算包Numpy
+tags:
+categories:
+---
+
+Numpy-科学计算包
+<!-- more -->
+
+# shape
+
+作用：探测数组的维度
+
+``` python
+>>> arr = array([[0.0,0.1,0.2],[1.0,1.1,1.2]])
+>>> arr.shape
+(2,3)
+>>> arr.shape[0]
+2
+>>> arr.shape[1]
+3
+```
+
+# tile
+
+``` python
+tile(A,B)
+```
+
+作用:重复A，B*次（B可以是int类型，也可以是元组类型）*
+
+当B是int类型时，在列方向上重复B次，行默认1次
+
+``` python
+>>> tile([0,1,2],3)
+array([0, 1, 2, 0, 1, 2, 0, 1, 2])
+
+>>> tile([[0.0,0.1],[1.0,1.1]],3)
+array([[0. , 0.1, 0. , 0.1, 0. , 0.1],
+       [1. , 1.1, 1. , 1.1, 1. , 1.1]])
+```
+
+当B是元组类型时，分别在对应维度重复指定次数
+
+``` python
+>>> tile([0,1,2],(2,3))
+array([[0, 1, 2, 0, 1, 2, 0, 1, 2],
+       [0, 1, 2, 0, 1, 2, 0, 1, 2]])
+```
+
+# sum
+
+作用：给定轴上数组元素的和
+
+假设存在三位数组：
+
+``` python
+arr = [
+  [
+    [0,1,2],
+    [1,2,3],
+    [2,3,4]
+  ],
+  [
+    [1,2,3],
+    [2,3,4],
+    [3,4,5]
+  ]
+]
+
+>>> shape(arr)
+(2,3,3)
+```
+
+当没有指定axis时，是求整个数组的和：
+
+``` python
+>>> sum(arr)
+45
+```
+
+当指定axis时，是求该axis(轴)的和
+
+``` python
+>>> sum(arr,axis=0)
+array([[1, 3, 5],
+       [3, 5, 7],
+       [5, 7, 9]])
+>>> sum(arr,axis=1)
+array([[ 3,  6,  9],
+       [ 6,  9, 12]])
+>>> sum(arr,axis=2)
+array([[ 3,  6,  9],
+       [ 6,  9, 12]])
+```
+
+注意：当指定axis时，对所求出的和再进行求和最终是等于不加axis时的值
+
+参考传送门[python 中 np.sum()函数 通俗易懂理解！](http://blog.csdn.net/rifengxxc/article/details/75008427)
+
+# argsort
+
+作用：对数组进行排序，并按从小到大返回相应的索引值
+
+``` python
+>>> argsort([2,3,1])
+array([2, 0, 1])
+
+>>> argsort([[6,4,2],[1,5,3]])
+array([[2, 1, 0],
+       [0, 2, 1]])
+```
+
+当指定axis时，根据指定axis(轴)进行排序*(axis默认值为-1，即最后一轴)*
+
+``` python
+>>> argsort([[6,4,2],[1,5,3]],axis=0)
+array([[1, 0, 0],
+       [0, 1, 1]])
+
+# 在这里数组只有两维，即axis=1与默认的axis=-1等效
+>>> argsort([[6,4,2],[1,5,3]],axis=1)
+array([[2, 1, 0],
+       [0, 2, 1]])
+```
+
+
+参考传送门[argsort](https://docs.scipy.org/doc/numpy-dev/reference/generated/numpy.argsort.html#numpy.argsort)
+
+# 参考
+
+[Numpy官方文档](https://docs.scipy.org/doc/numpy-dev/user/quickstart.html)
