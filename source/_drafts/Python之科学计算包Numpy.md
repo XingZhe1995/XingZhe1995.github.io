@@ -124,8 +124,29 @@ array([[2, 1, 0],
        [0, 2, 1]])
 ```
 
-
 参考传送门[argsort](https://docs.scipy.org/doc/numpy-dev/reference/generated/numpy.argsort.html#numpy.argsort)
+
+# zeros
+
+作用：创建指定维度和类型并以0填充的数组。
+
+创建一维数组
+
+``` python
+>>> zeros(5)
+array([0., 0., 0., 0., 0.])
+```
+
+创建多维数组
+
+``` python
+>>> zeros((5,2))
+array([[0., 0.],
+       [0., 0.],
+       [0., 0.],
+       [0., 0.],
+       [0., 0.]])
+```
 
 # 参考
 

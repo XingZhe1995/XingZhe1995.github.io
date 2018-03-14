@@ -28,3 +28,44 @@ sorted([3,1,2],reverse=True)
 >>> sorted([3,1,2],reverse=False)
 [1, 2, 3]
 ```
+
+# len()
+
+``` python
+def len(object)
+```
+
+作用：返回字符串、列表、字典、元组等长度
+
+参数：
+1.object：要计算的字符串、列表、字典、元组等
+
+``` python
+>>> len('12345')
+5
+
+>>> len([1,2,3,4,5])
+5
+
+>>> len({"first":1,"second":2,"third":3})
+3
+
+>>> len(('1','2','3'))
+3
+```
+
+# strip()、lstrip()、rstrip()
+
+``` python
+S.strip([chars])
+```
+
+作用：删除前导和后缀字符并返回字符串；当不加参数时，默认删除前后空格；
+
+``` python
+>>> str = ' abcd '
+>>> str
+' abcd '
+>>> str.strip()
+'abcd'
+```
