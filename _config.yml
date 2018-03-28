@@ -116,3 +116,6 @@ theme_config:
     enable: true
     global:
       size: 16
+
+  math:
+    enable: true
