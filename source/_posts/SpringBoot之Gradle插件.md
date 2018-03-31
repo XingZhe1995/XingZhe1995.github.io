@@ -11,7 +11,6 @@ categories:
 date: 2018-03-31 15:42:56
 ---
 
-
 在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。
 
 <!-- more -->
@@ -30,7 +29,7 @@ date: 2018-03-31 15:42:56
 
 在Gradle中想要使用SpringBoot插件，需要如下的4个步骤：
 
-1. 配置下载插件的仓库地址：https://repo.spring.io/libs-snapshot
+1. 配置下载插件的仓库地址：[https://repo.spring.io/libs-snapshot](https://repo.spring.io/libs-snapshot)
 2. 在依赖中引入要使用的插件，即SpringBoot的Gradle插件spring-boot-gradel-plugin
 3. 指定插件的版本，最好与项目使用的Spring Boot版本一致。
 4. 应用插件
