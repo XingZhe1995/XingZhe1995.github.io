@@ -43,7 +43,9 @@ buildscript {
     }
 
     repositories {
-        maven { url 'https://repo.spring.io/libs-snapshot' }
+        jcenter()
+        maven { url 'https://repo.spring.io/snapshot' }
+        maven { url 'https://repo.spring.io/milestone' }
     }
 
     dependencies {
@@ -52,11 +54,17 @@ buildscript {
 }
 
 apply plugin: 'org.springframework.boot'
+
+// 这里应用Java插件或者war插件
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
 ```
 
 通过上述配置，就能在整个项目中使用SpringBoot插件了。同时为了方便后续spring boot的版本更改，在配置中加入了自定义的变量*springbootVersion*，用于指代spring boot的版本。
 
 注：在Gradle的字符串中使用变量，需要在双引号中使用（在单引号中会无法识别），并且要以*${变量名}*这种形式进行引用。
+
+在Spring Boot项目中，除了springboot插件外，还需要Java插件或War插件，以及dependency-management插件，才能达到构建项目所需的最少插件。
 
 ## 运行应用
 
@@ -90,7 +98,9 @@ springBoot {
 
 ## 依赖管理
 
-当项目中应用io.spring.dependency-management插件时，Spring Boot的插件会自动从项目中正在使用的Spring Boot版本导入spring-boot-dependencies bom。这为Maven用户提供了类似的依赖管理体验，可以像使用使用maven一样，自定义依赖的jar包版本、排除依赖等。
+当项目中应用io.spring.dependency-management插件时，Spring Boot的插件会自动从项目中正在使用的Spring Boot版本导入相应的spring-boot-dependencies bom。这为Maven用户提供了类似的依赖管理体验，可以像使用使用maven一样，自定义依赖的jar包版本、排除依赖等。
+
+当然可以不使用io.spring.dependency-management插件，但是这会为项目的管理徒然增加难度。
 
 ### 自定义版本号
 
@@ -145,7 +155,7 @@ apply plugin: 'io.spring.dependency-management'
 
 当项目应用*io.spring.dependency-management*插件时，SpringBoot插件将会自动从项目中正在使用的Spring Boot版本中导入spring-boot-dependencies bom。为Maven用户提供了类似的依赖管理体验。
 
-当需要自定义依赖关系时，该插件非常有用，但是在平时可以无需使用。
+注意：当使用了该插件时，可以在引用spring-boot-starter-**项目时省略相应的版本号，默认使用与项目一致的版本号。
 
 ## 打包
 
