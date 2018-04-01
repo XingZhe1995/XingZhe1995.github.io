@@ -130,7 +130,7 @@
 <meta property="og:site_name" content="每天一点">
 <meta property="og:description" content="在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-01T09:14:10.099Z">
+<meta property="og:updated_time" content="2018-04-01T16:17:44.213Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot之Gradle插件">
 <meta name="twitter:description" content="在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。">
@@ -426,9 +426,10 @@
 <li>应用插件</li>
 </ol>
 <p>整个基本配置如下所示：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    ext &#123;</span><br><span class="line">        springbootVersion = <span class="string">'2.0.1.BUILD-SNAPSHOT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        maven &#123; url <span class="string">'https://repo.spring.io/libs-snapshot'</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">"org.springframework.boot:spring-boot-gradle-plugin:$&#123;springbootVersion&#125;"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'org.springframework.boot'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    ext &#123;</span><br><span class="line">        springbootVersion = <span class="string">'2.0.1.BUILD-SNAPSHOT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        maven &#123; url <span class="string">'https://repo.spring.io/snapshot'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'https://repo.spring.io/milestone'</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">"org.springframework.boot:spring-boot-gradle-plugin:$&#123;springbootVersion&#125;"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'org.springframework.boot'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里应用Java插件或者war插件</span></span><br><span class="line">apply plugin: <span class="string">'java'</span></span><br><span class="line">apply plugin: <span class="string">'io.spring.dependency-management'</span></span><br></pre></td></tr></table></figure>
 <p>通过上述配置，就能在整个项目中使用SpringBoot插件了。同时为了方便后续spring boot的版本更改，在配置中加入了自定义的变量<em>springbootVersion</em>，用于指代spring boot的版本。</p>
 <p>注：在Gradle的字符串中使用变量，需要在双引号中使用（在单引号中会无法识别），并且要以<em>${变量名}</em>这种形式进行引用。</p>
+<p>在Spring Boot项目中，除了springboot插件外，还需要Java插件或War插件，以及dependency-management插件，才能达到构建项目所需的最少插件。</p>
 <h2 id="运行应用"><a href="#运行应用" class="headerlink" title="运行应用"></a>运行应用</h2><p>要在不创建归档文件（jar、war）的情况下运行应用程序，需要使用bootRun任务：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle bootRun</span><br></pre></td></tr></table></figure>
 <h3 id="配置主类"><a href="#配置主类" class="headerlink" title="配置主类"></a>配置主类</h3><p>通过配置主类可以指定应用的运行入口。</p>
@@ -437,7 +438,8 @@
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bootRun &#123;</span><br><span class="line">  main = <span class="string">'com.example.ExampleApplication'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>或者，可以使用Spring Boot DSL的mainClassName属性在项目范围内配置主类：</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">springBoot &#123;</span><br><span class="line">  mainClassName =<span class="string">'com.example.ExampleApplication'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><p>当项目中应用io.spring.dependency-management插件时，Spring Boot的插件会自动从项目中正在使用的Spring Boot版本导入spring-boot-dependencies bom。这为Maven用户提供了类似的依赖管理体验，可以像使用使用maven一样，自定义依赖的jar包版本、排除依赖等。</p>
+<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><p>当项目中应用io.spring.dependency-management插件时，Spring Boot的插件会自动从项目中正在使用的Spring Boot版本导入相应的spring-boot-dependencies bom。这为Maven用户提供了类似的依赖管理体验，可以像使用使用maven一样，自定义依赖的jar包版本、排除依赖等。</p>
+<p>当然可以不使用io.spring.dependency-management插件，但是这会为项目的管理徒然增加难度。</p>
 <h3 id="自定义版本号"><a href="#自定义版本号" class="headerlink" title="自定义版本号"></a>自定义版本号</h3><p>通过使用依赖管理插件，可以使用属性来控制依赖关系的版本，参考<a href="https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-dependencies/pom.xml" target="_blank" rel="noopener">bom</a>，例子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext[<span class="string">'slf4j.version'</span>] = <span class="string">'1.7.20'</span></span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -466,7 +468,7 @@
 <p>注意：使用了war插件就不需要再使用Java插件了。</p>
 <h3 id="dependency-management插件"><a href="#dependency-management插件" class="headerlink" title="dependency-management插件"></a>dependency-management插件</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'io.spring.dependency-management'</span></span><br></pre></td></tr></table></figure>
 <p>当项目应用<em>io.spring.dependency-management</em>插件时，SpringBoot插件将会自动从项目中正在使用的Spring Boot版本中导入spring-boot-dependencies bom。为Maven用户提供了类似的依赖管理体验。</p>
-<p>当需要自定义依赖关系时，该插件非常有用，但是在平时可以无需使用。</p>
+<p>注意：当使用了该插件时，可以在引用spring-boot-starter-**项目时省略相应的版本号，默认使用与项目一致的版本号。</p>
 <h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><p>SpringBoot插件可以创建可执行的归档文件（jar、war），其中包含了一个应用所需的全部依赖，并且能够使用<em>java -jar</em>命令来运行。</p>
 <h3 id="打包可执行的jar"><a href="#打包可执行的jar" class="headerlink" title="打包可执行的jar"></a>打包可执行的jar</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle bootJar</span><br></pre></td></tr></table></figure>
 <p>可执行jar可以使用bootJar任务来构建。该任务在应用java插件时自动创建，并且是BootJar的一个实例。assemble任务自动配置为依赖于bootJar任务，因此运行assemble（或built）也将运行bootJar任务</p>
@@ -532,6 +534,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/01/SpringBoot之devtools模块/" rel="prev" title="Spring Boot之devtools模块">
+                Spring Boot之devtools模块 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -609,7 +615,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
