@@ -5,6 +5,7 @@ tags:
   - 工具
 categories:
   - 工具
+mathjax: true
 ---
 
 
@@ -163,7 +164,7 @@ git submodule update --remote
 
 使用该种方式对主题的定制化，是通过在站定配置文件追加*theme_config*字段实现的，只要是主题配置文件中存在的字段就能够在*theme_config*字段下使用(*注意缩进*)，并且作用到主题中。例子：
 
-``` shell
+``` yaml
 theme_config:
   # 主题
   scheme: Mist
@@ -176,6 +177,50 @@ theme_config:
     categories: /categories/ || th
     archives: /archives/ || archive
 ```
+
+### 数学公式渲染
+
+写博客的过程中可能会遇到需要编写数学公式的情景，要是使用图片来代替的话就不太优雅了，这时候可以考虑使用数学渲染引擎来直接渲染出数学公式了，幸运的是Next主题已经替我们准备好了。Next主题提供了两个渲染引擎：mathjax和katex，mathjax渲染速度较慢，但是支持的范围较广，katex渲染速度快，但是支持的范围较窄，因此博主选择了mathjax，以下内容也以mathjax为例，如果有需要的读者可自行查询文档：[katex安装](https://github.com/theme-next/hexo-theme-next/blob/master/docs/MATH.md)
+
+首先卸载hexo自带的渲染工具
+``` shell
+npm un hexo-renderer-marked --save
+```
+
+然后安装新的渲染工具，根据官方文档说，mathjax只能在hexo-renderer-kramed和hexo-renderer-pandoc中二选一，在这里博主选择了hexo-renderer-kramed
+``` shell
+npm i hexo-renderer-kramed --save # or hexo-renderer-pandoc
+```
+
+在站点配置文件中，写入如下配置
+``` yaml
+theme_config:
+  math:
+    enable: true
+    engine: mathjax
+    mathjax:
+      cdn: //cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+```
+即可使博客网站具备渲染数学公式的能力，更多的配置可在主题配置文件（Next/_config.yml）的math部分查看。
+
+然后在需要进行数学公式渲染的markdown文件中，开头部分加入mathjax: true，即可让数学渲染引擎对该文件进行渲染，如果不需要进行数学渲染的切记不要添加，因为会有损性能。
+``` markdown
+---
+title: 
+date: 
+tags:
+categories:
+mathjax: true
+---
+```
+如果成功了的话，就能看到你现在所看到的数学公式了
+$$
+f(n) =
+\begin{cases}
+n/2,  & \text{if $n$ is even} \\
+3n+1, & \text{if $n$ is odd}
+\end{cases}
+$$
 
 # 自动部署
 
