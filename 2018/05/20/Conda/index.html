@@ -142,7 +142,7 @@
 <meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_create.png">
 <meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_list.png">
 <meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_search.png">
-<meta property="og:updated_time" content="2018-05-20T09:10:47.246Z">
+<meta property="og:updated_time" content="2018-05-20T09:14:36.102Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Conda">
 <meta name="twitter:description" content="Conda是一个包管理、依赖管理和环境管理工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。">
@@ -441,7 +441,7 @@
 <p>那么到底怎么创建一个新的环境呢？</p>
 <h1 id="环境创建、克隆、激活和删除"><a href="#环境创建、克隆、激活和删除" class="headerlink" title="环境创建、克隆、激活和删除"></a>环境创建、克隆、激活和删除</h1><p>想要创建环境，只要输入如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 不指定python版本</span><br><span class="line">conda create --name env-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 指定python版本</span><br><span class="line">conda create --name env-name python=2.7</span><br></pre></td></tr></table></figure></p>
 <p>其中env-name是该新建环境的名称；python是该环境中的python版本，默认情况下如果不写该参数，将会延用base环境中的python版本，而base环境中的python版本就是下载部分选择conda安装包时的python版本。<br><img src="/images/conda/conda_create.png" alt="conda创建环境"><br>创建成功后就能看到如上的显示，想要激活环境，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate env-name</span><br></pre></td></tr></table></figure></p>
-<p>想要取消激活，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate env-name</span><br></pre></td></tr></table></figure></p>
+<p>想要取消激活，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure></p>
 <p>当然，也可以直接关闭命令窗口来退出已激活的环境。</p>
 <p>注意：在没有激活任何环境的情况下都是处于base环境之下的，就算激活了其它环境也只在激活的命令窗口下是激活环境，在激活环境下的任何操作，都不会对其它环境产生影响，当然这也就是conda的意义所在。</p>
 <p>在某些情况下如果想要复制已有的环境，可以输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create --name new-env-name --clone env-name</span><br></pre></td></tr></table></figure></p>
