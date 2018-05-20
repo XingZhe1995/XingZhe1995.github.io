@@ -1,9 +1,7 @@
 ---
 title: SpringBoot之Gradle插件
 tags:
-  - java
   - spring
-  - spring boot
 categories:
   - 框架
   - spring

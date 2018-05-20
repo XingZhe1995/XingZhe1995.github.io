@@ -1,9 +1,7 @@
 ---
 title: Spring Boot之devtools模块
 tags:
-  - java
   - spring
-  - spring boot
 categories:
   - 框架
   - spring

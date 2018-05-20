@@ -1,8 +1,6 @@
 ---
 title: k-近邻算法
 tags:
-  - 机器学习
-  - 算法
 categories:
   - 机器学习
   - 算法

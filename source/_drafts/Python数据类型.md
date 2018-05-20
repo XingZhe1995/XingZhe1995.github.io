@@ -1,8 +1,6 @@
 ---
 title: Python数据类型
 tags:
-  - 编程语言
-  - Python
 categories:
   - 编程语言
   - Python 
