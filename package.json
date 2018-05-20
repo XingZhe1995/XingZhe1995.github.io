@@ -4,10 +4,8 @@
   "scripts": {
     "start": "hexo s --draft",
     "server": "hexo s",
-    "new": "hexo new",
-    "build": "hexo clean && hexo g",
     "clean": "hexo clean",
-    "dev": "hexo s --debug"
+    "cli": "hexo"
   },
   "hexo": {
     "version": "3.5.0"
