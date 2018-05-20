@@ -108,7 +108,7 @@ conda activate env-name
 ```
 想要取消激活，输入：
 ``` shell
-conda deactivate env-name
+conda deactivate
 ```
 当然，也可以直接关闭命令窗口来退出已激活的环境。
 
