@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+<meta name="description" content="Conda是一个包管理、依赖管理和环境管理工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conda">
+<meta property="og:url" content="http://blog.yilinfeng.top/2018/05/20/Conda/index.html">
+<meta property="og:site_name" content="每天一点">
+<meta property="og:description" content="Conda是一个包管理、依赖管理和环境管理工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_prompt.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_cmd.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_rootdir.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/system_path.jpg">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/system_variable_edit.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_path.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_info.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_info.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_info_env.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/activate_tensorflow.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_create.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_list.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/conda/conda_search.png">
+<meta property="og:updated_time" content="2018-05-20T07:48:57.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Conda">
+<meta name="twitter:description" content="Conda是一个包管理、依赖管理和环境管理工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。">
+<meta name="twitter:image" content="http://blog.yilinfeng.top/images/conda/conda_prompt.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.yilinfeng.top/2018/05/20/Conda/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Conda | 每天一点</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">每天一点</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">做一个混吃等死的程序猿</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/InitNext" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yilinfeng.top/2018/05/20/Conda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="月下休憩">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="每天一点">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Conda</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T02:34:06+00:00">2018-05-20</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Conda是一个包管理、依赖管理和<em>环境管理</em>工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。</p>
+<a id="more"></a>
+<h1 id="Conda简介"><a href="#Conda简介" class="headerlink" title="Conda简介"></a>Conda简介</h1><blockquote>
+<p>Conda是一个开源的包管理、依赖管理和环境管理工具，能运行在Windows、macOS和Linux上，具备快速安装、运行和更新包和依赖的能力，能够轻松的创建、保存、加载和切换不同的开发环境。虽然Conda由Python程序创建，但它可以打包并分发任何语言的软件。</p>
+</blockquote>
+<p>通过以上摘录自官网的译文可以知道，Conda对于经常要切换不同的开发环境的开发者来说，是一个极其合适的工具。</p>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p>Conda作为一个管理工具，有两个常见的发行版本：Anaconda和Miniconda，其区别如下：</p>
+<p>Miniconda：仅仅拥有python，conda和一些必须的依赖包,除此之外没有任何附带的东西，操作时需要使用命令行的方式进行操作，占用极小的硬盘空间，但使用的时候需要自己安装所需要的包。<a href="https://conda.io/miniconda.html" target="_blank" rel="noopener">&gt;&gt;&gt;下载&lt;&lt;&lt;</a></p>
+<p>Anaconda：拥有Miniconda所拥有的之外，还自带超过720个的开源包，并且具有图形化的操作界面，安装后即可使用，但占用较大的空间，以及会安装一些自己使用不到的包。<a href="https://www.anaconda.com/download/" target="_blank" rel="noopener">&gt;&gt;&gt;下载&lt;&lt;&lt;</a></p>
+<p>综上来看：两个发行版该有的基本功能一样不缺，但相对而言，Miniconda更适合一些简约的人使用，如果需要省心的话Anaconda就是一个极好的选择，毕竟多占的一些硬盘空间对现在的硬盘来说不算什么，读者可以根据自身情况进行选择。</p>
+<p>博主比较喜欢简约因此使用的是Miniconda，同时为了更好的熟悉conda，下面将会直接使用命令行来进行操作演示。</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>在安装conda的过程中，其中有一个选项就是把conda加入系统环境变量中，官方提示是不建议勾选，因为重装之类的可能会导致找不到相应目录之类的，建议直接使用官方提供的命令行工具，在命令行下找到一个名为<em>Anaconda Prompt</em>的应用，如下所示：<br><img src="/images/conda/conda_prompt.png" alt="Anaconda Prompt"><br>运行后的效果如下所示：<br><img src="/images/conda/conda_cmd.png" alt="Anaconda Prompt CMD"><br>但是经过一段时间的使用后发现还是加入到系统的环境变量中更方便，这样就可以随时随地在任何环境中使用了，如果已经安装了程序但又没有加入系统环境变量的，可以按照如下步骤重新加入：</p>
+<ol>
+<li>找到程序的安装根目录，要是安装时没有指定安装目录的话，一般都是安装在安装时使用的用户的用户目录之下，这里假设路径是conda_rootdir<br><img src="/images/conda/conda_rootdir.png" alt="conda安装根目录"></li>
+<li>打开系统环境变量的设置窗口：我的电脑点击鼠标右键-&gt;属性-&gt;高级系统设置-&gt;环境变量<br><img src="/images/conda/system_path.jpg" alt="系统环境变量"></li>
+<li>在系统变量部分，找到变量名为Path的条目，选中并点击下方的编辑按钮，就能打开编辑界面<br><img src="/images/conda/system_variable_edit.png" alt="系统环境变量编辑窗口"></li>
+<li>把如下的路径添加到系统环境变量中，记得把conda_rootdir替换为自己电脑下conda的安装根目录<br><img src="/images/conda/conda_path.png" alt="conda路径"></li>
+<li>点击确定，保存编辑的内容，然后重新打开命令行窗口，然后输入命令<em>conda info</em>，并显示相应内容的话，就表示配置成功，配置失败的请重新配置<br><img src="/images/conda/conda_info.png" alt="conda信息"></li>
+</ol>
+<h1 id="conda配置文件"><a href="#conda配置文件" class="headerlink" title="conda配置文件"></a>conda配置文件</h1><p>conda安装后会在用户目录下生成一个配置文件<em>.condarc</em>，如果没有的话可以自己创建一个，内容如下：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">channels:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">defaults</span></span><br></pre></td></tr></table></figure></p>
+<p>配置文件中的channels属性指的是安装时的下载来源，defaults指的是默认的下载来源，如果想添加下载源的话只要按照格式添加就可以了。默认源在国内下载速度较慢，所以国内有清华镜像源即<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/" target="_blank" rel="noopener">Anaconda 镜像</a>，使用后速度会有明显的提升，但是在这里依然不建议使用国内的清华源，因为使用一段时间后发现清华源的版本比较旧而且还不全，直接使用默认源的话使用上是基本没有问题，下载时间也就相对清华源慢一些而已。</p>
+<p>默认情况下环境文件以及下载下来的包都是安装在软件根目录下的envs和pkgs文件夹下，如果想要更改安装路径的话，可以加入如下配置<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 环境目录</span></span><br><span class="line"><span class="attr">envs_dirs:</span></span><br><span class="line"><span class="attr">  - E:</span><span class="string">\Documents\Code\alpha\conda\envs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 包目录</span></span><br><span class="line"><span class="attr">pkgs_dirs:</span></span><br><span class="line"><span class="attr">  - E:</span><span class="string">\Documents\Code\alpha\conda\pkgs</span></span><br></pre></td></tr></table></figure></p>
+<p>如果有想了解更多的可以直接访问官网了解详细的配置<a href="https://conda.io/docs/user-guide/configuration/use-condarc.html" target="_blank" rel="noopener">&gt;&gt;&gt;传送门&lt;&lt;&lt;</a></p>
+<h1 id="Conda信息"><a href="#Conda信息" class="headerlink" title="Conda信息"></a>Conda信息</h1><p>如果想要查看Conda的信息的话，可以输入如下命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda info</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/conda/conda_info.png" alt="conda信息"><br>可以看到上一部分的配置信息也出现在内容展示中，说明配置是有效的。</p>
+<p>如果想要查看已有的开发环境，输入如下命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda info --env</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/conda/conda_info_env.png" alt="conda环境信息"><br>可以看到里面现在有两个环境，分别是base和tensorflow，其中base就是安装时默认的环境，而tensorflow就是博主自己创建的环境。</p>
+<p>在上述图片中还有个要注意的地方就是base环境前面是有个*号的，说明base环境处于激活的状态，即判断当前所处环境的方法就是查看*号出现在那个环境前。<br><img src="/images/conda/activate_tensorflow.png" alt="激活了tensorflow环境"><br>而上面这张则是激活了tensorflow环境的，而这张还有一个特别地方就是前面直接写着名为tensorflow的环境名称，因此也可以作为当前处于那个激活环境的判断。</p>
+<p>那么到底怎么创建一个新的环境呢？</p>
+<h1 id="环境创建、克隆、激活和删除"><a href="#环境创建、克隆、激活和删除" class="headerlink" title="环境创建、克隆、激活和删除"></a>环境创建、克隆、激活和删除</h1><p>想要创建环境，只要输入如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 不指定python版本</span><br><span class="line">conda create --name env-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 指定python版本</span><br><span class="line">conda create --name env-name python=2.7</span><br></pre></td></tr></table></figure></p>
+<p>其中env-name是该新建环境的名称；python是该环境中的python版本，默认情况下如果不写该参数，将会延用base环境中的python版本，而base环境中的python版本就是下载部分选择conda安装包时的python版本。<br><img src="/images/conda/conda_create.png" alt="conda创建环境"><br>创建成功后就能看到如上的显示，想要激活环境，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate env-name</span><br></pre></td></tr></table></figure></p>
+<p>想要取消激活，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate env-name</span><br></pre></td></tr></table></figure></p>
+<p>当然，也可以直接关闭命令窗口来退出已激活的环境。</p>
+<p>注意：在没有激活任何环境的情况下都是处于base环境之下的，就算激活了其它环境也只在激活的命令窗口下是激活环境，在激活环境下的任何操作，都不会对其它环境产生影响，当然这也就是conda的意义所在。</p>
+<p>在某些情况下如果想要复制已有的环境，可以输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create --name new-env-name --clone env-name</span><br></pre></td></tr></table></figure></p>
+<p>如果想删除现有的环境，必须在先取消激活目标环境，然后执行如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda remove --name env-name --all</span><br></pre></td></tr></table></figure></p>
+<h1 id="包的查看、搜索、安装、更新和卸载"><a href="#包的查看、搜索、安装、更新和卸载" class="headerlink" title="包的查看、搜索、安装、更新和卸载"></a>包的查看、搜索、安装、更新和卸载</h1><p>注意：以下的一切命令请先激活环境后再执行，否则都将会作用于基本环境，即操作的对象是基本环境。</p>
+<p>创建好环境后，想要使用当然还需要安装自己所需要的包，这里使用tensorflow做例子，输入如下命令，查看当前已安装的包：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda list</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/conda/conda_list.png" alt="查看已安装的包"></p>
+<p>搜索可用的包<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda search tensorflow</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/conda/conda_search.png" alt="搜索可用的包"></p>
+<p>安装包<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install tensorflow</span><br></pre></td></tr></table></figure></p>
+<p>更新包<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda update tensorflow</span><br></pre></td></tr></table></figure></p>
+<p>卸载已安装的包<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda uninstall tensorflow</span><br></pre></td></tr></table></figure></p>
+<h1 id="环境配置的导入和导出"><a href="#环境配置的导入和导出" class="headerlink" title="环境配置的导入和导出"></a>环境配置的导入和导出</h1><p>在某些情况下，如果想要分享自己的开发环境，可以通过导出目标环境的环境配置来完成分享。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda activate tensorflow</span><br><span class="line"></span><br><span class="line">conda env export &gt; path-to/environment.yml</span><br></pre></td></tr></table></figure></p>
+<p>注意：要先激活想要的分享目标环境，然后再执行导出命令</p>
+<p>导出命令的path-to是指定目标路径，environment.yml则是导出的环境配置文件，如果不写路径则将会导出到命令行当前的路径之下。</p>
+<p>别人拿到了你分享出来的环境配置文件又该如何使用呢，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda env create -f path-to/environment.yml</span><br></pre></td></tr></table></figure></p>
+<p>即可创建一个和环境配置文件描述的一摸一样的开发环境了。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>至此，conda的基本用法已经讲述完，如过想要更深入了解的话可以在官网上查阅更详细的资料。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://conda.io/docs/index.html" target="_blank" rel="noopener">conda官网</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/01/SpringBoot之devtools模块/" rel="next" title="Spring Boot之devtools模块">
+                <i class="fa fa-chevron-left"></i> Spring Boot之devtools模块
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="月下休憩" />
+            
+              <p class="site-author-name" itemprop="name">月下休憩</p>
+              <p class="site-description motion-element" itemprop="description">持之以恒 切忌浮躁</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/InitNext" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:3137650480@qq.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Conda简介"><span class="nav-number">1.</span> <span class="nav-text">Conda简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下载"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境变量"><span class="nav-number">3.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conda配置文件"><span class="nav-number">4.</span> <span class="nav-text">conda配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conda信息"><span class="nav-number">5.</span> <span class="nav-text">Conda信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境创建、克隆、激活和删除"><span class="nav-number">6.</span> <span class="nav-text">环境创建、克隆、激活和删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包的查看、搜索、安装、更新和卸载"><span class="nav-number">7.</span> <span class="nav-text">包的查看、搜索、安装、更新和卸载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境配置的导入和导出"><span class="nav-number">8.</span> <span class="nav-text">环境配置的导入和导出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">9.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">10.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">月下休憩</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.0.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"model":{"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json"},"display":{"position":"left","width":100},"mobile":{"show":false}});</script></body>
+</html>
