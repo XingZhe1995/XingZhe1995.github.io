@@ -1,7 +1,11 @@
 ---
 title: Python之科学计算包Numpy
+date: 2018-06-02 09:08:15
 tags:
+  - Python
 categories:
+  - 编程语言
+  - Python
 ---
 
 Numpy-科学计算包

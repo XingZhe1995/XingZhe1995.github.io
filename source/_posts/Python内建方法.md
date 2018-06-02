@@ -1,7 +1,11 @@
 ---
 title: Python内建方法
+date: 2018-06-02 09:27:00
 tags:
+  - Python
 categories:
+  - 编程语言
+  - Python
 ---
 
 <!-- more -->
