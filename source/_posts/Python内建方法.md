@@ -8,6 +8,8 @@ categories:
   - Python
 ---
 
+在本文章中将会记录Python常用的方法，并且将会不断更新。
+
 <!-- more -->
 
 # sorted

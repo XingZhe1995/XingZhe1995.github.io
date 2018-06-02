@@ -80,6 +80,7 @@ deploy:
   type:
 
 # 看板娘
+# github https://github.com/EYHN/hexo-helper-live2d/blob/master/README.zh-CN.md
 live2d:
   enable: true
   # jsdeliver CDN

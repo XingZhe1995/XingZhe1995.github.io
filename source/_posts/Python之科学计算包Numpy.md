@@ -8,7 +8,8 @@ categories:
   - Python
 ---
 
-Numpy-科学计算包
+在本文章中将会记录科学计算包Numpy的常用方法，并不断更新。
+
 <!-- more -->
 
 # shape
