@@ -5,7 +5,8 @@
     "start": "hexo s --draft",
     "server": "hexo s",
     "clean": "hexo clean",
-    "cli": "hexo"
+    "cli": "hexo",
+    "draft": "hexo new draft"
   },
   "hexo": {
     "version": "3.5.0"
