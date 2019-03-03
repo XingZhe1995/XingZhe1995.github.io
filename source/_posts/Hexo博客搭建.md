@@ -1,5 +1,5 @@
 ---
-title: Markdown博客搭建
+title: Hexo博客搭建
 date: 2018-03-04 23:08:15
 tags:
   - 工具
