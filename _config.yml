@@ -123,16 +123,18 @@ theme_config:
 
   google_site_verification: google-site-verification=cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
 
+  # 评论
+
   # Gitalk
   # Demo: https://gitalk.github.io
   # Reference: https://asdfv1929.github.io/2018/01/20/gitalk/, https://liujunzhou.top/2018/8/10/gitalk-error/
   gitalk:
-    enable: false
-    github_id:  # Github repo owner
-    repo:  # Repository name to store issues
-    client_id:  # Github Application Client ID
-    client_secret:  # Github Application Client Secret
-    admin_user:  # GitHub repo owner and collaborators, only these guys can initialize github issues
+    enable: true
+    github_id: InitNext
+    repo: InitNext.github.io
+    client_id: 37644037ac52d12cdd8a
+    client_secret: 09993925bc5a09337e2d13cc1225761ca099d39b
+    admin_user: 3137650480@qq.com
     distraction_free_mode: true # Facebook-like distraction free mode
     # Gitalk's display language depends on user's browser or system environment
     # If you want everyone visiting your site to see a uniform language, you can set a force language value
