@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 每天一点
-subtitle: 做一个混吃等死的程序猿
-description: 持之以恒 切忌浮躁
-author: 月下休憩
+title: 知行合一
+subtitle: 对技术的热情让我永不停歇
+#description: 持之以恒 切忌浮躁
+author: 陈随想
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -79,39 +79,65 @@ theme: next
 deploy:
   type:
 
-# 看板娘
-# github https://github.com/EYHN/hexo-helper-live2d/blob/master/README.zh-CN.md
-live2d:
-  enable: true
-  # jsdeliver CDN
-  scriptFrom: jsdelivr
-  model:
-    use: https://cdn.jsdelivr.net/npm/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json
-  display:
-    position: left
-    width: 100
-    # height: 300
-  mobile:
-    show: false
-
-# set theme config
+# next主题设置
 theme_config:
   # 主题
-  scheme: Mist
+  scheme: Gemini
+
   # 头像
-  avatar: /images/avatar.png
+  avatar: https://blog.yilinfeng.top/avatar.png
+
   # 菜单
   menu:
+    # home: / || home
+    # tags: /tags/ || tags
+    # categories: /categories/ || th
+    # archives: /archives/ || archive
+    # about: /about
+    # commonweal: /404.html || heartbeat
     home: / || home
+    about: /about/ || user
     tags: /tags/ || tags
     categories: /categories/ || th
     archives: /archives/ || archive
+    schedule: /schedule/ || calendar
+    sitemap: /sitemap.xml || sitemap
     commonweal: /404.html || heartbeat
+
   # github fork me 标志
   github_banner: https://github.com/InitNext || Follow me on GitHub
   social:
     GitHub: https://github.com/InitNext || github
     E-Mail: mailto:3137650480@qq.com || envelope
+
+  # 侧边栏位置
+  sidebar:
+    position: left
+
+  # 代码高亮主题
+  highlight_theme: night
+
+  footer:
+    # 建站时间
+    since: 2018
+
+  google_site_verification: google-site-verification=cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
+
+  # Gitalk
+  # Demo: https://gitalk.github.io
+  # Reference: https://asdfv1929.github.io/2018/01/20/gitalk/, https://liujunzhou.top/2018/8/10/gitalk-error/
+  gitalk:
+    enable: false
+    github_id:  # Github repo owner
+    repo:  # Repository name to store issues
+    client_id:  # Github Application Client ID
+    client_secret:  # Github Application Client Secret
+    admin_user:  # GitHub repo owner and collaborators, only these guys can initialize github issues
+    distraction_free_mode: true # Facebook-like distraction free mode
+    # Gitalk's display language depends on user's browser or system environment
+    # If you want everyone visiting your site to see a uniform language, you can set a force language value
+    # Available value: en, es-ES, fr, ru, zh-CN, zh-TW
+    language:
 
   font:
     enable: true
