@@ -89,19 +89,10 @@ theme_config:
 
   # 菜单
   menu:
-    # home: / || home
-    # tags: /tags/ || tags
-    # categories: /categories/ || th
-    # archives: /archives/ || archive
-    # about: /about
-    # commonweal: /404.html || heartbeat
     home: / || home
-    about: /about/ || user
     tags: /tags/ || tags
     categories: /categories/ || th
     archives: /archives/ || archive
-    schedule: /schedule/ || calendar
-    sitemap: /sitemap.xml || sitemap
     commonweal: /404.html || heartbeat
 
   # github fork me 标志
@@ -121,13 +112,7 @@ theme_config:
     # 建站时间
     since: 2018
 
-  google_site_verification: google-site-verification=cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
-
-  # 评论
-
-  # Gitalk
-  # Demo: https://gitalk.github.io
-  # Reference: https://asdfv1929.github.io/2018/01/20/gitalk/, https://liujunzhou.top/2018/8/10/gitalk-error/
+  # Gitalk评论
   gitalk:
     enable: true
     github_id: InitNext
@@ -135,17 +120,42 @@ theme_config:
     client_id: 37644037ac52d12cdd8a
     client_secret: 09993925bc5a09337e2d13cc1225761ca099d39b
     admin_user: InitNext
-    distraction_free_mode: true # Facebook-like distraction free mode
-    # Gitalk's display language depends on user's browser or system environment
-    # If you want everyone visiting your site to see a uniform language, you can set a force language value
-    # Available value: en, es-ES, fr, ru, zh-CN, zh-TW
-    language:
+    distraction_free_mode: true
+
+  # 谷歌分析
+  google_analytics:
+    tracking_id: UA-135887327-1
+    localhost_ignored: true
+
+  # 谷歌站点管理工具
+  google_site_verification: cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
+
+  # 内容分享
+  needmoreshare2:
+    enable: true
+    postbottom:
+      enable: true
+
+  # 搜索
+  local_search:
+    enable: true
+    trigger: auto
+    top_n_per_article: 1
+    unescape: false
+
+  sitemap:
+  path: sitemap.xml
+
+  baidusitemap:
+    path: baidusitemap.xml
+
 
   font:
     enable: true
     global:
       size: 16
 
+  # 数学公式
   math:
     enable: true
     engine: mathjax
