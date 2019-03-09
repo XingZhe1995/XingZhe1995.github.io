@@ -127,9 +127,6 @@ theme_config:
     tracking_id: UA-135887327-1
     localhost_ignored: true
 
-  # 谷歌站点管理工具
-  google_site_verification: cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
-
   # 内容分享
   needmoreshare2:
     enable: true
@@ -143,13 +140,18 @@ theme_config:
     top_n_per_article: 1
     unescape: false
 
-  sitemap:
-  path: sitemap.xml
+  # 谷歌站点管理工具
+  google_site_verification: cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
 
+  # 站点地图
+  sitemap:
+    path: sitemap.xml
+
+  # 百度站点地图
   baidusitemap:
     path: baidusitemap.xml
 
-
+  # 字体
   font:
     enable: true
     global:
