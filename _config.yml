@@ -14,7 +14,7 @@ timezone: Asia/Shanghai
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://blog.yilinfeng.top
 root: /
-permalink: :year/:month/:day/:title/
+permalink: :title.html
 permalink_defaults:
 
 # Directory
@@ -85,7 +85,8 @@ theme_config:
   scheme: Gemini
 
   # 头像
-  avatar: https://blog.yilinfeng.top/avatar.png
+  avatar:
+    url: /images/avatar.png
 
   # 菜单
   menu:
@@ -163,4 +164,57 @@ theme_config:
     engine: mathjax
     mathjax:
       cdn: //cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+  # 搜索引擎优化
+  seo: true
+  baidu_push: true
+
+  # 文章阅读数
+  leancloud_visitors:
+    enable: true
+    app_id: EVuNVQdwjVVETLVOGGdClySN-gzGzoHsz
+    app_key: UBIufuTIEV1gHcdJIx6IOmyN
+    security: true
+    betterPerformance: true
+
+  # 相关文章
+  # Dependencies: https://github.com/tea3/hexo-related-popular-posts
+  related_posts:
+    enable: true
+    title: # custom header, leave empty to use the default one
+    display_in_home: false
+    params:
+      maxCount: 5
+      #PPMixingRate: 0.0
+      #isDate: false
+      #isImage: false
+      #isExcerpt: false
+
+# 相关文章
+# Dependencies: https://github.com/tea3/hexo-related-popular-posts
+related_posts:
+  enable: true
+  title: # custom header, leave empty to use the default one
+  display_in_home: false
+  params:
+  maxCount: 5
+    #PPMixingRate: 0.0
+    #isDate: false
+    #isImage: false
+    #isExcerpt: false
+
+# 阅读时间
+symbols_count_time:
+  symbols: true
+  time: true
+  total_symbols: true
+  total_time: true
+
+# 文章阅读次数
+leancloud_counter_security:
+  enable_sync: true
+  app_id: EVuNVQdwjVVETLVOGGdClySN
+  app_key: UBIufuTIEV1gHcdJIx6IOmyN
+  username: InitNext
+  password: # Recommmended to be left blank. Will be asked while deploying if is left blank
 
