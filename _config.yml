@@ -174,34 +174,8 @@ theme_config:
     enable: true
     app_id: EVuNVQdwjVVETLVOGGdClySN-gzGzoHsz
     app_key: UBIufuTIEV1gHcdJIx6IOmyN
-    security: true
+    security: false
     betterPerformance: true
-
-  # 相关文章
-  # Dependencies: https://github.com/tea3/hexo-related-popular-posts
-  related_posts:
-    enable: true
-    title: # custom header, leave empty to use the default one
-    display_in_home: false
-    params:
-      maxCount: 5
-      #PPMixingRate: 0.0
-      #isDate: false
-      #isImage: false
-      #isExcerpt: false
-
-# 相关文章
-# Dependencies: https://github.com/tea3/hexo-related-popular-posts
-related_posts:
-  enable: true
-  title: # custom header, leave empty to use the default one
-  display_in_home: false
-  params:
-  maxCount: 5
-    #PPMixingRate: 0.0
-    #isDate: false
-    #isImage: false
-    #isExcerpt: false
 
 # 阅读时间
 symbols_count_time:
@@ -209,12 +183,3 @@ symbols_count_time:
   time: true
   total_symbols: true
   total_time: true
-
-# 文章阅读次数
-leancloud_counter_security:
-  enable_sync: true
-  app_id: EVuNVQdwjVVETLVOGGdClySN
-  app_key: UBIufuTIEV1gHcdJIx6IOmyN
-  username: InitNext
-  password: # Recommmended to be left blank. Will be asked while deploying if is left blank
-
