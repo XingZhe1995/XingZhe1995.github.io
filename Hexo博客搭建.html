@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left"},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇文章主要讲述的是搭建Hexo + Github Page + Travis CI的博客环境。 目前有许多搭建个人博客的方案，但是使用Github Page来展示自己的个人博客，无疑是一个较好的方案，无需额外的服务器、免费、自带CDN、可靠并且自带网站域名，这种种的优势足以让人做出选择，然后加上美观的主题，就可以搭建出一个完整的博客系统了，当然要是有点懒的话，加上Travis CI进行自动部署，">
+<meta name="keywords" content="工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo博客搭建">
+<meta property="og:url" content="http://blog.yilinfeng.top/Hexo博客搭建.html">
+<meta property="og:site_name" content="知行合一">
+<meta property="og:description" content="本篇文章主要讲述的是搭建Hexo + Github Page + Travis CI的博客环境。 目前有许多搭建个人博客的方案，但是使用Github Page来展示自己的个人博客，无疑是一个较好的方案，无需额外的服务器、免费、自带CDN、可靠并且自带网站域名，这种种的优势足以让人做出选择，然后加上美观的主题，就可以搭建出一个完整的博客系统了，当然要是有点懒的话，加上Travis CI进行自动部署，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/generatenewtoken.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/newpersonalaccesstoken.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/accesstoken.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/reposetting.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/addservice.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/tciselectrepo.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/tcisettingheader.png">
+<meta property="og:image" content="http://blog.yilinfeng.top/images/blog/tcisettingcontent.png">
+<meta property="og:updated_time" content="2019-03-09T08:10:55.364Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo博客搭建">
+<meta name="twitter:description" content="本篇文章主要讲述的是搭建Hexo + Github Page + Travis CI的博客环境。 目前有许多搭建个人博客的方案，但是使用Github Page来展示自己的个人博客，无疑是一个较好的方案，无需额外的服务器、免费、自带CDN、可靠并且自带网站域名，这种种的优势足以让人做出选择，然后加上美观的主题，就可以搭建出一个完整的博客系统了，当然要是有点懒的话，加上Travis CI进行自动部署，">
+<meta name="twitter:image" content="http://blog.yilinfeng.top/images/blog/generatenewtoken.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="知行合一" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://blog.yilinfeng.top/Hexo博客搭建.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Hexo博客搭建 | 知行合一</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-135887327-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">知行合一</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">对技术的热情让我永不停歇</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/404.html" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.yilinfeng.top/Hexo博客搭建.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈随想">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="知行合一">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Hexo博客搭建
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-04 23:08:15" itemprop="dateCreated datePublished" datetime="2018-03-04T23:08:15+08:00">2018-03-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-09 16:10:55" itemprop="dateModified" datetime="2019-03-09T16:10:55+08:00">2019-03-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/Hexo博客搭建.html" class="leancloud_visitors" data-flag-title="Hexo博客搭建">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇文章主要讲述的是搭建<strong>Hexo + Github Page + Travis CI</strong>的博客环境。</p>
+<p>目前有许多搭建个人博客的方案，但是使用Github Page来展示自己的个人博客，无疑是一个较好的方案，无需额外的服务器、免费、自带CDN、可靠并且自带网站域名，这种种的优势足以让人做出选择，然后加上美观的主题，就可以搭建出一个完整的博客系统了，当然要是有点懒的话，加上Travis CI进行自动部署，就可以专注于博客文章的编写了。</p>
+<a id="more"></a>
+<p><em>开始前的题外话：在这里我已假设你拥有git的使用知识。</em></p>
+<h1 id="GitHub配置"><a href="#GitHub配置" class="headerlink" title="GitHub配置"></a>GitHub配置</h1><blockquote>
+<p><a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a>主要是用于个人、组织、或者项目的网站，直接把网站代码托管在GitHub仓库上，别人就能访问到该网站，你只需要编辑并推送代码，你对网站的修改就能生效。<br><em>注意:GitHub Pages仅支持静态网站。</em></p>
+</blockquote>
+<h2 id="注册GitHub账号"><a href="#注册GitHub账号" class="headerlink" title="注册GitHub账号"></a>注册GitHub账号</h2><p>使用<strong>GitHub Pages</strong>来部署博客代码，需用到GitHub仓库，因而拥有一个GitHub的账号是必须的。<a href="https://github.com/join" target="_blank" rel="noopener">&gt;&gt;&gt;传送门&lt;&lt;&lt;</a></p>
+<h2 id="创建博客代码仓库"><a href="#创建博客代码仓库" class="headerlink" title="创建博客代码仓库"></a>创建博客代码仓库</h2><p>根据GitHub Pages的官网介绍，GitHub Pages主要用于个人网站、组织网站和项目网站，它们的配置如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">网站类型</th>
+<th style="text-align:left">网站域名与仓库名</th>
+<th style="text-align:left">分支名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">个人网站</td>
+<td style="text-align:left">username.github.io</td>
+<td style="text-align:left">master</td>
+</tr>
+<tr>
+<td style="text-align:left">组织网站</td>
+<td style="text-align:left">orgname.github.io</td>
+<td style="text-align:left">master</td>
+</tr>
+<tr>
+<td style="text-align:left">个人所拥有的项目</td>
+<td style="text-align:left">username.github.io/projectname</td>
+<td style="text-align:left">master、gh-pages或者master分支下的docs文件夹下</td>
+</tr>
+<tr>
+<td style="text-align:left">组织所拥有的项目</td>
+<td style="text-align:left">orgname.github.io/projectname</td>
+<td style="text-align:left">master、gh-pages或者master分支下的docs文件夹下</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>由上面的表格可以看到，对不同类型的网站，在仓库的命名和推送的目标分支仅有略微的差别，而对于要搭建个人博客的我们，关注点就在<strong>第一行</strong>上<em>（当然，聪明的你完全可以依照本篇文章的方法为自己的项目搭建一个网站出来）</em>。</p>
+<p>参照上面的配置表格，根据自己GitHub上的用户名<em>username</em>，创建一个仓库并命名为：<strong>username.github.io</strong><br>与此同时，你的个人网站也拥有了相应的域名也就是仓库名<em>username.github.io</em>，以后你或者其他人就能通过该域名访问到你的网站。</p>
+<h2 id="master分支与hexo分支"><a href="#master分支与hexo分支" class="headerlink" title="master分支与hexo分支"></a>master分支与hexo分支</h2><p>由上面的表格可以了解到，对于个人网站而言，网站代码必须存放于master分支上，GitHub Pages才能生效，而对于我们生成博客网站前的博客代码，我则存放于hexo分支上（读者可以放到其它地方或者其它分支上，只要最后博客网站代码正确推送到username.github.io仓库的master分支上即可）。<br><strong>master分支：存放最终生成的博客网站代码；</strong><br><strong>hexo分支：存放博客源代码；</strong></p>
+<h1 id="博客配置"><a href="#博客配置" class="headerlink" title="博客配置"></a>博客配置</h1><p>在这里我选择了Hexo做为博客框架，当然如果感兴趣的读者也可以研究一下其它的博客框架。</p>
+<h2 id="Hexo博客框架"><a href="#Hexo博客框架" class="headerlink" title="Hexo博客框架"></a>Hexo博客框架</h2><blockquote>
+<p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+</blockquote>
+<p>Hexo博客框架依赖于node.js来运行并生成静态页面。</p>
+<h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h3><p>在这里建议下载稳定版LTS（<a href="https://nodejs.org/en/" target="_blank" rel="noopener">&gt;&gt;&gt;下载传送门&lt;&lt;&lt;</a>），以提供一个相对稳定的博客编写环境。下载并安装后，打开命令行界面，输入命令<em>node -v</em>，如果安装成功将会返回版本信息，如下图所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">8.9.4</span><br></pre></td></tr></table></figure>
+<h3 id="安装Hexo博客框架"><a href="#安装Hexo博客框架" class="headerlink" title="安装Hexo博客框架"></a>安装Hexo博客框架</h3><p>打开命令行界面，输入如下命令，安装全局的Hexo命令，方便后续的博客编写操作：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>然后输入如下命令，安装hexo博客框架代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init 这里写存放博客代码的路径</span><br></pre></td></tr></table></figure>
+<p>进入博客代码文件夹内，安装Hexo博客框架运行所需的依赖：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p>至此一个可运行的Hexo博客框架就搭建完成了，如果需要了解更多关于Hexo的使用方法，可点击<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">&gt;&gt;这里&lt;&lt;</a>。</p>
+<h2 id="Next博客主题"><a href="#Next博客主题" class="headerlink" title="Next博客主题"></a>Next博客主题</h2><p>博客主题对于博客来说是极其重要的，在这里我选择了使用Next主题，Next主题拥有众多的开发者，也被众多的博客所使用，因而能够保持着足够的活力，同时也能够在遇到问题的时候寻求到帮助。</p>
+<p>为了方便余下篇幅的描述，作出以下约定：</p>
+<ol>
+<li>站点配置文件：Hexo博客根目录下一个名为<em>_config.yml</em>的文件，里面存放着整个博客站点的配置信息；</li>
+<li>主题配置文件：在Hexo博客所引用的主题文件里也存在着一个名为<em>_config.yml</em>的文件，但与站点配置文件不同的是里面存放的是该主题的配置信息；</li>
+<li>主题文件夹：Hexo博客根目录下有一个thems文件夹，里面存放着博客的主题资源；</li>
+</ol>
+<h3 id="主题安装基本步骤"><a href="#主题安装基本步骤" class="headerlink" title="主题安装基本步骤"></a>主题安装基本步骤</h3><h4 id="下载主题"><a href="#下载主题" class="headerlink" title="下载主题"></a>下载主题</h4><p>关于主题的具体下载方式，在这里暂且跳过，后续由专门的章节来进行讲解。<br>在这里假设我们已经下载好主题文件，并把主题文件夹命名为<em>next</em>（这里你可以命名为任何合法的名字，只需要在下一个步骤里填入相同的名字就可以了），把主题文件放置在<em>主题文件夹</em>内。</p>
+<h4 id="切换主题"><a href="#切换主题" class="headerlink" title="切换主题"></a>切换主题</h4><p>Hexo博客在博客创建的时候就已经自带了一个主题，而要切换为自带的博客主题，就需要修改<em>站点配置文件</em>，如下所示：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
+<p>到这里博客就能够使用新的博客主题了。</p>
+<h3 id="主题下载方式"><a href="#主题下载方式" class="headerlink" title="主题下载方式"></a>主题下载方式</h3><p>主题的下载方式决定了后续过程中对该主题进行个性化定制后升级的难易程度。</p>
+<h4 id="直接下载"><a href="#直接下载" class="headerlink" title="直接下载"></a>直接下载</h4><p>直接下载，顾名思义就是直接下载整个主题，使用这种方式有一个弊端：在主题升级或者修复bug之后，主题的升级都需要去主题站点重新下载整个主题并替换掉旧的主题，费时费力；其次对于高度个性化定制主题之后，更是难以进行升级操作。因而<strong>强烈不推荐这种方式</strong>。</p>
+<h4 id="git-clone下载"><a href="#git-clone下载" class="headerlink" title="git clone下载"></a>git clone下载</h4><p>使用<em>git clone</em>方式下载主题至主题文件夹内，是主题发布方的推荐方式，该种方式能够及时且方便的获取主题的最新版本，并且能够在高度个性化定制主题后能够轻松的保留更改的同时升级主题。</p>
+<p>主题下载：进入博客根目录，打开命令行界面（<em>注意路径为博客根目录</em>），执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/theme-next/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure>
+<p>执行结束后主题文件夹下就多了一个叫next的文件夹，同时里面也存放有主题相关的资源文件。</p>
+<p>主题更新：进入Next主题文件夹，打开命令行界面（<em>注意路径为博客根目录</em>），执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+<p>如果更新遇到问题，可以参考<a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">&gt;&gt;&gt;这里&lt;&lt;&lt;</a></p>
+<h4 id="git子模块下载"><a href="#git子模块下载" class="headerlink" title="git子模块下载"></a>git子模块下载</h4><p>使用<em>git submodule</em>方式下载主题，是无法对主题内容进行高度个性定制化的，仅仅能够在Next主题允许的范围内对主题进行个性定制，优点就是在保留一定程度的定制化的同时能够轻松对主题进行升级（比<em>git clone</em>方法还要方便）。</p>
+<p>主题下载：进入博客根目录，打开命令行界面（<em>注意路径为博客根目录</em>），执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule add https://github.com/theme-next/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure>
+<p>执行结束后主题文件夹下就多了一个叫next的文件夹，同时里面也存放有主题相关的资源文件。</p>
+<p>主题更新：进入博客根目录，打开命令行界面（<em>注意路径为博客根目录</em>），执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --remote</span><br></pre></td></tr></table></figure>
+<p>使用该种方式对主题的定制化，是通过在站定配置文件追加<em>theme_config</em>字段实现的，只要是主题配置文件中存在的字段就能够在<em>theme_config</em>字段下使用(<em>注意缩进</em>)，并且作用到主题中。例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme_config:</span></span><br><span class="line">  <span class="comment"># 主题</span></span><br><span class="line"><span class="attr">  scheme:</span> <span class="string">Mist</span></span><br><span class="line">  <span class="comment"># 头像</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="string">/images/avatar.png</span></span><br><span class="line">  <span class="comment"># 菜单</span></span><br><span class="line"><span class="attr">  menu:</span></span><br><span class="line"><span class="attr">    home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line"><span class="attr">    tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">    categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">    archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
+<h3 id="数学公式渲染"><a href="#数学公式渲染" class="headerlink" title="数学公式渲染"></a>数学公式渲染</h3><p>写博客的过程中可能会遇到需要编写数学公式的情景，要是使用图片来代替的话就不太优雅了，这时候可以考虑使用数学渲染引擎来直接渲染出数学公式了，幸运的是Next主题已经替我们准备好了。Next主题提供了两个渲染引擎：mathjax和katex，mathjax渲染速度较慢，但是支持的范围较广，katex渲染速度快，但是支持的范围较窄，因此博主选择了mathjax，以下内容也以mathjax为例，如果有需要的读者可自行查询文档：<a href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/MATH.md" target="_blank" rel="noopener">katex安装</a></p>
+<p>首先卸载hexo自带的渲染工具<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm un hexo-renderer-marked --save</span><br></pre></td></tr></table></figure></p>
+<p>然后安装新的渲染工具，根据官方文档说，mathjax只能在hexo-renderer-kramed和hexo-renderer-pandoc中二选一，在这里博主选择了hexo-renderer-kramed<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-renderer-kramed --save # or hexo-renderer-pandoc</span><br></pre></td></tr></table></figure></p>
+<p>在站点配置文件中，写入如下配置<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme_config:</span></span><br><span class="line"><span class="attr">  math:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    engine:</span> <span class="string">mathjax</span></span><br><span class="line"><span class="attr">    mathjax:</span></span><br><span class="line"><span class="attr">      cdn:</span> <span class="string">//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML</span></span><br></pre></td></tr></table></figure></p>
+<p>即可使博客网站具备渲染数学公式的能力，更多的配置可在主题配置文件（Next/_config.yml）的math部分查看。</p>
+<p>然后在需要进行数学公式渲染的markdown文件中，开头部分加入mathjax: true，即可让数学渲染引擎对该文件进行渲染，如果不需要进行数学渲染的切记不要添加，因为会有损性能。<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: </span><br><span class="line">date: </span><br><span class="line">tags:</span><br><span class="line">categories:</span><br><span class="line">mathjax: true</span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
+<p>如果成功了的话，就能看到你现在所看到的数学公式了</p>
+<script type="math/tex; mode=display">
+f(n) =
+\begin{cases}
+n/2,  & \text{if $n$ is even} \\
+3n+1, & \text{if $n$ is odd}
+\end{cases}</script><h1 id="自动部署"><a href="#自动部署" class="headerlink" title="自动部署"></a>自动部署</h1><p>一篇新的博客文章需要经历三个步骤才能出现在博客中：</p>
+<ol>
+<li>写文章</li>
+<li>生成GitHub Pages用的博客代码（hexo generate）</li>
+<li>提交上述的生成的博客代码（git push）</li>
+</ol>
+<p>要是每次写一遍新的文章都要经历如上三个步骤多繁琐呀！要是能把第二个步省略掉，自己只专注于写博客，然后提交新的文章，文章就能自动出现在博客中那该多好呀，使用Travis CI就能达到这个目的，替我们完成这与创作无关的步骤。</p>
+<h2 id="GitHub权限配置"><a href="#GitHub权限配置" class="headerlink" title="GitHub权限配置"></a>GitHub权限配置</h2><p>使用Travis CI来自动部署网站代码，必须对代码仓库进行设置，同时需要授予Travis CI相应的权限，而GitHub已经提供了相应的开发者接口，并且有一套完善安全的接口调用方法。</p>
+<h3 id="获取Access-Token"><a href="#获取Access-Token" class="headerlink" title="获取Access Token"></a>获取Access Token</h3><ol>
+<li>登陆GitHub</li>
+<li>进入个人设置页面（点击自己的头像图标-&gt;Settings）</li>
+<li>点击左侧栏下的Developer settings（Personal settings-&gt;Developer settings）</li>
+<li>点击Personal access tokens</li>
+<li>这个时候就能看到如下图所示的界面，点击Generate new token按钮<img src="/images/blog/generatenewtoken.png" alt="Generate new token界面"></li>
+<li>填写Token description（凭据描述,方便以后自己的辨别），选中repo下的publish_repo选项（授予Travis CI的权限），如下图所示：<img src="/images/blog/newpersonalaccesstoken.png" alt="New Personale Access Token">然后点击下方的Generate token（保存设置）</li>
+<li>点击保存后回到步骤5的界面，这时候会显示一串字符，这就是Travis CI所需要的凭据<strong>（注意：立刻保存好这串字符，因为该字符串仅在第一次显示，并且为了自己的代码安全不要告诉他人这串字符的任何信息）</strong><img src="/images/blog/accesstoken.png" alt="Access Token"></li>
+</ol>
+<h3 id="GitHub仓库配置"><a href="#GitHub仓库配置" class="headerlink" title="GitHub仓库配置"></a>GitHub仓库配置</h3><ol>
+<li>登陆GitHub</li>
+<li>进入<em>username.github.io</em>仓库</li>
+<li>点击仓库上方的Settings按钮<img src="/images/blog/reposetting.png" alt="Settings"></li>
+<li>点击左侧栏的Integrations &amp; services-&gt;点击右侧的Add services按钮-&gt;输入并选中Travis CI，如下图所示<img src="/images/blog/addservice.png" alt="Add Services"></li>
+<li>点击下方的绿色Add service</li>
+</ol>
+<p>至此，在GitHub方面的配置就完成了。</p>
+<h2 id="Travis-CI"><a href="#Travis-CI" class="headerlink" title="Travis CI"></a>Travis CI</h2><blockquote>
+<p>Travis CI是一个提供持续集成的服务，能够与GitHub很好的结合起来。Travis CI对于GitHub的开源仓库是免费的，对于私有仓库是需要收费的。</p>
+</blockquote>
+<h3 id="Travis-CI注册"><a href="#Travis-CI注册" class="headerlink" title="Travis CI注册"></a>Travis CI注册</h3><p>要使用Travis CI当然要先注册一个账号<a href="https://www.travis-ci.org/" target="_blank" rel="noopener">&gt;&gt;&gt;传送门&lt;&lt;&lt;</a>，而Travis CI允许使用GitHub的账号作为第三方授权登陆。</p>
+<h3 id="Travis-CI配置"><a href="#Travis-CI配置" class="headerlink" title="Travis CI配置"></a>Travis CI配置</h3><p>当使用GiHub授权登陆Travis CI的时候，Travis CI就能感知到我们仓库的状态，这时候就要设置究竟是那个仓库要进行持续集成了。</p>
+<ol>
+<li>点击头像图标进入如下界面：<img src="/images/blog/tciselectrepo.png" alt="GitHub仓库列表"></li>
+<li>选中username.github.io仓库（按钮变为绿色）</li>
+<li>点击旁边的小齿轮，进入仓库的具体设置页面</li>
+<li>点击右侧的more options-&gt;选择Settings<img src="/images/blog/tcisettingheader.png" alt="Travis CI Setting header"></li>
+<li>按下图选中对应的选项<img src="/images/blog/tcisettingcontent.png" alt="Travis CI Setting Content"></li>
+<li>在Environment Variables部分中，写入环境变量GITHUB_TOKEN，值为上述提到的Token，然后点击add按钮添加</li>
+</ol>
+<p>至此在Travis CI的配置就完成了。</p>
+<h2 id="博客源代码配置"><a href="#博客源代码配置" class="headerlink" title="博客源代码配置"></a>博客源代码配置</h2><p>Travis CI服务的使用，除了需要在Travis CI和GitHub中进行配置外，还需要在博客根目录下添加一个名为.travis.yml的文件，这个配置文件告诉了Travis CI如何工作，配置文件如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexo博客框架是依赖于node.js环境来运行的</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">node_js</span></span><br><span class="line"><span class="comment"># 指定node.js的版本</span></span><br><span class="line"><span class="attr">node_js:</span> <span class="string">stable</span></span><br><span class="line"><span class="comment"># 缓存依赖文件，提高构建的速度</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line"><span class="attr">  directories:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"node_modules"</span></span><br><span class="line"><span class="comment"># 指定对什么分支才进行构建</span></span><br><span class="line"><span class="attr">branches:</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line">  <span class="comment"># 这里替换成自己的分支</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">your-github-branch</span></span><br><span class="line"><span class="comment"># 安装hexo所需要的依赖</span></span><br><span class="line"><span class="attr">install:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line"><span class="comment"># 构建时执行的动作，这里是生成博客的网站代码</span></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">hexo</span> <span class="string">g</span></span><br><span class="line"><span class="comment"># 推送网站代码到github</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  provider:</span> <span class="string">pages</span></span><br><span class="line"><span class="attr">  skip-cleanup:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># 这里引用上一步中所填入的Token</span></span><br><span class="line"><span class="attr">  github-token:</span> <span class="string">$GITHUB_TOKEN</span></span><br><span class="line"><span class="attr">  keep-history:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># 将要推送到github的代码位置，这里是指向Hexo生成的博客网站代码的文件夹</span></span><br><span class="line"><span class="attr">  local-dir:</span> <span class="string">./public</span></span><br><span class="line">  <span class="comment"># 推送的目标分支</span></span><br><span class="line"><span class="attr">  target-branch:</span> <span class="string">master</span></span><br><span class="line">  <span class="comment"># 构建结果的通知对象</span></span><br><span class="line"><span class="attr">  email:</span> <span class="string">your-email</span></span><br><span class="line">  <span class="comment"># 提交者</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">commiter</span></span><br><span class="line">  <span class="comment"># 推送前的条件判断</span></span><br><span class="line"><span class="attr">  on:</span></span><br><span class="line">    <span class="comment"># 本次构建来自指定分支才进行推送，预防有多分支时造成的误推送（这里与前面都点重复）</span></span><br><span class="line"><span class="attr">    branch:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">your-github-branch</span></span><br><span class="line"><span class="comment"># 设置邮件通知，构建成功或失败都进行通知</span></span><br><span class="line"><span class="attr">notifications:</span></span><br><span class="line"><span class="attr">  email:</span></span><br><span class="line"><span class="attr">    on_success:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    on_failure:</span> <span class="string">always</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用流程"><a href="#使用流程" class="headerlink" title="使用流程"></a>使用流程</h3><p>经过上述的三个配置步骤，博客的自动部署就设置完成了，现在我们写一篇博客文章只需要：</p>
+<ol>
+<li>写博客文章</li>
+<li>推送文章内容到GitHub仓库</li>
+</ol>
+<p>然后剩下的就交给Travis CI来完成了，它将会代替我们生成网站代码并部署到GitHub仓库上，我们只要耐心的等待一下，就能在网站上看到效果了。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>网络上关于Hexo博客搭建的文章很多，如果有人能读到本篇文章，希望能给你带来一点帮助！</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://help.github.com/categories/github-pages-basics/" target="_blank" rel="noopener">GitHub Pages帮助文档</a><br><a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">Hexo帮助文档</a><br><a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">Next主题</a><br><a href="https://docs.travis-ci.com/" target="_blank" rel="noopener">Travis CI帮助文档</a></p>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/日记/博客之始.html" rel="next" title="博客之始">
+                <i class="fa fa-chevron-left"></i> 博客之始
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/java/SpringBoot之Gradle插件.html" rel="prev" title="SpringBoot之Gradle插件">
+                SpringBoot之Gradle插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="陈随想">
+            
+              <p class="site-author-name" itemprop="name">陈随想</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/InitNext" title="GitHub &rarr; https://github.com/InitNext" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:3137650480@qq.com" title="E-Mail &rarr; mailto:3137650480@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GitHub配置"><span class="nav-number">1.</span> <span class="nav-text">GitHub配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册GitHub账号"><span class="nav-number">1.1.</span> <span class="nav-text">注册GitHub账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建博客代码仓库"><span class="nav-number">1.2.</span> <span class="nav-text">创建博客代码仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#master分支与hexo分支"><span class="nav-number">1.3.</span> <span class="nav-text">master分支与hexo分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#博客配置"><span class="nav-number">2.</span> <span class="nav-text">博客配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo博客框架"><span class="nav-number">2.1.</span> <span class="nav-text">Hexo博客框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装node-js"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Hexo博客框架"><span class="nav-number">2.1.2.</span> <span class="nav-text">安装Hexo博客框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Next博客主题"><span class="nav-number">2.2.</span> <span class="nav-text">Next博客主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主题安装基本步骤"><span class="nav-number">2.2.1.</span> <span class="nav-text">主题安装基本步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载主题"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">下载主题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#切换主题"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">切换主题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题下载方式"><span class="nav-number">2.2.2.</span> <span class="nav-text">主题下载方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接下载"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">直接下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-clone下载"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">git clone下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git子模块下载"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">git子模块下载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学公式渲染"><span class="nav-number">2.2.3.</span> <span class="nav-text">数学公式渲染</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自动部署"><span class="nav-number">3.</span> <span class="nav-text">自动部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub权限配置"><span class="nav-number">3.1.</span> <span class="nav-text">GitHub权限配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取Access-Token"><span class="nav-number">3.1.1.</span> <span class="nav-text">获取Access Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub仓库配置"><span class="nav-number">3.1.2.</span> <span class="nav-text">GitHub仓库配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Travis-CI"><span class="nav-number">3.2.</span> <span class="nav-text">Travis CI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Travis-CI注册"><span class="nav-number">3.2.1.</span> <span class="nav-text">Travis CI注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Travis-CI配置"><span class="nav-number">3.2.2.</span> <span class="nav-text">Travis CI配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#博客源代码配置"><span class="nav-number">3.3.</span> <span class="nav-text">博客源代码配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用流程"><span class="nav-number">3.3.1.</span> <span class="nav-text">使用流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">4.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈随想</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">16k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">15 分钟</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '37644037ac52d12cdd8a',
+    clientSecret: '09993925bc5a09337e2d13cc1225761ca099d39b',
+    repo: 'InitNext.github.io',
+    owner: 'InitNext',
+    admin: ['InitNext'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'EVuNVQdwjVVETLVOGGdClySN-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'EVuNVQdwjVVETLVOGGdClySN-gzGzoHsz',
+                'X-LC-Key': 'UBIufuTIEV1gHcdJIx6IOmyN',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

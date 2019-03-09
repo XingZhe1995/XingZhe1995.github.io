@@ -123,13 +123,18 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="知行合一">
-<meta property="og:url" content="http://blog.yilinfeng.top/page/2/index.html">
+  <meta name="description" content="在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。">
+<meta name="keywords" content="spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot之Gradle插件">
+<meta property="og:url" content="http://blog.yilinfeng.top/java/SpringBoot之Gradle插件.html">
 <meta property="og:site_name" content="知行合一">
+<meta property="og:description" content="在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-09T08:10:55.364Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="知行合一">
+<meta name="twitter:title" content="SpringBoot之Gradle插件">
+<meta name="twitter:description" content="在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。">
 
 
 
@@ -138,7 +143,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.yilinfeng.top/page/2/">
+  <link rel="canonical" href="http://blog.yilinfeng.top/java/SpringBoot之Gradle插件.html">
 
 
 
@@ -148,7 +153,7 @@
   };
 </script>
 
-  <title>知行合一</title>
+  <title>SpringBoot之Gradle插件 | 知行合一</title>
   
 
 
@@ -207,8 +212,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -392,9 +396,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -426,10 +430,8 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/java/SpringBoot之Gradle插件.html" class="post-title-link" itemprop="url">SpringBoot之Gradle插件</a>
+          <h2 class="post-title" itemprop="name headline">SpringBoot之Gradle插件
+
               
             
           </h2>
@@ -576,20 +578,102 @@
       
 
       
-        
-          <p>在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/java/SpringBoot之Gradle插件.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
+        <p>在Java生态中，常用Maven和Gradle来对项目进行生命周期的管理。在本篇文章中使用Gradle来对Spring Boot项目进行构建，并记录常用的插件：java、war、dependency-management。</p>
+<a id="more"></a>
+<h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><p>关于Gradle的介绍在此省略，想了解相关知识的读者请自行搜索。</p>
+<h1 id="SpringBoot插件"><a href="#SpringBoot插件" class="headerlink" title="SpringBoot插件"></a>SpringBoot插件</h1><blockquote>
+<p>Spring Boot的Gradle插件提供了Spring Boot在Gradle上的支持，允许打包可执行的Jar包、war归档文件、运行Spring Boot应用，以及使用<em>spring-boot-dependecies</em>提供的依赖管理。<strong>注意:使用Spring Boot的Gradle插件需要Gradle4.0或以上的版本</strong></p>
+</blockquote>
+<p>由官方译文可以知道，想要使用Gradle来方便管理Spring Boot项目，使用SpringBoot插件是一个极佳的选择。</p>
+<h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p>在Gradle中想要使用SpringBoot插件，需要如下的4个步骤：</p>
+<ol>
+<li>配置下载插件的仓库地址：<a href="https://repo.spring.io/libs-snapshot" target="_blank" rel="noopener">https://repo.spring.io/libs-snapshot</a></li>
+<li>在依赖中引入要使用的插件，即SpringBoot的Gradle插件spring-boot-gradel-plugin</li>
+<li>指定插件的版本，最好与项目使用的Spring Boot版本一致。</li>
+<li>应用插件</li>
+</ol>
+<p>整个基本配置如下所示：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    ext &#123;</span><br><span class="line">        springbootVersion = <span class="string">'2.0.1.BUILD-SNAPSHOT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        maven &#123; url <span class="string">'https://repo.spring.io/snapshot'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'https://repo.spring.io/milestone'</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">"org.springframework.boot:spring-boot-gradle-plugin:$&#123;springbootVersion&#125;"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'org.springframework.boot'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里应用Java插件或者war插件</span></span><br><span class="line">apply plugin: <span class="string">'java'</span></span><br><span class="line">apply plugin: <span class="string">'io.spring.dependency-management'</span></span><br></pre></td></tr></table></figure>
+<p>通过上述配置，就能在整个项目中使用SpringBoot插件了。同时为了方便后续spring boot的版本更改，在配置中加入了自定义的变量<em>springbootVersion</em>，用于指代spring boot的版本。</p>
+<p>注：在Gradle的字符串中使用变量，需要在双引号中使用（在单引号中会无法识别），并且要以<em>${变量名}</em>这种形式进行引用。</p>
+<p>在Spring Boot项目中，除了springboot插件外，还需要Java插件或War插件，以及dependency-management插件，才能达到构建项目所需的最少插件。</p>
+<h2 id="运行应用"><a href="#运行应用" class="headerlink" title="运行应用"></a>运行应用</h2><p>要在不创建归档文件（jar、war）的情况下运行应用程序，需要使用bootRun任务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle bootRun</span><br></pre></td></tr></table></figure>
+<h3 id="配置主类"><a href="#配置主类" class="headerlink" title="配置主类"></a>配置主类</h3><p>通过配置主类可以指定应用的运行入口。</p>
+<p>默认情况下，bootRun任务会自动通过寻找在任务类路径下的目录中的带有<em>public static void main(String[])</em>方法的类配置为主类（main class）。</p>
+<p>当然，可以通过bootRun任务的main属性显式地配置主类：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bootRun &#123;</span><br><span class="line">  main = <span class="string">'com.example.ExampleApplication'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者，可以使用Spring Boot DSL的mainClassName属性在项目范围内配置主类：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">springBoot &#123;</span><br><span class="line">  mainClassName =<span class="string">'com.example.ExampleApplication'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><p>当项目中应用io.spring.dependency-management插件时，Spring Boot的插件会自动从项目中正在使用的Spring Boot版本导入相应的spring-boot-dependencies bom。这为Maven用户提供了类似的依赖管理体验，可以像使用使用maven一样，自定义依赖的jar包版本、排除依赖等。</p>
+<p>当然可以不使用io.spring.dependency-management插件，但是这会为项目的管理徒然增加难度。</p>
+<h3 id="自定义版本号"><a href="#自定义版本号" class="headerlink" title="自定义版本号"></a>自定义版本号</h3><p>通过使用依赖管理插件，可以使用属性来控制依赖关系的版本，参考<a href="https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-dependencies/pom.xml" target="_blank" rel="noopener">bom</a>，例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext[<span class="string">'slf4j.version'</span>] = <span class="string">'1.7.20'</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Spring Boot的每个发布版本都是针对特定的第三方依赖来进行设计和测试。覆盖版本可能会导致兼容性问题，应该要小心处理。</p>
+</blockquote>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><p>单独的使用SpringBoot插件对项目几乎没有改变，但是当使用了某些插件时，SpringBoot插件会检测出该插件并对项目配置做出相应的改变。以下列出几个常用的插件：</p>
+<h3 id="Java插件"><a href="#Java插件" class="headerlink" title="Java插件"></a>Java插件</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'java'</span></span><br></pre></td></tr></table></figure>
+<p>当项目中使用了Java插件，Gradle会做出以下改变：</p>
+<ol>
+<li>创建一个名为bootJar的BootJar任务：为项目创建一个可执行的jar。该jar将包含项目目录结构中main文件集中运行时类路径中的所有内容;类被放置在BOOT-INF / classes中，而jar被放置在BOOT-INF / lib中</li>
+<li>将assemble任务配置为依赖于bootJar任务</li>
+<li>禁用jar任务</li>
+<li>创建了一个名为bootRun的BootRun任务，用于运行该项目</li>
+<li>创建一个名为bootArchives的配置，其中包含由bootJar任务生成的组件</li>
+<li>配置任何没有配置编码的JavaCompile任务以使用UTF-8编码</li>
+<li>配置任何JavaCompile任务以使用-parameters编译器参数</li>
+</ol>
+<h3 id="War插件"><a href="#War插件" class="headerlink" title="War插件"></a>War插件</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'war'</span></span><br></pre></td></tr></table></figure>
+<p>当项目中使用了war插件，Gradle会做出以下改变：</p>
+<ol>
+<li>创建一个名为bootWar的BootWar任务，该任务将为该项目创建一个可执行的war。除了标准打包之外，providedRuntime配置中的所有内容都将打包在WEB-INF/lib-provided的文件夹中</li>
+<li>将assemble任务配置为依赖于bootWar任务</li>
+<li>禁用war任务</li>
+<li>配置bootArchives的配置以包含由bootWar任务生成的组件</li>
+</ol>
+<p>注意：使用了war插件就不需要再使用Java插件了。</p>
+<h3 id="dependency-management插件"><a href="#dependency-management插件" class="headerlink" title="dependency-management插件"></a>dependency-management插件</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'io.spring.dependency-management'</span></span><br></pre></td></tr></table></figure>
+<p>当项目应用<em>io.spring.dependency-management</em>插件时，SpringBoot插件将会自动从项目中正在使用的Spring Boot版本中导入spring-boot-dependencies bom。为Maven用户提供了类似的依赖管理体验。</p>
+<p>注意：当使用了该插件时，可以在引用spring-boot-starter-**项目时省略相应的版本号，默认使用与项目一致的版本号。</p>
+<h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><p>SpringBoot插件可以创建可执行的归档文件（jar、war），其中包含了一个应用所需的全部依赖，并且能够使用<em>java -jar</em>命令来运行。</p>
+<h3 id="打包可执行的jar"><a href="#打包可执行的jar" class="headerlink" title="打包可执行的jar"></a>打包可执行的jar</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle bootJar</span><br></pre></td></tr></table></figure>
+<p>可执行jar可以使用bootJar任务来构建。该任务在应用java插件时自动创建，并且是BootJar的一个实例。assemble任务自动配置为依赖于bootJar任务，因此运行assemble（或built）也将运行bootJar任务</p>
+<h3 id="打包可执行的war"><a href="#打包可执行的war" class="headerlink" title="打包可执行的war"></a>打包可执行的war</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradle bootWar</span><br></pre></td></tr></table></figure>
+<p>可执行war可以使用bootWar任务来构建。该任务在应用war插件时自动创建，并且是BootWar的一个实例。assemble任务自动配置为依赖于bootWar任务，因此运行assemble（或built）也将运行bootWar任务</p>
+<p>一个war文件可以被打包，以便它可以使用java -jar执行并被部署到一个外部容器。为此，应该将嵌入式servlet容器依赖项添加到providedRuntime配置中，列如：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">  compile <span class="string">'org.springframework.boot:spring-boot-starter-web'</span></span><br><span class="line">  providedRuntime <span class="string">'org.springframework.boot:spring-boot-starter-tomcat'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这可以确保它们被封装在war文件的WEB-INF/lib提供的目录中，在哪里它们不会与外部容器的类冲突</p>
+<h3 id="同时打包可执行的和常规的归档文件"><a href="#同时打包可执行的和常规的归档文件" class="headerlink" title="同时打包可执行的和常规的归档文件"></a>同时打包可执行的和常规的归档文件</h3><p>默认情况下，当配置bootJar或bootWar任务时，jar或war任务被禁用。通过启用jar或war任务，可以将项目配置为同时构建可执行归档文件和常规归档文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jar &#123;</span><br><span class="line">  enabled = true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为避免可执行文件和常规归档被写入同一位置，应将其中一个或另一个配置为使用不同的位置。其中一种方式是通过配置分类器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bootJar &#123;</span><br><span class="line">  classifier = &apos;boot&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="排除Devtools"><a href="#排除Devtools" class="headerlink" title="排除Devtools"></a>排除Devtools</h3><p>默认情况下，Spring Boot的Devtools模块org.springframework.boot：spring-boot-devtools将被排除在可执行jar或war之外。如果您想在您的归档文件中包含Devtools，可以将将excludeDevtools属性设置为false，例子如下：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bootWar &#123;</span><br><span class="line">  excludeDevtools = <span class="keyword">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="配置需要解包的库"><a href="#配置需要解包的库" class="headerlink" title="配置需要解包的库"></a>配置需要解包的库</h3><p>当嵌套在可执行归档文件中时，大多数库可以直接使用，但某些库可能有问题。要处理任何有问题的库，可配置为在运行可执行归档文件时将特定的嵌套jar包解压到临时文件夹，可以将库标识为需要使用与源代码文件的绝对路径相匹配的Ant样式模式进行解包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bootJar &#123;</span><br><span class="line">  requiresUnpack &apos;**/jruby-complete-*.jar&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了更多的控制，也可以使用闭合。闭包传递一个FileTreeElement，并返回一个布尔值，指示是否需要拆箱</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>本文大部分内容都摘录自官方文档，但通过阅读文档依然收获良多，并记录下自己常用或者可能会用到的知识点。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://docs.spring.io/spring-boot/docs/2.0.1.BUILD-SNAPSHOT/gradle-plugin/reference/html/" target="_blank" rel="noopener">Spring Boot的Gradle插件</a></p>
+
       
     </div>
+
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/java/SpringBoot之devtools模块.html" rel="bookmark">Spring Boot之devtools模块</a></div>
+      
+    </li>
+  
+  </ul>
+
 
     
 
@@ -608,447 +692,60 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yilinfeng.top/Hexo博客搭建.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈随想">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="知行合一">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/Hexo博客搭建.html" class="post-title-link" itemprop="url">Hexo博客搭建</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-03-04 23:08:15" itemprop="dateCreated datePublished" datetime="2018-03-04T23:08:15+08:00">2018-03-04</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-03-09 16:10:55" itemprop="dateModified" datetime="2019-03-09T16:10:55+08:00">2019-03-09</time>
-              
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/spring/" rel="tag"># spring</a>
           
-
-          
-            
-            
-          
-
-          
-          
-            <span id="/Hexo博客搭建.html" class="leancloud_visitors" data-flag-title="Hexo博客搭建">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">6.9k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">6 分钟</span>
-              
-            </div>
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
+      
+        <div class="post-widgets">
         
-          <p>本篇文章主要讲述的是搭建<strong>Hexo + Github Page + Travis CI</strong>的博客环境。</p>
-<p>目前有许多搭建个人博客的方案，但是使用Github Page来展示自己的个人博客，无疑是一个较好的方案，无需额外的服务器、免费、自带CDN、可靠并且自带网站域名，这种种的优势足以让人做出选择，然后加上美观的主题，就可以搭建出一个完整的博客系统了，当然要是有点懒的话，加上Travis CI进行自动部署，就可以专注于博客文章的编写了。</p>
-          <!--noindex-->
+
+        
+
+        
           
-            <div class="post-button text-center">
-              <a class="btn" href="/Hexo博客搭建.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.yilinfeng.top/日记/博客之始.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈随想">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="知行合一">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/日记/博客之始.html" class="post-title-link" itemprop="url">博客之始</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+          <div class="social_share">
             
             
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-02-16 00:00:00" itemprop="dateCreated datePublished" datetime="2018-02-16T00:00:00+08:00">2018-02-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
                 </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-03-09 16:10:55" itemprop="dateModified" datetime="2019-03-09T16:10:55+08:00">2019-03-09</time>
-              
+              </div>
             
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/日记/" itemprop="url" rel="index"><span itemprop="name">日记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-            <span id="/日记/博客之始.html" class="leancloud_visitors" data-flag-title="博客之始">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">203</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">1 分钟</span>
-              
-            </div>
-          
-
-          
-
+          </div>
+        
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
       
 
       
-        
-          
-            <p>以前总是看别人写的博客，用OneNote做的笔记，当面试的时候被问到：你有写博客吗？我的回答是NO！  那时候以为写博客离自己很遥远，觉得自己的水平低写不出什么东西来，但是现在仔细想想，不正是因为自己的水平低才更要写博客吗！</p>
-<p>通过写博客来做笔记并且加入自己的思考，摆脱以前一贯的只记忆不思考的习惯，一次又一次地修改完善，才能更好的提高自己的能力。</p>
-<p>在这特殊的一天，踏出新的一步，祝2018年大家越来越好！</p>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Hexo博客搭建.html" rel="next" title="Hexo博客搭建">
+                <i class="fa fa-chevron-left"></i> Hexo博客搭建
+              </a>
+            
+          </div>
 
-          
-        
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/java/SpringBoot之devtools模块.html" rel="prev" title="Spring Boot之devtools模块">
+                Spring Boot之devtools模块 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1058,18 +755,19 @@
   </article>
 
 
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
-
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -1089,8 +787,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1242,6 +949,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradle"><span class="nav-number">1.</span> <span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot插件"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本配置"><span class="nav-number">2.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行应用"><span class="nav-number">2.2.</span> <span class="nav-text">运行应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置主类"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置主类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖管理"><span class="nav-number">2.3.</span> <span class="nav-text">依赖管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义版本号"><span class="nav-number">2.3.1.</span> <span class="nav-text">自定义版本号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件"><span class="nav-number">2.4.</span> <span class="nav-text">插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java插件"><span class="nav-number">2.4.1.</span> <span class="nav-text">Java插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#War插件"><span class="nav-number">2.4.2.</span> <span class="nav-text">War插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dependency-management插件"><span class="nav-number">2.4.3.</span> <span class="nav-text">dependency-management插件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包"><span class="nav-number">2.5.</span> <span class="nav-text">打包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#打包可执行的jar"><span class="nav-number">2.5.1.</span> <span class="nav-text">打包可执行的jar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包可执行的war"><span class="nav-number">2.5.2.</span> <span class="nav-text">打包可执行的war</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同时打包可执行的和常规的归档文件"><span class="nav-number">2.5.3.</span> <span class="nav-text">同时打包可执行的和常规的归档文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排除Devtools"><span class="nav-number">2.5.4.</span> <span class="nav-text">排除Devtools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置需要解包的库"><span class="nav-number">2.5.5.</span> <span class="nav-text">配置需要解包的库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">3.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -1380,6 +1104,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
 
   
 
@@ -1395,6 +1123,37 @@
 
   
 
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '37644037ac52d12cdd8a',
+    clientSecret: '09993925bc5a09337e2d13cc1225761ca099d39b',
+    repo: 'InitNext.github.io',
+    owner: 'InitNext',
+    admin: ['InitNext'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
 
 
   
@@ -1726,38 +1485,30 @@
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function() {
-        entries.push( $(this).attr('id').trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for (var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if (countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
         })
         .fail(function ({ responseJSON }) {
@@ -1782,9 +1533,7 @@
             });
           };
           
-            if ($('.post-title-link').length >= 1) {
-              showTime(Counter);
-            }
+            addCount(Counter);
           
         });
     });
@@ -1798,16 +1547,6 @@
   
 
   
-  
-    
-      
-    
-      
-        
-      
-    
-      
-    
   
 
   
