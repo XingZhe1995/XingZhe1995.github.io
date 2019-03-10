@@ -10,6 +10,9 @@ branches:
   only:
     - hexo
 
+before_install:
+  - mv ./source/css/custom.styl ./themes/next/source/css/_custom/
+
 install:
   - npm install
 
