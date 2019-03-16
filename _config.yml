@@ -178,6 +178,15 @@ theme_config:
     app_key: UBIufuTIEV1gHcdJIx6IOmyN
     security: false
     betterPerformance: true
+  
+  # cdn加速
+  vendors:
+    jquery: //cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js    
+    velocity: //cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js
+    velocity_ui: //cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js
+    fontawesome: //cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css
+    needmoreshare2_js: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js
+    needmoreshare2_css: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css
 
 # 阅读时间
 symbols_count_time:
@@ -185,3 +194,26 @@ symbols_count_time:
   time: true
   total_symbols: true
   total_time: true
+
+# 代码压缩 启用neat
+neat_enable: true
+
+# 对html优化
+neat_html:          
+  enable: true
+  exclude:
+  
+# 对css优化
+neat_css:
+  enable: true
+  exclude:
+    - '*.min.css'
+
+# 对js优化
+neat_js:
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude:
+    - '*.min.js'
