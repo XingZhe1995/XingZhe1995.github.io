@@ -146,14 +146,6 @@ theme_config:
   # 谷歌站点管理工具
   google_site_verification: cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw
 
-  # 站点地图
-  sitemap:
-    path: sitemap.xml
-
-  # 百度站点地图
-  baidusitemap:
-    path: baidusitemap.xml
-
   # 字体
   font:
     enable: true
@@ -187,6 +179,14 @@ theme_config:
     fontawesome: //cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css
     needmoreshare2_js: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js
     needmoreshare2_css: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css
+
+# 站点地图
+sitemap:
+  path: sitemap.xml
+
+# 百度站点地图
+baidusitemap:
+  path: baidusitemap.xml
 
 # 阅读时间
 symbols_count_time:
