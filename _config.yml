@@ -90,6 +90,13 @@ theme_config:
     rounded: true
     rotated: true
 
+  # 网站图标
+  favicon:
+    small: /images/favicon-16x16.png
+    medium: /images/favicon-32x32.png
+    apple_touch_icon: /images/apple-touch-icon.png
+    safari_pinned_tab: /images/safari-pinned-tab.svg
+
   # 菜单
   menu:
     home: / || home
@@ -170,10 +177,10 @@ theme_config:
     app_key: UBIufuTIEV1gHcdJIx6IOmyN
     security: false
     betterPerformance: true
-  
+
   # cdn加速
   vendors:
-    jquery: //cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js    
+    jquery: //cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js
     velocity: //cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js
     velocity_ui: //cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js
     fontawesome: //cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css
@@ -199,10 +206,10 @@ symbols_count_time:
 neat_enable: true
 
 # 对html优化
-neat_html:          
+neat_html:
   enable: true
   exclude:
-  
+
 # 对css优化
 neat_css:
   enable: true
