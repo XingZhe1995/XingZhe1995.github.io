@@ -4,6 +4,7 @@ tags:
   - Linux
 categories:
   - Linux
+abbrlink: d2906cb4
 ---
 
 每一次使用Linux总是忘记了怎么配置网络，因此特意在这里做一下记录。

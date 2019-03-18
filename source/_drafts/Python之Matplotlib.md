@@ -1,5 +1,6 @@
 ---
 title: Python之Matplotlib
+abbrlink: 58f9dd24
 tags:
 categories:
 ---

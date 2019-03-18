@@ -1,5 +1,6 @@
 ---
 title: Python常见运算符
+abbrlink: 56b69528
 tags:
 categories:
 ---

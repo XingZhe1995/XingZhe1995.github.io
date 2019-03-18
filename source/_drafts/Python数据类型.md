@@ -1,9 +1,10 @@
 ---
 title: Python数据类型
-tags:
 categories:
   - 编程语言
-  - Python 
+  - Python
+abbrlink: 9f07ae5c
+tags:
 ---
 
 Python数据类型

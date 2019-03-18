@@ -1,9 +1,10 @@
 ---
 title: k-近邻算法
-tags:
 categories:
   - 机器学习
   - 算法
+abbrlink: e955b133
+tags:
 ---
 
 k-近邻算法采用测量不同特征值之间的距离方法进行分类。

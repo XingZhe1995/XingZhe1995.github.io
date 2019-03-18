@@ -1,11 +1,12 @@
 ---
 title: Hexo博客搭建
-date: 2018-03-04 23:08:15
 tags:
   - 工具
 categories:
   - 工具
 mathjax: true
+abbrlink: b8f4bd70
+date: 2018-03-04 23:08:15
 ---
 
 

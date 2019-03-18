@@ -1,11 +1,12 @@
 ---
 title: Python内建方法
-date: 2018-06-02 09:27:00
 tags:
   - Python
 categories:
   - 编程语言
   - Python
+abbrlink: '723e7817'
+date: 2018-06-02 09:27:00
 ---
 
 在本文章中将会记录Python常用的方法，并且将会不断更新。

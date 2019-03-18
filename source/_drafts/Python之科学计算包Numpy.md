@@ -1,11 +1,12 @@
 ---
 title: Python之科学计算包Numpy
-date: 2018-06-02 09:08:15
 tags:
   - Python
 categories:
   - 编程语言
   - Python
+abbrlink: cabfbce9
+date: 2018-06-02 09:08:15
 ---
 
 在本文章中将会记录科学计算包Numpy的常用方法，并不断更新。

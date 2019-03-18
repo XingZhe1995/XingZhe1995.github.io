@@ -1,11 +1,12 @@
 ---
 title: Python之IO操作
-date: 2018-06-02 10:40:00
 tags:
   - Python
 categories:
   - 编程语言
   - Python
+abbrlink: 908ea013
+date: 2018-06-02 10:40:00
 ---
 
 编码过程中，总是绕不开要对文件进行读写操作，本文章讲述的是Python如何进行IO操作。
