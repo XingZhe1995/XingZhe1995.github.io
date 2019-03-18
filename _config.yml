@@ -86,7 +86,7 @@ theme_config:
 
   # 头像
   avatar:
-    url: http://ww1.sinaimg.cn/large/e6dffef4gy1g13vyu6hakj2139139qmq.jpg
+    url: https://ww1.sinaimg.cn/large/e6dffef4gy1g13vyu6hakj2139139qmq.jpg
     rounded: true
     rotated: true
 
