@@ -2,9 +2,9 @@
 title: DailyDictation-001
 tags:
   - 英语
-  - 每日听力
 categories:
   - 英语
+  - 每日听力
 comments: false
 abbrlink: 21c97ce0
 date: 2019-05-07 17:42:44
