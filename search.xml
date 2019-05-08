@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[圆周率的来历]]></title>
+    <url>%2Fposts%2F5d007e64.html</url>
+    <content type="text"><![CDATA[圆周率是通过实际测量得出的，即一个圆的周长和其直径的比率。结束语不知道是学了忘记，还是说从来就不知道，今天才发现，所以特意记下圆周率是怎么来的。参考维基百科：圆周率]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[DailyDictation-000前言]]></title>
+    <url>%2Fposts%2Fc6c233ed.html</url>
+    <content type="text"><![CDATA[随着学习的不断深入，发现有很多好的知识都是由英文来编写，所以提高英语的能力是必须的。这里通过youtube上的Daily Dictation来帮助提高。学习方法每天听一段听力，并把听力材料记录下来在下一个视频中进行讲解]]></content>
+      <categories>
+        <category>英语</category>
+        <category>每日听力</category>
+      </categories>
+      <tags>
+        <tag>英语</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[DailyDictation-001]]></title>
+    <url>%2Fposts%2F21c97ce0.html</url>
+    <content type="text"><![CDATA[第1天的听力训练。记录接下来的听力材料mother teresa who recive the nobel peace price for her what his catch a poor die died india sho was eighty seven year old完整听力材料Mother Teresa, who received a Nobel Peace Price for her work on behalf of the poor dies in CalCutta India —— she was 87 years old.CalCutta [kæl’kʌtə] n.加尔各答（印度城市）参考听力材料：https://www.youtube.com/watch?v=32T-nyka0dM分析：https://www.youtube.com/watch?v=achfLFf7dUo]]></content>
+      <categories>
+        <category>英语</category>
+        <category>每日听力</category>
+      </categories>
+      <tags>
+        <tag>英语</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Java常用名词]]></title>
     <url>%2Fposts%2Fb0269417.html</url>
     <content type="text"><![CDATA[接触Java开发已经很长一段时间了，对于常见的名词，如：JMS、JDBC、JPA，也基本知道代表的是什么，而JNDI、JTA这些就不知道了，今天特意做个备忘录，记录下在Java中遇到的这些名词，并在后续中不断更新。名词全称中文JDBCJava DataBase ConnectivityJava数据库连接JPAJava Persistence APIJava持久化APIJTAJava Transaction APIJava事务APIJMSJava Message ServiceJava消息服务JNDIJava Naming and Directory InterfaceJava命名和目录接口POJO]]></content>
