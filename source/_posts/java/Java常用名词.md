@@ -19,4 +19,4 @@ date: 2019-04-09 16:31:43
 |JTA|Java Transaction API|Java事务API|
 |JMS|Java Message Service|Java消息服务|
 |JNDI|Java Naming and Directory Interface|Java命名和目录接口|
-|POJO|||
+|POJO|Plain Ordinary Java Object|简单Java对象|
