@@ -32,20 +32,20 @@ Anaconda：拥有Miniconda所拥有的之外，还自带超过720个的开源包
 # 环境变量
 
 在安装conda的过程中，其中有一个选项就是把conda加入系统环境变量中，官方提示是不建议勾选，因为重装之类的可能会导致找不到相应目录之类的，建议直接使用官方提供的命令行工具，在命令行下找到一个名为*Anaconda Prompt*的应用，如下所示：
-![Anaconda Prompt](/images/conda/conda_prompt.png)
+![Anaconda Prompt](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppvqnx28j206w016aa2.jpg)
 运行后的效果如下所示：
-![Anaconda Prompt CMD](/images/conda/conda_cmd.png)
+![Anaconda Prompt CMD](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppw9j5u6j20p50c2aa8.jpg)
 但是经过一段时间的使用后发现还是加入到系统的环境变量中更方便，这样就可以随时随地在任何环境中使用了，如果已经安装了程序但又没有加入系统环境变量的，可以按照如下步骤重新加入：
 1. 找到程序的安装根目录，要是安装时没有指定安装目录的话，一般都是安装在安装时使用的用户的用户目录之下，这里假设路径是conda_rootdir
-![conda安装根目录](/images/conda/conda_rootdir.png)
+![conda安装根目录](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppwjwa75j20pk0gy0uf.jpg)
 2. 打开系统环境变量的设置窗口：我的电脑点击鼠标右键->属性->高级系统设置->环境变量
-![系统环境变量](/images/conda/system_path.jpg)
+![系统环境变量](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppwvx4znj211u0i8b1e.jpg)
 3. 在系统变量部分，找到变量名为Path的条目，选中并点击下方的编辑按钮，就能打开编辑界面
-![系统环境变量编辑窗口](/images/conda/system_variable_edit.png)
+![系统环境变量编辑窗口](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppx5njzxj20q00imdh7.jpg)
 4. 把如下的路径添加到系统环境变量中，记得把conda_rootdir替换为自己电脑下conda的安装根目录
-![conda路径](/images/conda/conda_path.png)
+![conda路径](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppxihyuxj20bc034mx0.jpg)
 5. 点击确定，保存编辑的内容，然后重新打开命令行窗口，然后输入命令*conda info*，并显示相应内容的话，就表示配置成功，配置失败的请重新配置
-![conda信息](/images/conda/conda_info.png)
+![conda信息](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppxqdloaj20rl0e5t95.jpg)
 
 # conda配置文件
 
@@ -75,18 +75,18 @@ pkgs_dirs:
 ``` shell
 conda info
 ```
-![conda信息](/images/conda/conda_info.png)
+![conda信息](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppxqdloaj20rl0e5t95.jpg)
 可以看到上一部分的配置信息也出现在内容展示中，说明配置是有效的。
 
 如果想要查看已有的开发环境，输入如下命令
 ``` shell
 conda info --env
 ```
-![conda环境信息](/images/conda/conda_info_env.png)
+![conda环境信息](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppybug74j20fx02kt8i.jpg)
 可以看到里面现在有两个环境，分别是base和tensorflow，其中base就是安装时默认的环境，而tensorflow就是博主自己创建的环境。
 
 在上述图片中还有个要注意的地方就是base环境前面是有个\*号的，说明base环境处于激活的状态，即判断当前所处环境的方法就是查看\*号出现在那个环境前。
-![激活了tensorflow环境](/images/conda/activate_tensorflow.png)
+![激活了tensorflow环境](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppyn28j4j20g303q0sm.jpg)
 而上面这张则是激活了tensorflow环境的，而这张还有一个特别地方就是前面直接写着名为tensorflow的环境名称，因此也可以作为当前处于那个激活环境的判断。
 
 那么到底怎么创建一个新的环境呢？
@@ -102,7 +102,7 @@ conda create --name env-name
 conda create --name env-name python=2.7
 ```
 其中env-name是该新建环境的名称；python是该环境中的python版本，默认情况下如果不写该参数，将会延用base环境中的python版本，而base环境中的python版本就是下载部分选择conda安装包时的python版本。
-![conda创建环境](/images/conda/conda_create.png)
+![conda创建环境](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppyx53v9j20qp05gwec.jpg)
 创建成功后就能看到如上的显示，想要激活环境，输入：
 ``` shell
 conda activate env-name
@@ -133,13 +133,13 @@ conda remove --name env-name --all
 ``` shell
 conda list
 ```
-![查看已安装的包](/images/conda/conda_list.png)
+![查看已安装的包](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppz5ky2sj20hn08mq2y.jpg)
 
 搜索可用的包
 ``` shell
 conda search tensorflow
 ```
-![搜索可用的包](/images/conda/conda_search.png)
+![搜索可用的包](https://ws1.sinaimg.cn/large/e6dffef4gy1g5ppzem086j20e804xq2t.jpg)
 
 安装包
 ``` shell
