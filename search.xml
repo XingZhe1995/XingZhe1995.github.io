@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[MySQL开发时异常记录]]></title>
+    <url>%2Fposts%2Fa7ec3638.html</url>
+    <content type="text"><![CDATA[记录开发过程中遇到过的MySQL异常。Unknown error 1045数据库的账号密码输入错误。Data truncation: #220011Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001插入的数据值范围超过了字段在数据库中定义的范围。The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone在较新版本的mysql-connector-java里，需要在连接数据库的url上加入serverTimeZone参数12# 需要注意serverTimeZone的大小写jdbc:mysql://localhost:3306/test?serverTimeZone=serverTimeZone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8一般情况使用参数serverTimeZone=Asia/Shanghai，代表中国的时区（UTC+8）如果有多国的时差问题，直接使用serverTimeZone=UTC，即全球标准时间可用参数参考：mysql serverTimezonejava.sql.SQLException: #HY000字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[IDEA输出中文乱码解决方法]]></title>
     <url>%2Fposts%2F3d0562c8.html</url>
     <content type="text"><![CDATA[IDEA输出中文乱码是个常见的问题了，记录下问题的解决方法，以及网上方法无效的原因。先上结论：首先要确认是idea的问题，如果是则打开idea，选择help-&gt;Edit Custom VM Options，加入参数-Dfile.encoding=UTF-8，保存并重启，即可解决问题。定位要解决中文乱码问题，首先要知道是哪里导致了中文乱码，才能进行针对性的配置。定位的方法很简单，就是使用排除法：直接用java -jar直接运行程序直接用构建工具运行程序是web程序则直接用tomcat运行这样就很清楚的知道是哪里的问题了。但是！但是！但是！一般情况下上面的环节其实都是没问题的，主要问题是在idea的身上！配置windows默认使用GBK，idea新装的时候也是使用GBK看到中文乱码，我们会自然的联想到是编码问题，所以会把GBK改为兼容性更好的UTF-8，具体操作如下：打开idea选中工具栏中的Help标签下的Edit Custom VM Options加入参数 -Dfile.encoding=UTF-8保存并重启idea经过上述步骤，中文乱码就迎刃而解了。本质搜索引擎上能搜索到很多解决idea中文乱码的文章，都是在vmoptions中添加参数 -Dfile.encoding=UTF-8，但是就是没有效果！为啥？其实是因为idea在用户目录下有一个vmoptions副本！！跟着文章通常修改的是idea安装目录下的idea.exe.vmoptions和idea64.exe.vmoptions，说白点就是你修改的和idea使用的根本不是同一个，才会导修改没有效果。参考重点在评论14楼]]></content>
