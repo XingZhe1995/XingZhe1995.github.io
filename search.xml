@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[MySQL存储IP地址]]></title>
+    <url>%2Fposts%2Fe38e4cbe.html</url>
+    <content type="text"><![CDATA[在MySQL中，没有专门用于存储IP地址的数据类型，但是可以使用inet_aton()函数把IP地址转换成整型数值进行存储，使用inet_ntoa()函数把整型数值转换回IP地址。inet_aton()和inet_ntoa()函数inet_aton()和inet_ntoa()是MySQL提供的一对函数，一般情况下都是互相配合使用的：inet_aton()：把IP地址转换成一个整型数值，其中的aton可以理解成 IP Address-&gt;Numberinet_ntoa()：把整型数值转换成IP地址，其中的ntoa可以理解成Number-&gt;IP Address具体的流程：inet_aton(IP地址)—&gt;整型数值，inet_ntoa(整型数值)-&gt;IP地址1234567891011&gt; select inet_aton('255.255.255.255');&gt; 4294967295&gt; select inet_ntoa('4294967295');&gt; 255.255.255.255&gt; select inet_aton('0.0.0.0'); &gt; 0&gt; select inet_ntoa('0');&gt; 0.0.0.0性能在不知道inet_aton()和inet_ntoa()函数存在的情况下，我们会想到使用varchar解决IP地址长度不固定的存储问题。但是为了更高的性能，MySQL为我们提供了专用的函数。IP地址范围：0.0.0.0 - 255.255.255.255根据IP地址的范围，使用varchar类型，存储IP地址的最小值（0.0.0.0）要占用7个字符，存储IP地址的最大值（255.255.255.255）要占用15个字符，按照一般使用UTF-8编码计算，存储占用在22~46个字节之间。使用inet_aton()函数，IP地址的最大值（255.255.255.255）转换后产生的整型数值为4294967295，即只需要一个int类型即可存储，而一个int类型数据在数据库中只占用4个字节。通过以上的分析可以了解到，使用函数对IP地址转换后进行存储比直接存储字符串在存储空间上要节省得多，其次在运算上也有明显的优势。注意：因为没有在真实的场景中用IP地址进行过运算，这里没法给出例子，等以后以后遇到了再回来修改！]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[MySQL开发时异常记录]]></title>
     <url>%2Fposts%2Fa7ec3638.html</url>
     <content type="text"><![CDATA[记录开发过程中遇到过的MySQL异常。Unknown error 1045数据库的账号密码输入错误。Data truncation: #220011Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001插入的数据值范围超过了字段在数据库中定义的范围。The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone在较新版本的mysql-connector-java里，需要在连接数据库的url上加入serverTimeZone参数12# 需要注意serverTimeZone的大小写jdbc:mysql://localhost:3306/test?serverTimeZone=serverTimeZone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8一般情况使用参数serverTimeZone=Asia/Shanghai，代表中国的时区（UTC+8）如果有多国的时差问题，直接使用serverTimeZone=UTC，即全球标准时间可用参数参考：mysql serverTimezonejava.sql.SQLException: #HY000字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。]]></content>
