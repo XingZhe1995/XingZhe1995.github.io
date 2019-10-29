@@ -30,12 +30,12 @@ Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001
 
 ``` java
 # 需要注意serverTimeZone的大小写
-jdbc:mysql://localhost:3306/test?serverTimeZone=serverTimeZone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
 ```
 
-一般情况使用参数*serverTimeZone=Asia/Shanghai*，代表中国的时区（UTC+8）
+一般情况使用参数*serverTimezone=Asia/Shanghai*，代表中国的时区（UTC+8）
 
-如果有多国的时差问题，直接使用*serverTimeZone=UTC*，即全球标准时间
+如果有多国的时差问题，直接使用*serverTimezone=UTC*，即全球标准时间
 
 可用参数参考：[mysql serverTimezone](https://blog.csdn.net/Shezzer/article/details/80201264)
 
