@@ -11,7 +11,7 @@
   <entry>
     <title><![CDATA[MySQL开发时异常记录]]></title>
     <url>%2Fposts%2Fa7ec3638.html</url>
-    <content type="text"><![CDATA[记录开发过程中遇到过的MySQL异常。Unknown error 1045数据库的账号密码输入错误。Data truncation: #220011Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001插入的数据值范围超过了字段在数据库中定义的范围。The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone在较新版本的mysql-connector-java里，需要在连接数据库的url上加入serverTimeZone参数12# 需要注意serverTimeZone的大小写jdbc:mysql://localhost:3306/test?serverTimeZone=serverTimeZone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8一般情况使用参数serverTimeZone=Asia/Shanghai，代表中国的时区（UTC+8）如果有多国的时差问题，直接使用serverTimeZone=UTC，即全球标准时间可用参数参考：mysql serverTimezonejava.sql.SQLException: #HY000字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。]]></content>
+    <content type="text"><![CDATA[记录开发过程中遇到过的MySQL异常。Unknown error 1045数据库的账号密码输入错误。Data truncation: #220011Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001插入的数据值范围超过了字段在数据库中定义的范围。The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone在较新版本的mysql-connector-java里，需要在连接数据库的url上加入serverTimeZone参数12# 需要注意serverTimeZone的大小写jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8一般情况使用参数serverTimezone=Asia/Shanghai，代表中国的时区（UTC+8）如果有多国的时差问题，直接使用serverTimezone=UTC，即全球标准时间可用参数参考：mysql serverTimezonejava.sql.SQLException: #HY000字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。]]></content>
       <categories>
         <category>MySQL</category>
       </categories>
