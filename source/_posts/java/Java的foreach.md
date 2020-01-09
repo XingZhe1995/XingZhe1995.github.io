@@ -73,7 +73,7 @@ for (Iterator iterator = collection.iterator(); iterator.hasNext(); ) {
 
 对于集合而言，使用foreach的遍历，其实就是在使用迭代器进行遍历，这点通过Java的规范文档可以了解到，也可以通过对Java的class文件反编译观察到，如下图所示：
 
-![foreach与迭代器.png](http://ws1.sinaimg.cn/large/e6dffef4gy1g8h9syd4fbj21bb0bqq3u.jpg)
+![foreach与迭代器.png](http://ww1.sinaimg.cn/large/e6dffef4gy1gaqphag66lj21bb0bqtjk.jpg)
 
 但是与直接使用iterator不同，使用foreach的过程中，是无法对元素进行增删的，因为iterator是隐含的仅存在于编译后的class文件中，即开发中无法直接获取iterator，因而也就无法执行增删操作。
 
