@@ -12,7 +12,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://blog.yilinfeng.top
+url: https://www.yilinfeng.top
 root: /
 permalink: posts/:abbrlink.html
 permalink_defaults:
@@ -86,7 +86,7 @@ theme_config:
 
   # 头像
   avatar:
-    url: https://ww1.sinaimg.cn/large/e6dffef4gy1g13vyu6hakj2139139qmq.jpg
+    url: http://ww1.sinaimg.cn/large/e6dffef4gy1g13vyu6hakj2139139qmq.jpg
     rounded: true
     rotated: true
 
