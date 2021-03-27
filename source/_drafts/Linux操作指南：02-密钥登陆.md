@@ -1,9 +1,10 @@
 ---
 title: Linux操作指南：02-密钥登陆
 tags:
- - Linux
+  - Linux
 categories:
- - Linux
+  - Linux
+abbrlink: 1791b24
 ---
 
 

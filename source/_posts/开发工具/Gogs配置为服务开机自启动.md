@@ -1,6 +1,17 @@
+---
+title: Gogs配置为服务开机自启动
+tags:
+  - DevOps
+categories:
+  - 开发工具
+abbrlink: bdb89eee
+date: 2021-03-27 21:09:44
+---
+
+
 `Gogs是一款极易搭建的自助 Git 服务`，安装起来也确实是这样，在安装目录下输入命令`./gogs web`就能启动Gogs服务，但如果是通过二进制方式进行安装每次都要输入命令拉起服务就很不方便了，因此需要手动把Gogs配置为Linux服务并开机自启动。
 
-
+<!-- more -->
 
 **注：假设当前的操作用户是git（为啥要用git用户下文细说），安装目录是/home/git/gogs ！！！**
 

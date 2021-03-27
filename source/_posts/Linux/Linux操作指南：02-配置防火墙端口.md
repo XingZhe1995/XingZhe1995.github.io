@@ -1,6 +1,17 @@
+---
+title: Linux操作指南：02-配置防火墙端口
+tags:
+  - Linux
+categories:
+  - Linux
+abbrlink: c62f803c
+date: 2021-03-27 21:10:14
+---
+
+
 新装的Linux系统，ssh、nginx、tomcat等各种服务都安装好了，可是在外网却访问不了？？这十有八九是防火墙的端口没有打开了。
 
-
+<!-- more -->
 
 # 环境
 

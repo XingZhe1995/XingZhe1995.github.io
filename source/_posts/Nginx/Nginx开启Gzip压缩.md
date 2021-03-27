@@ -1,6 +1,18 @@
+---
+title: Nginx开启Gzip压缩
+tags:
+  - 服务器
+  - Nginx
+categories:
+  - Nginx
+abbrlink: 84bf135c
+date: 2021-03-27 21:11:24
+---
+
+
 有些资源文件的体积比较大，开启nginx的gzip压缩，能够极大的提升传输的效率。
 
-
+<!-- more -->
 
 # 环境
 

@@ -5,6 +5,8 @@ categories:
 abbrlink: a7ec3638
 date: 2019-10-25 23:03:02
 tags:
+  - 数据库
+  - MySQL
 ---
 
 

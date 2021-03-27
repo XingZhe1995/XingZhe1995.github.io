@@ -7,31 +7,20 @@ branches:
     - hexo
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_2c430460807a_key -iv $encrypted_2c430460807a_iv -in secrets.tar.enc -out secrets.tar -d
-  - tar xvf secrets.tar
-  - mv id_rsa ssh_know_hosts ~/.ssh/
   - mv ./source/css/custom.styl ./themes/next/source/css/_custom/
 
 script:
   - hexo g
-
-after_success:
-  - chmod 600 ~/.ssh/id_rsa
-  - cat ~/.ssh/ssh_know_hosts >> ~/.ssh/known_hosts
-  - mv ./public ./Blog
-  - tar -zcf blog.tar.gz ./Blog/
-  - scp -P $SERVER_PORT ./blog.tar.gz $SERVER_USER@$SERVER_HOST:~
-  - ssh -p $SERVER_PORT $SERVER_USER@$SERVER_HOST 'rm -rf ~/Blog && tar -zxf blog.tar.gz && rm -f blog.tar.gz | exit'
 
 deploy:
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
   keep-history: true
-  local-dir: ./Blog
+  local-dir: ./public
   target-branch: master
   email: 3137650480@qq.com
-  name: cyl
+  name: zhixing
   on:
     branch:
       - hexo

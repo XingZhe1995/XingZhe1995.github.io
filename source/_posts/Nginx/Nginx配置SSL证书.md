@@ -1,6 +1,18 @@
+---
+title: Nginx配置SSL证书
+tags:
+  - 服务器
+  - Nginx
+categories:
+  - Nginx
+abbrlink: ecc40a95
+date: 2021-03-27 21:11:53
+---
+
+
 HTTP连接是不安全的，数据是明文传输的，如果有敏感数据这就直接暴露在互联网环境下是很危险的行为，因此为Nginx配置SSL证书，使用安全的HTTPS进行访问是非常有必要的。
 
-
+<!-- more -->
 
 # 环境
 

@@ -1,6 +1,18 @@
+---
+title: docker自启动
+tags:
+  - 容器
+  - Docker
+categories:
+  - Docker
+abbrlink: f31ac7c3
+date: 2021-03-27 21:08:56
+---
+
+
 服务器重启后docker服务和容器都会停止运行，如果每次都手动启动的话就很繁琐了，因此配置为自启动就很有必要了。
 
-
+<!-- more -->
 
 # 环境
 
