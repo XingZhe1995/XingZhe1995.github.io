@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>斐讯N1刷机后操作</title>
+    <url>/posts/b9577586.html</url>
+    <content><![CDATA[<p>N1刷机成功后，为了方便使用，免不了要执行一些常见的配置操作或软件安装，例：更换国内软件源、安装docker、设置WIFI、安装Java环境等。</p>
+<span id="more"></span>
+
+<h1 id="阅读须知"><a href="#阅读须知" class="headerlink" title="阅读须知"></a>阅读须知</h1><p>本示例系统使用的是armbian 5.67 stretch 4.19</p>
+<h1 id="设置WiFi"><a href="#设置WiFi" class="headerlink" title="设置WiFi"></a>设置WiFi</h1><p>要设置WiFi可以使用系统自带的网络设置图形界面</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmtui</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后，通过方向键和回车键选中其中的<em>Activate a connection</em>选项，将会弹出一个列表（<em>Wired</em>代表的是有线连接，<em>WiFi</em>代表的是无线连接），按提示输入WiFi账号密码即可。</p>
+<p>如果图形界面中没有WiFi列表则说明系统的WiFi模块有问题，可按如下方法解决：</p>
+<p>方法一： 执行如下命令重新加载模块</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">modprobe dhd &amp;&amp; echo dhd &gt;&gt; &#x2F;etc&#x2F;modules</span><br><span class="line">modprobe wifi_dummy &amp;&amp; echo wifi_dummy &gt;&gt; &#x2F;etc&#x2F;modules</span><br></pre></td></tr></table></figure>
+
+<p>方法二：使用armbian-config命令设置wifi</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 执行命令</span><br><span class="line">armbian-config</span><br></pre></td></tr></table></figure>
+
+<p>依据提示选中Network中的WIFI</p>
+<p>方法三：重新安装系统。</p>
+<h1 id="更换国内源"><a href="#更换国内源" class="headerlink" title="更换国内源"></a>更换国内源</h1><p>重要的事情说三遍</p>
+<p>如果默认源的安装速度不是特别慢的话，无需特意跟换源！！！</p>
+<p>如果默认源的安装速度不是特别慢的话，无需特意跟换源！！！</p>
+<p>如果默认源的安装速度不是特别慢的话，无需特意跟换源！！！</p>
+<p>/etc/apt/sources.list文件记录的是系统所使用的软件源，而默认安装的系统使用的是国外源</p>
+<p>首先对/etc/apt/sources.list文件进行备份，以备不时之需</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bak</span><br></pre></td></tr></table></figure>
+
+<p>然后编辑/etc/apt/sources.list文件，把原有的源删除，并加入新的国内源（这里使用的是科大的源，如果需要的可以自行更换为其它源，如：163、清华等），并保存。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;apt&#x2F;sources.list</span><br><span class="line"></span><br><span class="line"># 科大软件源</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free contrib</span><br></pre></td></tr></table></figure>
+
+<p>最后执行更新命令，使软件列表生效</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+
+<p>等待命令执行完，至此新的软件源就生效了。</p>
+<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><p>安装docker有一个非常便捷的方法就是使用阿里提供的一键安装脚本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -fsSL https:&#x2F;&#x2F;get.docker.com | bash -s docker --mirror Aliyun</span><br></pre></td></tr></table></figure>
+
+<p>通过脚本直接安装docker及其所需的依赖，可以说是非常方便了。</p>
+<p>注意：该脚本会直接安装最新的docker脚本</p>
+<h1 id="安装JRE"><a href="#安装JRE" class="headerlink" title="安装JRE"></a>安装JRE</h1><p>有时候需要运行Java程序，因此JRE（Java运行时环境）是必不可少的。</p>
+<p>执行如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 安装java8的jre</span><br><span class="line">apt-get install openjdk-8-jre</span><br></pre></td></tr></table></figure>
+
+<p>注意点一：如果安装过程中遇到所需依赖无法下载的问题，可能是由apt源造成的。博主之前使用的是科大软件源，结果提示部分依赖缺少无法下载，然后跟换回默认源就可以了。</p>
+<p>注意点二：博主一开始是从Oracle官网下载的解压包：server-jre-8u212-linux-x64.tar.gz，并用其配置环境，但是在尝试执行命令的时候却报错：<em>cannot execute binary file: Exec format error</em>，这是因为该解压包的文件目标运行系统和本系统（参考：阅读须知）有差异而导致的，需要指定的版本才能在本系统运行。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://luotianyi.vc/1389.html">Armbian系统重新加载WiFi模块</a></p>
+<p><a href="https://www.hostloc.com/thread-527652-1-1.html">N1求教连接wifi问题，实在不知道咋回事了</a></p>
+]]></content>
+      <categories>
+        <category>有趣</category>
+        <category>刷机</category>
+      </categories>
+      <tags>
+        <tag>有趣</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>架构师的思考层次</title>
+    <url>/posts/b1bd9b76.html</url>
+    <content><![CDATA[<p>作为一个架构师，在面对一个产品的时候应该怎么进行思考呢？</p>
+<span id="more"></span>
+
+<h1 id="关注产品本身"><a href="#关注产品本身" class="headerlink" title="关注产品本身"></a>关注产品本身</h1><p>第一个层次是<strong>关注产品本身</strong>，即只会考虑产品本身系统的事情，不会考虑系统外的事情，例：后期与第三方系统对接的问题等。</p>
+<h1 id="关注整个系统"><a href="#关注整个系统" class="headerlink" title="关注整个系统"></a>关注整个系统</h1><p>第二个层次是<strong>关注整个系统</strong>，在上了规模的产品中，大多是多个系统之间的配合，因此除了要关注自己的系统之外，还要考虑到与其它系统之间的协作。</p>
+<h1 id="关注产品背后的价值"><a href="#关注产品背后的价值" class="headerlink" title="关注产品背后的价值"></a>关注产品背后的价值</h1><p>第三个层次是<strong>关注产品可能潜在的价值</strong>，除了技术的要素，重点关注的是价值，即该产品可能带来的价值。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上内容是阅读别人文章后的心得，并计划在后续的工作中进行尝试，记录于2019-06-24 22：30。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://blog.51cto.com/frankfan/1248401">架构设计师—你在哪层楼？</a></p>
+]]></content>
+      <categories>
+        <category>架构师</category>
+      </categories>
+      <tags>
+        <tag>架构师</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>科学的重复</title>
+    <url>/posts/ab6871d9.html</url>
+    <content><![CDATA[<p>想要学习效果好，记忆是个绕不开的话题，通过科学的重复记忆，就能显著的提高记忆效果。</p>
+<span id="more"></span>
+
+<h1 id="遗忘曲线"><a href="#遗忘曲线" class="headerlink" title="遗忘曲线"></a>遗忘曲线</h1><blockquote>
+<p>遗忘曲线（又名：艾宾浩斯遗忘曲线）揭示了人类大脑对于新事物的记忆规律：遗忘是先快后慢，最有趋于稳定。</p>
+</blockquote>
+<h1 id="启示"><a href="#启示" class="headerlink" title="启示"></a>启示</h1><p>根据遗忘曲线的特性，在关键时间点上进行重复复习，即可事半功倍的进行记忆。</p>
+<p>关键时间点：一般记住后，在5分钟后重复一遍，30分钟后再重复一遍，12小时后，1天后，2天后，4天后，7天后，15天后就会记得很牢。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>并不需要一定要严格按照上述的时间点进行复习，只需要在大概的时间重复记忆一下内容即可，其本质是：重复记忆。</p>
+<p>计划在后续中进行尝试，并记录下心得。</p>
+<p>记录于2019-06-24 23：04，开始尝试。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://baike.baidu.com/item/%E9%81%97%E5%BF%98%E6%9B%B2%E7%BA%BF/7278665?fromtitle=%E8%89%BE%E5%AE%BE%E6%B5%A9%E6%96%AF%E9%81%97%E5%BF%98%E6%9B%B2%E7%BA%BF&fromid=3905802">艾宾浩斯遗忘曲线</a></p>
+<p><a href="https://www.zhihu.com/question/31136262">如何利用遗忘曲线来有效记忆？</a></p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>记忆</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>记忆</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux操作指南：01-新建用户</title>
+    <url>/posts/1eb05570.html</url>
+    <content><![CDATA[<p>在Linux上root用户拥有最高的权限，但是多人共享root账户或者直接使用root账户都是一件危险的事情，因此新建普通用户给其它操作员是一件顺理成章的事情。</p>
+<span id="more"></span>
+
+<p><strong>注：演示使用的Linux操作系统是Centos 7</strong></p>
+<h1 id="用户操作"><a href="#用户操作" class="headerlink" title="用户操作"></a>用户操作</h1><h2 id="新增用户"><a href="#新增用户" class="headerlink" title="新增用户"></a>新增用户</h2><p>全新的Linux系统默认都是只有root账户，因此通过root用户来创建用户，当然也可以使用具备新建用户的权限的用户来创建用户</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">useradd test</span><br></pre></td></tr></table></figure>
+
+<p>此时通过查看命令即可看到home目录下多了个test目录，即代表用户test已经成功创建</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ls -l 查看命令</span></span><br><span class="line">ls -l /home</span><br><span class="line">drwx------  2 test   test   4096 Jan 10 21:32 test</span><br></pre></td></tr></table></figure>
+
+<h1 id="修改用户密码"><a href="#修改用户密码" class="headerlink" title="修改用户密码"></a>修改用户密码</h1><p>使用<em>useradd</em>命令创建用户后，此时由于没有设置密码，该新建的账户是无法登陆使用的，因此需要给该新账户添加密码（注：修改密码使用的是同一个命令）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> passwd 修改密码命令</span></span><br><span class="line">passwd test</span><br><span class="line">New password: </span><br></pre></td></tr></table></figure>
+
+<p>此时即可输入新密码了，但是会发现好像一直按键盘都是空的，这就是Linux的安全策略，光给密码打码还不够安全，连长度都不知道才是真的安全，输入完密码按回车键即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">passwd test</span><br><span class="line">New password: </span><br><span class="line">Retype new password: </span><br></pre></td></tr></table></figure>
+
+<p>输入完第一次后还会要求你再重复输入一次，以防你输入错误的密码</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">passwd test</span><br><span class="line">New password: </span><br><span class="line">Retype new password: </span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
+
+<p>两次输入密码成功后会出现成功的提示信息，此时新建账户已经可以使用了。</p>
+<p>但是有时候可不是这么顺利，比如说输入的密码太短：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">passwd test</span><br><span class="line">New password: </span><br><span class="line">BAD PASSWORD: The password is shorter than 8 characters</span><br></pre></td></tr></table></figure>
+
+<p>或者输入的密码中包含用户名</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">passwd test</span><br><span class="line">New password:</span><br><span class="line">BAD PASSWORD: The password contains the user name in some form</span><br></pre></td></tr></table></figure>
+
+<p>又或者输入的密码太简单</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">passwd test</span><br><span class="line">New password:</span><br><span class="line">BAD PASSWORD: The password fails the dictionary check - it is too simplistic/systematic</span><br></pre></td></tr></table></figure>
+
+<p>以上的几种情况都会导致输入的密码无效，要重新输入新的密码。</p>
+<h2 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h2><p>新建的用户在使用一段时间后可能会面临删账户的情况，使用如下命令:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">userdel test</span><br></pre></td></tr></table></figure>
+
+<p>但是这样只是仅仅删除了账户，而home目录下的账户目录是没有被删除的，因此可以选择加入参数*-R*在删除账户的同时删除对应的用户目录。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">userdel -R test</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上就是在Linux中关于账户的一些常用操作。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux操作指南：02-配置防火墙端口</title>
+    <url>/posts/c62f803c.html</url>
+    <content><![CDATA[<p>新装的Linux系统，ssh、nginx、tomcat等各种服务都安装好了，可是在外网却访问不了？？这十有八九是防火墙的端口没有打开了。</p>
+<span id="more"></span>
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>系统：CentOS 7</p>
+<h1 id="firewall-cmd与iptables"><a href="#firewall-cmd与iptables" class="headerlink" title="firewall-cmd与iptables"></a>firewall-cmd与iptables</h1><p>到了CentOS 7，防火墙的操作命令由<em>iptables</em>改为了<em>firewall-cmd</em>了。以下是摘抄自<a href="https://wangchujiang.com/linux-command/c/firewall-cmd.html">他人</a>的解释：</p>
+<blockquote>
+<p>firewall-cmd 是 firewalld的字符界面管理工具，firewalld是centos7的一大特性，最大的好处有两个：支持动态更新，不用重启服务；第二个就是加入了防火墙的“zone”概念。</p>
+<p>firewalld跟iptables比起来至少有两大好处：</p>
+<ol>
+<li>firewalld可以动态修改单条规则，而不需要像iptables那样，在修改了规则后必须得全部刷新才可以生效。</li>
+<li>firewalld在使用上要比iptables人性化很多，即使不明白“五张表五条链”而且对TCP/IP协议也不理解也可以实现大部分功能。</li>
+</ol>
+<p>firewalld自身并不具备防火墙的功能，而是和iptables一样需要通过内核的netfilter来实现，也就是说firewalld和 iptables一样，他们的作用都是用于维护规则，而真正使用规则干活的是内核的netfilter，只不过firewalld和iptables的结 构以及使用方法不一样罢了。</p>
+</blockquote>
+<p>总的来说这次变更带来的直观好处就是变的更方便更好用了。</p>
+<h1 id="端口开发的两种方式"><a href="#端口开发的两种方式" class="headerlink" title="端口开发的两种方式"></a>端口开发的两种方式</h1><p>开放端口有两种方式：指定端口和指定服务。</p>
+<p>指定端口很好理解，就是写上那个端口号就开放那个端口。</p>
+<p>指定服务可以理解为内置的一个端口映射，默认情况下：ssh服务端口是22、http服务端口是80、MySQL服务端口是3306、tomcat服务端口是8080，因此用服务名来代替直接指定端口，方便记忆和使用。</p>
+<p><strong>要注意的是：通过指定服务名开放的就要通过指定服务名关闭；通过指定端口号开放的就要通过指定端口号关闭，且指定端口的时候一定要指定是什么协议，tcp 还是 udp。</strong></p>
+<h1 id="permanent参数和zone参数"><a href="#permanent参数和zone参数" class="headerlink" title="permanent参数和zone参数"></a>permanent参数和zone参数</h1><p>配置端口的时候这两个参数是会经常使用到的。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --permanent</span><br></pre></td></tr></table></figure>
+
+<p>这个很好理解，就是让配置永久生效的意思。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public</span><br></pre></td></tr></table></figure>
+
+<p><strong>zone</strong>参数就难以理解一点，这个参数的作用是指定一套规则集合，依靠这些规则来判断是否放行数据。这里使用的规则集是<strong>public</strong>，即只放行已配置的服务（端口）。</p>
+<p>更详细的可以参考：<a href="http://www.excelib.com/article/287/show/#g5vTC3">Firewalld的结构</a>，<a href="https://www.cnblogs.com/excelib/p/5155951.html">用活Firewalld防火墙中的zone</a></p>
+<h1 id="firewall-cmd常用命令"><a href="#firewall-cmd常用命令" class="headerlink" title="firewall-cmd常用命令"></a>firewall-cmd常用命令</h1><p>增加端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 指定端口</span></span><br><span class="line">firewall-cmd --zone=public --add-port=80/tcp --permanent</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定服务</span></span><br><span class="line">firewall-cmd --add-service=http --permanent</span><br></pre></td></tr></table></figure>
+
+<p>移除端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 指定端口</span></span><br><span class="line">firewall-cmd --permanent --remove-port=80/tcp</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定服务</span></span><br><span class="line">firewall-cmd --permanent --remove-service=http</span><br></pre></td></tr></table></figure>
+
+<p>显示防火墙运行状态</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
+
+<p>仅显示打开的端口信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
+
+<p>仅显示增加的服务信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --list-service</span><br></pre></td></tr></table></figure>
+
+<p>显示所有信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --list-all</span><br></pre></td></tr></table></figure>
+
+<p>配置完之后，必须要重启防火墙让配置生效，如下命令的意思是不中断连接重新加载防火墙配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这里只是列举了自己常用的一些命令，更具体的可以参考以下文章</p>
+<ul>
+<li><p><a href="https://wangchujiang.com/linux-command/c/firewall-cmd.html">firewall-cmd详解</a></p>
+</li>
+<li><p><a href="http://www.excelib.com/article/287/show/#g5vTC3">Firewalld的结构</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/excelib/p/5155951.html">用活Firewalld防火墙中的zone</a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux设置时区</title>
+    <url>/posts/35e905e4.html</url>
+    <content><![CDATA[<p>如果服务器在国外且所在时区不一致，那么使用<code>date</code>命令查看时间的话，会看到另外一个时区的时间，为了符合生活习惯需要设置新的时区。</p>
+<p>假设一个场景：凌晨3点人少的时候重启服务器。这样写crontab定时任务就有点麻烦了，因为要以自己的时间计算服务器所在时区的时间，因此把服务器时区设置为自己生活所在的时区还是挺有必要的。</p>
+<span id="more"></span>
+
+<p>设置方法如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 选择时区，在这里选了中国时区Asia/Shanghai</span></span><br><span class="line">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 会提示</span></span><br><span class="line">cp: overwrite ‘/etc/localtime’?</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 输入确认y</span></span><br><span class="line">cp: overwrite ‘/etc/localtime’? y</span><br></pre></td></tr></table></figure>
+
+<p>PS1：这里只是使用了其中一种方法，其它设置方法可以参考<a href="https://blog.csdn.net/gezilan/article/details/79422864">Linux如何设置时区、时间</a>。</p>
+<p>PS2：如果时区对上了，但是具体的时间对不上，可能是没有使用ntp同步互联网时间。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux配置IPV6地址</title>
+    <url>/posts/ef0b8374.html</url>
+    <content><![CDATA[<p>一般的服务器都是没有提供IPV6地址的，但是有时候我们又会需要使用到，例如访问谷歌经常会弹出人机验证非常讨厌，这时候使用IPV6进行访问就不需要再验证了。</p>
+<span id="more"></span>
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>系统：CentOS 7</p>
+<h1 id="免费IPV6"><a href="#免费IPV6" class="headerlink" title="免费IPV6"></a>免费IPV6</h1><p>这是一个免费资源，是由HE（HURRICANE ELECTRIC）提供的，通过技术手段连上HE提供的服务器，实现IPV4转IPV6，我们就间接有了IPV6访问的能力了。</p>
+<p>具体的获取教程请参考<a href="https://zhuanlan.zhihu.com/p/344450513">HE的IPV6注册</a>，目的是在HE中获取如下的配置内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">modprobe ipv6</span><br><span class="line">ip tunnel add he-ipv6 mode sit remote 216.218.200.58 local 替换你的ipv4地址 ttl 255</span><br><span class="line">ip link set he-ipv6 up</span><br><span class="line">ip addr add 替换获得的ipv6地址 dev he-ipv6</span><br><span class="line">ip route add ::/0 dev he-ipv6</span><br><span class="line">ip -f inet6 addr</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="自动配置IPV6"><a href="#自动配置IPV6" class="headerlink" title="自动配置IPV6"></a>自动配置IPV6</h1><p>如果直接执行上述的命令，由于这些命令都是临时生效的，每次重启服务器都需要重新执行一次。因此我们要设置为自动执行。操作过程如下</p>
+<ol>
+<li>首先新建一个脚本ipv6.sh，脚本示例如下</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 当前目录是：/home/demo 文件具体路径：/home/demo/ipv6.sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建脚本ipv6.sh</span></span><br><span class="line">vi ipv6.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 脚本内容如下</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">modprobe ipv6</span><br><span class="line">ip tunnel add he-ipv6 mode sit remote 216.218.200.58 local 替换你的ipv4地址 ttl 255</span><br><span class="line">ip link set he-ipv6 up</span><br><span class="line">ip addr add 替换获得的ipv6地址 dev he-ipv6</span><br><span class="line">ip route add ::/0 dev he-ipv6</span><br><span class="line">ip -f inet6 addr</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>保存退出后，赋予执行权限</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 授予执行权限</span></span><br><span class="line">chmod +x ipv6.sh</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在rc.local文件中加入执行ipv6.sh的命令，最后保存退出，等到下次重启服务器就能看到效果了。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 编辑rc.local脚本</span></span><br><span class="line">vi /etc/rc.local</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 加入如下内容，记得替换成自己的路径</span></span><br><span class="line">/home/demo/ipv6.sh</span><br></pre></td></tr></table></figure>
+
+<p>rc.local脚本，是Linux系统自带的脚本，每次系统启动时都会执行一遍脚本中的命令，我们就是通过这个机制来自动执行ipv6设置。</p>
+<h1 id="检查配置是否生效"><a href="#检查配置是否生效" class="headerlink" title="检查配置是否生效"></a>检查配置是否生效</h1><p>想要立刻重启服务器，可以使用命令<em>reboot</em>，重启后输入网络查看命令<em>ifconfig</em>，找到<em>he-ipv6</em>这个网络接口，如果能找到就代表配置成功了。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重启服务器</span></span><br><span class="line">reboot</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看网络信息</span></span><br><span class="line">ifconfig</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 找到he-ipv6这个名字，这个名字是在上面的配置中名命的，不是自动生成的</span></span><br><span class="line">he-ipv6: flags=209&lt;UP,POINTOPOINT,RUNNING,NOARP&gt;  mtu 1480</span><br><span class="line">        inet6 ipv6地址  prefixlen 64  scopeid 0x0&lt;global&gt;</span><br><span class="line">        inet6 ipv6地址  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        sit  txqueuelen 1000  (IPv6-in-IPv4)</span><br><span class="line">        RX packets 1575  bytes 555832 (542.8 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 1654  bytes 407621 (398.0 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="使用IPV6访问"><a href="#使用IPV6访问" class="headerlink" title="使用IPV6访问"></a>使用IPV6访问</h1><p>尝试使用IPV6访问一下谷歌</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ping6 就是用ipv6进行访问</span></span><br><span class="line">ping6 google.com</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提示错误</span></span><br><span class="line">connect: Network is unreachable</span><br></pre></td></tr></table></figure>
+
+<p>（这是我猜的）应该是由于缺少IPV6域名地址的解析能力，无法正确获得IPV6地址，因此访问失败。因此通过在hosts文件中加入谷歌的IPV6地址，尝试绕过解析这一步骤</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改host文件</span></span><br><span class="line">vi /etc/hosts</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 加入谷歌的IPV6地址</span></span><br><span class="line">2404:6800:4008:c00::71 google.com</span><br><span class="line">2404:6800:4008:c02::63 www.google.com</span><br></pre></td></tr></table></figure>
+
+<p>修改完hosts文件后要重新加载网络信息才能生效</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 重启网络</span></span><br><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
+
+<p>由于上一步重启了网络，因此要重新配置IPV6，执行一下ipv6.sh脚本即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/home/demo/ipv6.sh</span><br></pre></td></tr></table></figure>
+
+<p>再次访问</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ping6 google.com</span><br><span class="line"></span><br><span class="line">PING google.com(google.com (2404:6800:4008:c00::71)) 56 data bytes</span><br><span class="line">64 bytes from google.com (2404:6800:4008:c00::71): icmp_seq=1 ttl=107 time=224 ms</span><br><span class="line">64 bytes from google.com (2404:6800:4008:c00::71): icmp_seq=2 ttl=107 time=224 ms</span><br><span class="line">64 bytes from google.com (2404:6800:4008:c00::71): icmp_seq=3 ttl=107 time=223 ms</span><br></pre></td></tr></table></figure>
+
+<p>这次就成功了，其中的IPV6地址就是我们在hosts文件中填的那个。</p>
+<h1 id="shadowsocks使用IPV6"><a href="#shadowsocks使用IPV6" class="headerlink" title="shadowsocks使用IPV6"></a>shadowsocks使用IPV6</h1><p>使用shadowsocks有个重要用途就是使用谷歌搜索，但是如果IP或者IP段被谷歌标记了的话，经常会弹出人机验证非常讨厌，通过使用IPV6的话就可以避开这个验证。</p>
+<p>shadowsocks使用IPV6非常简单，简单的加入如下配置即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 编辑配置文件</span></span><br><span class="line">vi /etc/shadowsocks-libev/config.json</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 加入配置项</span></span><br><span class="line">&quot;ipv6_first&quot;:true</span><br></pre></td></tr></table></figure>
+
+<p>然后重启shadowsocks服务即可。</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL存储IP地址</title>
+    <url>/posts/e38e4cbe.html</url>
+    <content><![CDATA[<p>在MySQL中，没有专门用于存储IP地址的数据类型，但是可以使用inet_aton()函数把IP地址转换成整型数值进行存储，使用inet_ntoa()函数把整型数值转换回IP地址。</p>
+<span id="more"></span>
+
+<h1 id="inet-aton-和inet-ntoa-函数"><a href="#inet-aton-和inet-ntoa-函数" class="headerlink" title="inet_aton()和inet_ntoa()函数"></a>inet_aton()和inet_ntoa()函数</h1><p>inet_aton()和inet_ntoa()是MySQL提供的一对函数，一般情况下都是互相配合使用的：</p>
+<ul>
+<li>inet_aton()：把IP地址转换成一个整型数值，其中的aton可以理解成 IP Address-&gt;Number</li>
+<li>inet_ntoa()：把整型数值转换成IP地址，其中的ntoa可以理解成Number-&gt;IP Address</li>
+</ul>
+<p>具体的流程：inet_aton(IP地址)—&gt;整型数值，inet_ntoa(整型数值)-&gt;IP地址</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_aton(<span class="string">&#x27;255.255.255.255&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 4294967295</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_ntoa(<span class="string">&#x27;4294967295&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 255.255.255.255</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_aton(<span class="string">&#x27;0.0.0.0&#x27;</span>);</span>  </span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_ntoa(<span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 0.0.0.0</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>在不知道inet_aton()和inet_ntoa()函数存在的情况下，我们会想到使用varchar解决IP地址长度不固定的存储问题。但是为了更高的性能，MySQL为我们提供了专用的函数。</p>
+<blockquote>
+<p>IP地址范围：0.0.0.0 - 255.255.255.255</p>
+</blockquote>
+<p>根据IP地址的范围，使用varchar类型，存储IP地址的最小值（0.0.0.0）要占用7个字符，存储IP地址的最大值（255.255.255.255）要占用15个字符，按照一般使用UTF-8编码计算，存储占用在<strong>22~46个字节</strong>之间。</p>
+<p>使用inet_aton()函数，IP地址的最大值（255.255.255.255）转换后产生的整型数值为<em>4294967295</em>，即只需要一个int类型即可存储，而一个int类型数据在数据库中只占用<strong>4个字节</strong>。</p>
+<p>通过以上的分析可以了解到，使用函数对IP地址转换后进行存储比直接存储字符串在存储空间上要节省得多，其次在运算上也有明显的优势。</p>
+<p>注意：因为没有在真实的场景中用IP地址进行过运算，这里没法给出例子，等以后以后遇到了再回来修改！</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL开发时异常记录</title>
+    <url>/posts/a7ec3638.html</url>
+    <content><![CDATA[<p>记录开发过程中遇到过的MySQL异常。</p>
+<span id="more"></span>
+
+<h1 id="Unknown-error-1045"><a href="#Unknown-error-1045" class="headerlink" title="Unknown error 1045"></a>Unknown error 1045</h1><p>数据库的账号密码输入错误。</p>
+<h1 id="Data-truncation-22001"><a href="#Data-truncation-22001" class="headerlink" title="Data truncation: #22001"></a>Data truncation: #22001</h1><figure class="highlight"><table><tr><td class="code"><pre><span class="line">Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001</span><br></pre></td></tr></table></figure>
+
+<p>插入的数据值范围超过了字段在数据库中定义的范围。</p>
+<h1 id="The-server-time-zone-value-‘�й���׼ʱ��’-is-unrecognized-or-represents-more-than-one-time-zone"><a href="#The-server-time-zone-value-‘�й���׼ʱ��’-is-unrecognized-or-represents-more-than-one-time-zone" class="headerlink" title="The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone"></a>The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone</h1><p>在较新版本的<em>mysql-connector-java</em>里，需要在连接数据库的url上加入<em>serverTimeZone</em>参数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># 需要注意serverTimeZone的大小写</span><br><span class="line">jdbc:mysql:<span class="comment">//localhost:3306/test?serverTimezone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br></pre></td></tr></table></figure>
+
+<p>一般情况使用参数<em>serverTimezone=Asia/Shanghai</em>，代表中国的时区（UTC+8）</p>
+<p>如果有多国的时差问题，直接使用<em>serverTimezone=UTC</em>，即全球标准时间</p>
+<p>可用参数参考：<a href="https://blog.csdn.net/Shezzer/article/details/80201264">mysql serverTimezone</a></p>
+<h1 id="java-sql-SQLException-HY000"><a href="#java-sql-SQLException-HY000" class="headerlink" title="java.sql.SQLException: #HY000"></a>java.sql.SQLException: #HY000</h1><p>字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx开启Gzip压缩</title>
+    <url>/posts/84bf135c.html</url>
+    <content><![CDATA[<p>有些资源文件的体积比较大，开启nginx的gzip压缩，能够极大的提升传输的效率。</p>
+<span id="more"></span>
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>系统：CentOS 7</p>
+<p>Nginx版本：1.16.1</p>
+<h1 id="配置方式"><a href="#配置方式" class="headerlink" title="配置方式"></a>配置方式</h1><p>nginx配置为文件服务器的方式非常简单，打开nginx的配置文件，一般在这个路径下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>然后在http、server、location这三个任一代码块（只是影响了生效的范围）中加入如下关键指令即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">开启gzip压缩 默认关闭off</span></span><br><span class="line">gzip on;</span><br><span class="line"><span class="meta">#</span><span class="bash">IE版本1-6不支持gzip压缩，关闭</span></span><br><span class="line">gzip_disable &#x27;MSIE[1-6].&#x27;;</span><br><span class="line"><span class="meta">#</span><span class="bash">需要压缩的文件格式 text/html默认会压缩，不用添加</span></span><br><span class="line">gzip_types text/css text/javascript application/javascript image/jpeg image/png image/gif; </span><br><span class="line"><span class="meta">#</span><span class="bash">给响应头加个vary，告知客户端能否缓存</span></span><br><span class="line">gzip_vary on; </span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认值是 4 4k/8k，设置系统获取几个单位的缓存用于存储gzip的压缩结果数据流。 例如 4 4k 代表以4k为单位，按照原始数据大小以4k为单位的4倍申请内存。 4 8k 代表以8k为单位，按照原始数据大小以8k为单位的4倍申请内存。</span></span><br><span class="line">gzip_buffers 4 8k;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 压缩等级1~9，默认值1，1级别最低压缩速度最快但是压缩比最小，9级别最高压缩速度最慢但压缩比最大，建议根据自己情况测试一下那个级别适合自己，偷懒的话网上看的大多数都是设成1或者4</span></span><br><span class="line">gzip_comp_level 1; </span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认值0 文件大小大于该值时才进行压缩，单位为Byte，写1k即1024B，当值为0时所有页面都进行压缩，建议设置成大于1k的字节数</span></span><br><span class="line">gzip_min_length 1k; </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 这个不熟悉</span></span><br><span class="line">gzip_proxied # 默认关闭off 用于反向代理的时候是否开启压缩，具体参数建议看下文的参考文章</span><br></pre></td></tr></table></figure>
+
+<p>具体示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">  ......</span><br><span class="line">  server &#123;</span><br><span class="line">    ......</span><br><span class="line">    location / &#123;</span><br><span class="line">      gzip on;</span><br><span class="line">      gzip_disable &#x27;MSIE[1-6].&#x27;;</span><br><span class="line">      gzip_types text/css text/javascript application/javascript image/jpeg image/png image/gif; </span><br><span class="line">      gzip_buffers 4 4k;</span><br><span class="line">      gzip_comp_level 1;</span><br><span class="line">      gzip_min_length 20;</span><br><span class="line">      gzip_vary on; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>写完配置文件后检查一下有没有写错（可省略）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>最后就是让nginx重新加载让配置生效</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.nginx.cn/doc/standard/httpgzip.html">Nginx Gzip模块中文参考</a></p>
+]]></content>
+      <categories>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx配置SSL证书</title>
+    <url>/posts/ecc40a95.html</url>
+    <content><![CDATA[<p>HTTP连接是不安全的，数据是明文传输的，如果有敏感数据这就直接暴露在互联网环境下是很危险的行为，因此为Nginx配置SSL证书，使用安全的HTTPS进行访问是非常有必要的。</p>
+<span id="more"></span>
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>系统：CentOS 7</p>
+<p>Nginx版本：1.16.1</p>
+<h1 id="SSL证书"><a href="#SSL证书" class="headerlink" title="SSL证书"></a>SSL证书</h1><p>Nginx需要使用到的SSL证书分为了两部分：key和pem，这个证书是唯一的。</p>
+<p>具体的获得方式要自己去域名服务提供商里找了，至于SSL是啥，我自己也很难说清楚，请自行百度吧。</p>
+<h1 id="SSL配置方式"><a href="#SSL配置方式" class="headerlink" title="SSL配置方式"></a>SSL配置方式</h1><p>nginx配置启用SSL的方式非常简单，打开nginx的配置文件，一般在这个路径下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>然后在server块中加入如下关键指令即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">listen 443 ssl; # 443是默认的HTTPS端口 ssl指的启用SSL安全配置的意思，在较旧的版本中是单独写成ssl on形式</span><br><span class="line"><span class="meta">#</span><span class="bash"> 证书放在了/etc/nginx/cert目录下，由于cert目录与nginx.conf配置文件处于同级目录下，因此可以写成cert/，</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果是其它地方建议直接写成绝对路径 例如：/home/nginx/cert/cert-file-name.pem</span></span><br><span class="line">ssl_certificate cert/cert-file-name.pem;  # ssl证书 需要将cert-file-name.pem替换成已上传的证书文件的名称。</span><br><span class="line">ssl_certificate_key cert/cert-file-name.key; # ssl证书需要将cert-file-name.key替换成已上传的证书密钥文件的名称。</span><br><span class="line"></span><br><span class="line">ssl_session_timeout 5m; # 会话的超时时间，m指分钟</span><br><span class="line">ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4; # 加密算法</span><br><span class="line"><span class="meta">#</span><span class="bash">表示使用的加密套件的类型。</span></span><br><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # 表示使用的TLS协议的类型。</span><br><span class="line">ssl_prefer_server_ciphers on; # 设置协商加密算法时，优先使用我们服务端的加密套件，而不是客户端浏览器的加密套件</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>具体示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">  ......</span><br><span class="line">  server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    ssl_certificate cert/cert-file-name.pem; </span><br><span class="line">    ssl_certificate_key cert/cert-file-name.key;</span><br><span class="line">    ssl_session_timeout 5m;</span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    </span><br><span class="line">    ......</span><br><span class="line">    </span><br><span class="line">    location / &#123;</span><br><span class="line">      ......</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h1><p>既然已经开启了SSL实现了HTTPS，那么普通的HTTP传输就不再需要了，但是每次输入网址都要刻意输入<em>https</em>还是很繁琐的，因此加入重定向配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">  ......</span><br><span class="line">  server &#123;</span><br><span class="line">    listen 80; # http访问的端口</span><br><span class="line">    ......</span><br><span class="line">    rewrite ^(.*)$ https://$host$1; #将所有HTTP请求通过rewrite指令重定向到HTTPS。</span><br><span class="line">    ......</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">  #</span><span class="bash"> 无效了。已经重定向永远到不了了</span></span><br><span class="line">  server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    ......</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">  #</span><span class="bash"> 有效</span></span><br><span class="line">  server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    ......</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样写后，所有的HTTP访问最终都会重定向到HTTPS，需要注意：这样配置后其它的监听80端口的配置就都失效了，因为都重定向了，需要更新相应的配置了。</p>
+<p>写完配置文件后检查一下有没有写错（可省略）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>最后就是让nginx重新加载让配置生效</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/posts/0.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Nginx配置为文件服务器</title>
+    <url>/posts/4eef1a76.html</url>
+    <content><![CDATA[<p>我们经常会遇到从远程服务器下载文件的情况，如果直接使用ftp或者sftp的进行下载的话，下载速度总是不甚满意，网络差的话简直让人抓狂要砸键盘了。这情况可以考虑用Nginx做文件服务器，然后使用IDM（设置为32个线程同时工作）下载，那下载速度可是杠杠的带宽都要跑满了。</p>
+<span id="more"></span>
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>系统：CentOS 7</p>
+<p>Nginx版本：1.16.1</p>
+<h1 id="配置方式"><a href="#配置方式" class="headerlink" title="配置方式"></a>配置方式</h1><p>nginx配置为文件服务器的方式非常简单，打开nginx的配置文件，一般在这个路径下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>然后在location块中加入如下关键指令即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">语法:	autoindex on | off;</span><br><span class="line">描述：开启或禁用目录浏览功能，默认是禁用</span><br><span class="line"></span><br><span class="line">语法：autoindex_exact_size off|on;</span><br><span class="line">描述：默认为on，显示出文件的确切大小，单位是bytes。一般会改为off，显示出文件的大概大小，单位是kB或者MB或者GB</span><br><span class="line"></span><br><span class="line">语法：autoindex_format html | xml | json | jsonp</span><br><span class="line">描述：设置目录列表的格式，默认是html</span><br><span class="line"></span><br><span class="line">语法：autoindex_localtime on|off;  </span><br><span class="line">描述：on显示文件的本地时间（服务器时间），否则显示文件的GMT时间（如果不是在0时区，则会有对不上时间的烦恼），默认是off</span><br></pre></td></tr></table></figure>
+
+<p>具体示例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">  ......</span><br><span class="line">  server &#123;</span><br><span class="line">    ......</span><br><span class="line">    location / &#123;</span><br><span class="line">      root /home/demo/download; # 可下载文件的路径</span><br><span class="line">      autoindex on; # 开启目录浏览功能 最关键的一个一定要填</span><br><span class="line">      autoindex_exact_size off; # 不显示文件的大小</span><br><span class="line">      autoindex_format html; # 目录列表的格式是html</span><br><span class="line">      autoindex_localtime on; # 使用本地时间</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>写完配置文件后检查一下有没有写错（可省略）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>最后就是让nginx重新加载让配置生效</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java常用名词</title>
+    <url>/posts/b0269417.html</url>
+    <content><![CDATA[<p>接触Java开发已经很长一段时间了，对于常见的名词，如：JMS、JDBC、JPA，也基本知道代表的是什么，而JNDI、JTA这些就不知道了，今天特意做个备忘录，记录下在Java中遇到的这些名词，并在后续中不断更新。</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th align="center">名词</th>
+<th align="center">全称</th>
+<th align="center">中文</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">JDBC</td>
+<td align="center">Java DataBase Connectivity</td>
+<td align="center">Java数据库连接</td>
+</tr>
+<tr>
+<td align="center">JPA</td>
+<td align="center">Java Persistence API</td>
+<td align="center">Java持久化API</td>
+</tr>
+<tr>
+<td align="center">JTA</td>
+<td align="center">Java Transaction API</td>
+<td align="center">Java事务API</td>
+</tr>
+<tr>
+<td align="center">JMS</td>
+<td align="center">Java Message Service</td>
+<td align="center">Java消息服务</td>
+</tr>
+<tr>
+<td align="center">JNDI</td>
+<td align="center">Java Naming and Directory Interface</td>
+<td align="center">Java命名和目录接口</td>
+</tr>
+<tr>
+<td align="center">POJO</td>
+<td align="center">Plain Ordinary Java Object</td>
+<td align="center">简单Java对象</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java的foreach</title>
+    <url>/posts/4c0b6fc5.html</url>
+    <content><![CDATA[<p>开发中经常使用到foreach，现在是时候深入了解一下了。</p>
+<span id="more"></span>
+
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>foreach是for的增强，基本语法结构：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里的collection 指数组或集合</span></span><br><span class="line"><span class="keyword">for</span>(T t : collection) &#123;</span><br><span class="line">  ... dosomething ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 数组</span><br><span class="line"><span class="keyword">int</span>[] a = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i : a) &#123;</span><br><span class="line">  System.out.println(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 集合</span><br><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList();</span><br><span class="line"><span class="keyword">for</span>(String str : list) &#123;</span><br><span class="line">  System.out.println(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h1><p>由上面的例子可以看到，在写法上foreach与for写法相比是简化了很多。</p>
+<p>要注意的一点是：使用foreach能遍历的，使用for也能遍历，反之则不一定能！！！</p>
+<p>其次还有一些缺点：</p>
+<ul>
+<li>对于数组，在遍历过程中需要使用元素下标的，则无能为力。</li>
+<li>对于集合，在遍历过程中无法对元素进行增删，否则会报异常，因为我们没法获得迭代器进行操作。</li>
+</ul>
+<h1 id="遍历的顺序"><a href="#遍历的顺序" class="headerlink" title="遍历的顺序"></a>遍历的顺序</h1><p>有时候我们可能对元素的遍历顺序有要求，那么使用foreach与for的遍历顺序是一致的吗？</p>
+<p>答案是一样的！！</p>
+<p>通过阅读官方的文档可以知道，对数组使用foreach写法，等同于下面的写法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而对于集合而言，就和使用迭代器进行遍历一样：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (Iterator iterator = collection.iterator(); iterator.hasNext(); ) &#123;</span><br><span class="line">  iterator.next <span class="keyword">do</span> something......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="迭代器iterator"><a href="#迭代器iterator" class="headerlink" title="迭代器iterator"></a>迭代器iterator</h1><p>对于集合而言，使用foreach的遍历，其实就是在使用迭代器进行遍历，这点通过Java的规范文档可以了解到，也可以通过对Java的class文件反编译观察到，如下图所示：</p>
+<p><img src="http://ww1.sinaimg.cn/large/e6dffef4gy1gaqphag66lj21bb0bqtjk.jpg" alt="foreach与迭代器.png"></p>
+<p>但是与直接使用iterator不同，使用foreach的过程中，是无法对元素进行增删的，因为iterator是隐含的仅存在于编译后的class文件中，即开发中无法直接获取iterator，因而也就无法执行增删操作。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.jianshu.com/p/81cec83541be">Java中的foreach遍历顺序</a></p>
+<p><a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-14.html#jls-14.14.2">Java规范文档-看14.14.2. The enhanced for statement部分</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Map的N种遍历方法</title>
+    <url>/posts/35b60266.html</url>
+    <content><![CDATA[<p>开发中经常要使用到集合类Map，现在让我们来研究一下究竟有多少种遍历方法吧。</p>
+<span id="more"></span>
+
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>遍历map时，我们想获得啥？</p>
+<p>键值对？键？值？</p>
+<p>贴心的Java已经定义了如下的三种方法供我们使用：</p>
+<ul>
+<li>entrySet()：获取键值对集合，返回类型是Set</li>
+<li>keySet()：获取键集合，返回类型是Set</li>
+<li>values()：获取值集合，返回类型是Collection</li>
+</ul>
+<p>由上面的返回类型可以知道，我们要遍历map，其实就是要遍历Collection，常用的遍历Collection方法：</p>
+<ul>
+<li>增强型for</li>
+<li>迭代器</li>
+<li>Lambda</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">map.put(<span class="string">&quot;firstElement&quot;</span>, <span class="number">1</span>);</span><br><span class="line">map.put(<span class="string">&quot;secondElement&quot;</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用for遍历</span></span><br><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;for-entry 键：&quot;</span> + entry.getKey() + <span class="string">&quot;, 值：&quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(String k : map.keySet()) &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;for-key 键：&quot;</span> + k + <span class="string">&quot;, 值：&quot;</span> + map.get(k));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(Integer v : map.values()) &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;for-value 值：&quot;</span> + v);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用迭代器遍历</span></span><br><span class="line">Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; iterator = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">  Map.Entry&lt;String, Integer&gt; entry = iterator.next();</span><br><span class="line">  System.out.println(<span class="string">&quot;iterator-entry 键：&quot;</span> + entry.getKey() + <span class="string">&quot;, 值：&quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Iterator&lt;String&gt; kIterator = map.keySet().iterator();</span><br><span class="line"><span class="keyword">while</span> (kIterator.hasNext()) &#123;</span><br><span class="line">  String key = kIterator.next();</span><br><span class="line">  System.out.println(<span class="string">&quot;iterator-key 键：&quot;</span> + key + <span class="string">&quot;, 值：&quot;</span> + map.get(key));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; vIterator = map.values().iterator();</span><br><span class="line"><span class="keyword">while</span> (vIterator.hasNext()) &#123;</span><br><span class="line">  Integer value = vIterator.next();</span><br><span class="line">  System.out.println(<span class="string">&quot;iterator-value 值：&quot;</span> + value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用Lambda</span></span><br><span class="line">map.forEach((k, v) -&gt; &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;Lambda-entry 键：&quot;</span> + k + <span class="string">&quot;, 值：&quot;</span> + v);</span><br><span class="line">&#125;);</span><br><span class="line">map.entrySet().forEach(entry -&gt; &#123;</span><br><span class="line">  System.out.println(<span class="string">&quot;Lambda-entry 键：&quot;</span> + entry.getKey() + <span class="string">&quot;, 值：&quot;</span> + entry.getValue());</span><br><span class="line">&#125;);</span><br><span class="line">map.keySet().forEach(key -&gt; System.out.println(<span class="string">&quot;Lambda-key 键：&quot;</span> + key + <span class="string">&quot;, 值：&quot;</span> + map.get(key)));</span><br><span class="line">map.values().forEach(value -&gt; System.out.println(<span class="string">&quot;Lambda-value 值：&quot;</span> + value));</span><br></pre></td></tr></table></figure>
+
+<h1 id="entrySet-、keySet-和values-的作用"><a href="#entrySet-、keySet-和values-的作用" class="headerlink" title="entrySet()、keySet()和values()的作用"></a>entrySet()、keySet()和values()的作用</h1><p>就像我们会遍历Collection集合一样，偶尔我们也会因业务需求遍历Map，但是Map的实现并不像Collection这么简单，底层是个数组或者链表什么的。</p>
+<p>以HashMap为例，它的底层数据结构是：数组+链表+红黑树，这样作为开发者的我们就要花费大量精力去实现怎么遍历。</p>
+<p>因此特意提供了entrySet()、keySet()和values()这三个方法，屏蔽底层的实现，提供简单易用的Collection。</p>
+<h1 id="3种遍历方法的本质"><a href="#3种遍历方法的本质" class="headerlink" title="3种遍历方法的本质"></a>3种遍历方法的本质</h1><blockquote>
+<p>迭代器模式：<strong>提供一种方法顺序的访问一个聚合对象中各个元素，而又不暴露该对象的内部表示</strong>。</p>
+</blockquote>
+<p>虽然上面提供了三种遍历方式，但其本质依然调用了迭代器：</p>
+<ul>
+<li>增强型for循环，其底层是使用了iterator，这点可以通过编译后的代码可以了解到。</li>
+<li>使用了Lambda表达式的forEach，其方法体内部依然是使用了增强型for循环。</li>
+</ul>
+<p>通过使用迭代器我们就能轻易的访问集合对象而又无须关注集合对象的内部实现。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>docker自启动</title>
+    <url>/posts/f31ac7c3.html</url>
+    <content><![CDATA[<p>服务器重启后docker服务和容器都会停止运行，如果每次都手动启动的话就很繁琐了，因此配置为自启动就很有必要了。</p>
+<span id="more"></span>
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>服务器系统：centos7</p>
+<p>docker 版本：19.03.5</p>
+<h1 id="docker服务自启动"><a href="#docker服务自启动" class="headerlink" title="docker服务自启动"></a>docker服务自启动</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 开启自启动</span></span><br><span class="line">systemctl enable docker</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 关闭自启动</span></span><br><span class="line">systemctl disable docker</span><br></pre></td></tr></table></figure>
+
+<p>PS：systemctl就是直接操作系统服务，是service、chkconfig命令的组合，如果没有systemctl命令，请自行搜索其它方案。</p>
+<h1 id="docker容器自启动"><a href="#docker容器自启动" class="headerlink" title="docker容器自启动"></a>docker容器自启动</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建容器前加入参数--restart</span></span><br><span class="line">docker run --restart=参数项</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 已创建容器则使用如下命令</span></span><br><span class="line">docker update --restart=参数项 [容器名]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> --restart参数解析</span></span><br><span class="line">no：不要自动重启容器（默认）</span><br><span class="line">on-failure：如果容器由于非正常退出（非零退出代码）而停止运行则重新启动容器，可以加入重启次数，如--restart=on-failure:3 即尝试3次后不再重新启动</span><br><span class="line">always：总是重启容器，如果是手动停止，则仅在docker服务重启或重新手动启动该容器时才重新启动</span><br><span class="line">unless-stopped：总是重启容器，但是如果容器是已经停止了（手动停止或其他方式），即使docker服务重新启动也不会重新启动容器</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 例子</span></span><br><span class="line">docker update --restart=on-failure [容器名]</span><br><span class="line">docker update --restart=on-failure:3 [容器名]</span><br><span class="line">docker update --restart=always [容器名]</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>容器</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Conda</title>
+    <url>/posts/c3592b96.html</url>
+    <content><![CDATA[<p>Conda是一个包管理、依赖管理和<em>环境管理</em>工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。</p>
+<span id="more"></span>
+
+<h1 id="Conda简介"><a href="#Conda简介" class="headerlink" title="Conda简介"></a>Conda简介</h1><blockquote>
+<p>Conda是一个开源的包管理、依赖管理和环境管理工具，能运行在Windows、macOS和Linux上，具备快速安装、运行和更新包和依赖的能力，能够轻松的创建、保存、加载和切换不同的开发环境。虽然Conda由Python程序创建，但它可以打包并分发任何语言的软件。</p>
+</blockquote>
+<p>通过以上摘录自官网的译文可以知道，Conda对于经常要切换不同的开发环境的开发者来说，是一个极其合适的工具。</p>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p>Conda作为一个管理工具，有两个常见的发行版本：Anaconda和Miniconda，其区别如下：</p>
+<p>Miniconda：仅仅拥有python，conda和一些必须的依赖包,除此之外没有任何附带的东西，操作时需要使用命令行的方式进行操作，占用极小的硬盘空间，但使用的时候需要自己安装所需要的包。<a href="https://conda.io/miniconda.html">&gt;&gt;&gt;下载&lt;&lt;&lt;</a></p>
+<p>Anaconda：拥有Miniconda所拥有的之外，还自带超过720个的开源包，并且具有图形化的操作界面，安装后即可使用，但占用较大的空间，以及会安装一些自己使用不到的包。<a href="https://www.anaconda.com/download/">&gt;&gt;&gt;下载&lt;&lt;&lt;</a></p>
+<p>综上来看：两个发行版该有的基本功能一样不缺，但相对而言，Miniconda更适合一些简约的人使用，如果需要省心的话Anaconda就是一个极好的选择，毕竟多占的一些硬盘空间对现在的硬盘来说不算什么，读者可以根据自身情况进行选择。</p>
+<p>博主比较喜欢简约因此使用的是Miniconda，同时为了更好的熟悉conda，下面将会直接使用命令行来进行操作演示。</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p>在安装conda的过程中，其中有一个选项就是把conda加入系统环境变量中，官方提示是不建议勾选，因为重装之类的可能会导致找不到相应目录之类的，建议直接使用官方提供的命令行工具，在命令行下找到一个名为<em>Anaconda Prompt</em>的应用，如下所示：<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppvqnx28j206w016aa2.jpg" alt="Anaconda Prompt"><br>运行后的效果如下所示：<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppw9j5u6j20p50c2aa8.jpg" alt="Anaconda Prompt CMD"><br>但是经过一段时间的使用后发现还是加入到系统的环境变量中更方便，这样就可以随时随地在任何环境中使用了，如果已经安装了程序但又没有加入系统环境变量的，可以按照如下步骤重新加入：</p>
+<ol>
+<li>找到程序的安装根目录，要是安装时没有指定安装目录的话，一般都是安装在安装时使用的用户的用户目录之下，这里假设路径是conda_rootdir<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppwjwa75j20pk0gy0uf.jpg" alt="conda安装根目录"></li>
+<li>打开系统环境变量的设置窗口：我的电脑点击鼠标右键-&gt;属性-&gt;高级系统设置-&gt;环境变量<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppwvx4znj211u0i8b1e.jpg" alt="系统环境变量"></li>
+<li>在系统变量部分，找到变量名为Path的条目，选中并点击下方的编辑按钮，就能打开编辑界面<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppx5njzxj20q00imdh7.jpg" alt="系统环境变量编辑窗口"></li>
+<li>把如下的路径添加到系统环境变量中，记得把conda_rootdir替换为自己电脑下conda的安装根目录<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppxihyuxj20bc034mx0.jpg" alt="conda路径"></li>
+<li>点击确定，保存编辑的内容，然后重新打开命令行窗口，然后输入命令<em>conda info</em>，并显示相应内容的话，就表示配置成功，配置失败的请重新配置<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppxqdloaj20rl0e5t95.jpg" alt="conda信息"></li>
+</ol>
+<h1 id="conda配置文件"><a href="#conda配置文件" class="headerlink" title="conda配置文件"></a>conda配置文件</h1><p>conda安装后会在用户目录下生成一个配置文件*.condarc*，如果没有的话可以自己创建一个，内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">channels:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">defaults</span></span><br></pre></td></tr></table></figure>
+<p>配置文件中的channels属性指的是安装时的下载来源，defaults指的是默认的下载来源，如果想添加下载源的话只要按照格式添加就可以了。默认源在国内下载速度较慢，所以国内有清华镜像源即<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">Anaconda 镜像</a>，使用后速度会有明显的提升，但是在这里依然不建议使用国内的清华源，因为使用一段时间后发现清华源的版本比较旧而且还不全，直接使用默认源的话使用上是基本没有问题，下载时间也就相对清华源慢一些而已。</p>
+<p>默认情况下环境文件以及下载下来的包都是安装在软件根目录下的envs和pkgs文件夹下，如果想要更改安装路径的话，可以加入如下配置</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 环境目录</span></span><br><span class="line"><span class="attr">envs_dirs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">E:\Documents\Code\alpha\conda\envs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 包目录</span></span><br><span class="line"><span class="attr">pkgs_dirs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">E:\Documents\Code\alpha\conda\pkgs</span></span><br></pre></td></tr></table></figure>
+
+<p>如果有想了解更多的可以直接访问官网了解详细的配置<a href="https://conda.io/docs/user-guide/configuration/use-condarc.html">&gt;&gt;&gt;传送门&lt;&lt;&lt;</a></p>
+<h1 id="Conda信息"><a href="#Conda信息" class="headerlink" title="Conda信息"></a>Conda信息</h1><p>如果想要查看Conda的信息的话，可以输入如下命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda info</span><br></pre></td></tr></table></figure>
+<p><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppxqdloaj20rl0e5t95.jpg" alt="conda信息"><br>可以看到上一部分的配置信息也出现在内容展示中，说明配置是有效的。</p>
+<p>如果想要查看已有的开发环境，输入如下命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda info --env</span><br></pre></td></tr></table></figure>
+<p><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppybug74j20fx02kt8i.jpg" alt="conda环境信息"><br>可以看到里面现在有两个环境，分别是base和tensorflow，其中base就是安装时默认的环境，而tensorflow就是博主自己创建的环境。</p>
+<p>在上述图片中还有个要注意的地方就是base环境前面是有个*号的，说明base环境处于激活的状态，即判断当前所处环境的方法就是查看*号出现在那个环境前。<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppyn28j4j20g303q0sm.jpg" alt="激活了tensorflow环境"><br>而上面这张则是激活了tensorflow环境的，而这张还有一个特别地方就是前面直接写着名为tensorflow的环境名称，因此也可以作为当前处于那个激活环境的判断。</p>
+<p>那么到底怎么创建一个新的环境呢？</p>
+<h1 id="环境创建、克隆、激活和删除"><a href="#环境创建、克隆、激活和删除" class="headerlink" title="环境创建、克隆、激活和删除"></a>环境创建、克隆、激活和删除</h1><p>想要创建环境，只要输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 不指定python版本</span></span><br><span class="line">conda create --name env-name</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定python版本</span></span><br><span class="line">conda create --name env-name python=2.7</span><br></pre></td></tr></table></figure>
+<p>其中env-name是该新建环境的名称；python是该环境中的python版本，默认情况下如果不写该参数，将会延用base环境中的python版本，而base环境中的python版本就是下载部分选择conda安装包时的python版本。<br><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppyx53v9j20qp05gwec.jpg" alt="conda创建环境"><br>创建成功后就能看到如上的显示，想要激活环境，输入：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate env-name</span><br></pre></td></tr></table></figure>
+<p>想要取消激活，输入：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure>
+<p>当然，也可以直接关闭命令窗口来退出已激活的环境。</p>
+<p>注意：在没有激活任何环境的情况下都是处于base环境之下的，就算激活了其它环境也只在激活的命令窗口下是激活环境，在激活环境下的任何操作，都不会对其它环境产生影响，当然这也就是conda的意义所在。</p>
+<p>在某些情况下如果想要复制已有的环境，可以输入：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create --name new-env-name --clone env-name</span><br></pre></td></tr></table></figure>
+
+<p>如果想删除现有的环境，必须在先取消激活目标环境，然后执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda remove --name env-name --all</span><br></pre></td></tr></table></figure>
+
+<h1 id="包的查看、搜索、安装、更新和卸载"><a href="#包的查看、搜索、安装、更新和卸载" class="headerlink" title="包的查看、搜索、安装、更新和卸载"></a>包的查看、搜索、安装、更新和卸载</h1><p>注意：以下的一切命令请先激活环境后再执行，否则都将会作用于基本环境，即操作的对象是基本环境。</p>
+<p>创建好环境后，想要使用当然还需要安装自己所需要的包，这里使用tensorflow做例子，输入如下命令，查看当前已安装的包：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda list</span><br></pre></td></tr></table></figure>
+<p><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppz5ky2sj20hn08mq2y.jpg" alt="查看已安装的包"></p>
+<p>搜索可用的包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda search tensorflow</span><br></pre></td></tr></table></figure>
+<p><img src="http://ws1.sinaimg.cn/large/e6dffef4gy1g5ppzem086j20e804xq2t.jpg" alt="搜索可用的包"></p>
+<p>安装包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda install tensorflow</span><br></pre></td></tr></table></figure>
+
+<p>更新包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda update tensorflow</span><br></pre></td></tr></table></figure>
+
+<p>卸载已安装的包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda uninstall tensorflow</span><br></pre></td></tr></table></figure>
+
+<h1 id="环境配置的导入和导出"><a href="#环境配置的导入和导出" class="headerlink" title="环境配置的导入和导出"></a>环境配置的导入和导出</h1><p>在某些情况下，如果想要分享自己的开发环境，可以通过导出目标环境的环境配置来完成分享。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate tensorflow</span><br><span class="line"></span><br><span class="line">conda env export &gt; path-to/environment.yml</span><br></pre></td></tr></table></figure>
+<p>注意：要先激活想要的分享目标环境，然后再执行导出命令</p>
+<p>导出命令的path-to是指定目标路径，environment.yml则是导出的环境配置文件，如果不写路径则将会导出到命令行当前的路径之下。</p>
+<p>别人拿到了你分享出来的环境配置文件又该如何使用呢，输入：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda env create -f path-to/environment.yml</span><br></pre></td></tr></table></figure>
+<p>即可创建一个和环境配置文件描述的一摸一样的开发环境了。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>至此，conda的基本用法已经讲述完，如过想要更深入了解的话可以在官网上查阅更详细的资料。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://conda.io/docs/index.html">conda官网</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Gogs配置为服务开机自启动</title>
+    <url>/posts/bdb89eee.html</url>
+    <content><![CDATA[<p><code>Gogs是一款极易搭建的自助 Git 服务</code>，安装起来也确实是这样，在安装目录下输入命令<code>./gogs web</code>就能启动Gogs服务，但如果是通过二进制方式进行安装每次都要输入命令拉起服务就很不方便了，因此需要手动把Gogs配置为Linux服务并开机自启动。</p>
+<span id="more"></span>
+
+<p><strong>注：假设当前的操作用户是git（为啥要用git用户下文细说），安装目录是/home/git/gogs ！！！</strong></p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>系统：CentOS 7</p>
+<p>Gogs版本：0.12.3</p>
+<h1 id="配置Gogs服务"><a href="#配置Gogs服务" class="headerlink" title="配置Gogs服务"></a>配置Gogs服务</h1><p>要配置为Linux服务，先要写一个配置脚本，而这一步Gogs已经贴心的帮我们完成了，放在了如下的位置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/home/git/gogs/scripts/systemd/gogs.service</span><br></pre></td></tr></table></figure>
+
+<p>然后复制到<code>/usr/lib/systemd/system/</code>目录下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp /home/git/gogs/scripts/systemd/gogs.service /usr/lib/systemd/system/</span><br></pre></td></tr></table></figure>
+
+<p>执行如下命令，让Linux重新加载服务的配置信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+
+<p>如果不执行这一步会弹出警告信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Warning: gogs.service changed on disk. Run &#x27;systemctl daemon-reload&#x27; to reload units.</span><br></pre></td></tr></table></figure>
+
+<p>到了这里就可以正常使用了。</p>
+<h1 id="Gogs服务自启动"><a href="#Gogs服务自启动" class="headerlink" title="Gogs服务自启动"></a>Gogs服务自启动</h1><p>配置好Gogs服务，剩下的就和其它的Linux服务没区别，直接用<code>systemctl</code>命令来控制就可以了。</p>
+<p>开启自启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl enable gogs</span><br></pre></td></tr></table></figure>
+
+<p>关闭自启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl disable gogs</span><br></pre></td></tr></table></figure>
+
+<p>手动启动服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl start gogs</span><br></pre></td></tr></table></figure>
+
+<p>手动关闭服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl stop gogs</span><br></pre></td></tr></table></figure>
+
+<p>查看服务状态</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl status gogs</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Gogs默认用户git"><a href="#Gogs默认用户git" class="headerlink" title="Gogs默认用户git"></a>Gogs默认用户git</h1><p>翻看一下Gogs安装目录下的脚本可以发现，很多地方的默认用户都是git，例如上文提到的<code>gogs.service</code>脚本</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 打开gogs.service脚本</span></span><br><span class="line">vi /home/git/gogs/scripts/systemd/gogs.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">这里只截取了部分内容</span></span><br><span class="line">[Service]</span><br><span class="line"><span class="meta">#</span><span class="bash"> Modify these two values and uncomment them <span class="keyword">if</span> you have</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> repos with lots of files and get an HTTP error 500 because</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> of that</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">##</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">LimitMEMLOCK=infinity</span></span><br><span class="line"><span class="meta">#</span><span class="bash">LimitNOFILE=65535</span></span><br><span class="line">Type=simple</span><br><span class="line">User=git</span><br><span class="line">Group=git</span><br><span class="line">WorkingDirectory=/home/git/gogs</span><br><span class="line">ExecStart=/home/git/gogs/gogs web</span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=git HOME=/home/git</span><br></pre></td></tr></table></figure>
+
+<p>因此怕麻烦不想修改脚本的，可以考虑新建一个git用户，不会新建的看这里<a href="https://www.zhixing.icu/archives/linux-cao-zuo-zhi-nan-01--xin-jian-yong-hu">Linux操作指南：01-新建用户</a>。</p>
+]]></content>
+      <categories>
+        <category>开发工具</category>
+      </categories>
+      <tags>
+        <tag>DevOps</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IDEA输出中文乱码解决方法</title>
+    <url>/posts/3d0562c8.html</url>
+    <content><![CDATA[<p>IDEA输出中文乱码是个常见的问题了，记录下问题的解决方法，以及网上方法无效的原因。</p>
+<span id="more"></span>
+
+<p>先上结论：首先要确认是idea的问题，如果是则打开idea，选择help-&gt;Edit Custom VM Options，加入参数-Dfile.encoding=UTF-8，保存并重启，即可解决问题。</p>
+<h1 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h1><p>要解决中文乱码问题，首先要知道是哪里导致了中文乱码，才能进行针对性的配置。</p>
+<p>定位的方法很简单，就是使用排除法：</p>
+<ul>
+<li>直接用<em>java -jar</em>直接运行程序</li>
+<li>直接用构建工具运行程序</li>
+<li>是web程序则直接用tomcat运行</li>
+</ul>
+<p>这样就很清楚的知道是哪里的问题了。</p>
+<p>但是！但是！但是！一般情况下上面的环节其实都是没问题的，主要问题是在idea的身上！</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><blockquote>
+<p>windows默认使用GBK，idea新装的时候也是使用GBK</p>
+</blockquote>
+<p>看到中文乱码，我们会自然的联想到是编码问题，所以会把GBK改为兼容性更好的UTF-8，具体操作如下：</p>
+<ol>
+<li>打开idea</li>
+<li>选中工具栏中的<strong>Help</strong>标签下的<strong>Edit Custom VM Options</strong></li>
+<li>加入参数 <strong>-Dfile.encoding=UTF-8</strong></li>
+<li>保存并重启idea</li>
+</ol>
+<p>经过上述步骤，中文乱码就迎刃而解了。</p>
+<h1 id="本质"><a href="#本质" class="headerlink" title="本质"></a>本质</h1><p>搜索引擎上能搜索到很多解决idea中文乱码的文章，都是在<strong>vmoptions</strong>中添加参数 <strong>-Dfile.encoding=UTF-8</strong>，但是就是没有效果！为啥？</p>
+<p>其实是因为idea在用户目录下有一个<strong>vmoptions</strong>副本！！</p>
+<p>跟着文章通常修改的是idea安装目录下的idea.exe.vmoptions和idea64.exe.vmoptions，说白点就是你修改的和idea使用的根本不是同一个，才会导修改没有效果。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/sxdcgaq8080/p/7648400.html">重点在评论14楼</a></p>
+]]></content>
+      <categories>
+        <category>开发工具</category>
+      </categories>
+      <tags>
+        <tag>DevOps</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深入操作系统-01环境创建</title>
+    <url>/posts/d1f7f56f.html</url>
+    <content><![CDATA[<p>要开发一个操作系统，搭建开发环境是必不可少的，本篇文章就介绍如何使用Linux、bochs搭建开发环境。</p>
+<span id="more"></span>
+
+<p>注意：本文章还没有涉及到C语言，所以环境搭建没有涉及到这部分，将会在后续进行补充。</p>
+<h1 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h1><p>在不考虑其它的情况下，先要知道一个OS源码最后要怎么在机器上运行。</p>
+<ol>
+<li>编写一个汇编源码文件（a.asm）</li>
+<li>使用nasm把汇编文件a.asm编译成二进制文件a.bin</li>
+<li>把二进制文件a.bin写入到磁盘中（在开发环境中即a.img）</li>
+<li>在bochs使用已写入汇编源码的磁盘（a.img）进行测试运行</li>
+</ol>
+<p>即源码文件经历了如下流程：.asm -&gt; a.bin -&gt; a.img</p>
+<p>现在已经整个开发流程有了一个基本的认知了，下面逐一讲解需要用到的工具。</p>
+<h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><p>是基本的编译环境，其次把编译好的二进制文件写入到磁盘中也需要用到Linux中的指令，即源码的编译与文件的写入都离开不了Linux。</p>
+<h1 id="Nasm"><a href="#Nasm" class="headerlink" title="Nasm"></a>Nasm</h1><p>是一个汇编指令的编译软件，能把汇编文件编译成二进制文件。</p>
+<h1 id="Bochs"><a href="#Bochs" class="headerlink" title="Bochs"></a>Bochs</h1><p>已经写好的程序该放到哪里运行呢？放到自己的电脑上，程序有故障怎么办！所以最好的办法是使用虚拟机，可以随便折腾，有问题也不怕，但是我们需要调试程序，所以使用普通的虚拟机也不行。</p>
+<p>因此使用bochs就是一个极好的选择，既是虚拟机又带有调试功能。</p>
+<p>在这里省略bochs的安装过程，主要看看使用bochs时需要用到的配置文件（注意：文件后缀是bxrc的就是bochs用到的配置文件，例：bochsrc.bxrc）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 为虚拟机分配的内存（RAM）大小，默认单位是MB</span><br><span class="line">megs: 32</span><br><span class="line"></span><br><span class="line"># 这里还没研究</span><br><span class="line">romimage: file&#x3D;$BXSHARE&#x2F;BIOS-bochs-latest</span><br><span class="line">vgaromimage: file&#x3D;$BXSHARE&#x2F;VGABIOS-lgpl-latest</span><br><span class="line"></span><br><span class="line"># 使用的磁盘列表</span><br><span class="line">floppya: 1_44&#x3D;boot.img, status&#x3D;inserted</span><br><span class="line"></span><br><span class="line"># 选择引导磁盘 cdroom即光驱 floppy即软驱 disk即硬盘</span><br><span class="line">boot: floppy</span><br><span class="line"></span><br><span class="line"># 输出的日志文件</span><br><span class="line">log: bochsout.txt</span><br><span class="line"></span><br><span class="line"># 是否启用鼠标</span><br><span class="line">mouse: enabled&#x3D;0</span><br><span class="line"></span><br><span class="line"># 键盘布局</span><br><span class="line">keyboard: keymap&#x3D;$BXSHARE&#x2F;keymaps&#x2F;x11-pc-us.map</span><br></pre></td></tr></table></figure>
+
+<p>注意：上文中提到的$BXSHARE即为bochs的安装目录。</p>
+<p>通过配置文件可以知道，要运行我们自己写的操作系统，只需要在配置文件中的磁盘列表加入我们创建的磁盘，并在以到磁盘项中选择我们的磁盘，然后运行bochs即可。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上便是开发一个操作系统需要的基本开发环境，目前涉及到的C语言部分将在后面完善。</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>圆周率的来历</title>
+    <url>/posts/5d007e64.html</url>
+    <content><![CDATA[<p>圆周率是通过实际<strong>测量</strong>得出的，即<strong>一个圆的周长和其直径的比率</strong>。</p>
+<span id="more"></span>
+
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>不知道是学了忘记，还是说从来就不知道，今天才发现，所以特意记下圆周率是怎么来的。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://zh.wikipedia.org/wiki/%E5%9C%93%E5%91%A8%E7%8E%87">维基百科：圆周率</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客之2019</title>
+    <url>/posts/87daa986.html</url>
+    <content><![CDATA[<p>2019年的第三个月即将过去了，现在才写这篇文章好像迟了一点，不过种一棵树最好的时间是十年前，其次是现在，这样子安慰自己的话，好像还不算晚。</p>
+<p>在2018年里仅仅写了几篇文章，不过幸运的是因为有个博客，所以总想着弄点什么来写写，从而养成了写文档的习惯，遇到不懂的、特别的都有记录下来，期望在后面的时间里写到博客上。</p>
+<p>在前段时间，突然萌生了换个博客的想法，wordpress、typecho、hugo这些都研究了一圈，感觉就像换了一个博客所有的事情都将变得会不一样似的，就像2018年里的目标并没有达成，反而是东学学西学学但并没有实质性的进展。</p>
+<p>最后的最后，其实自己需要的是一点坚持——对目标的坚持，也是对适合自己的学习方法的一个概括：坚持！每天运动一下、学习一下、记录一下，明天就会有那么一点不一样！</p>
+<p>题外话：最后还是没忍住折腾劲，对博客进行了修改，当然博客程序还是那个，但是配置上做了很多修改，对以前的文章的结构、分类、命名、内容这些也不大满意，所以也进行了修改。</p>
+]]></content>
+      <categories>
+        <category>日志</category>
+      </categories>
+      <tags>
+        <tag>日志</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客之始</title>
+    <url>/posts/40124174.html</url>
+    <content><![CDATA[<p>以前总是看别人写的博客，用OneNote做的笔记，当面试的时候被问到：你有写博客吗？我的回答是NO！  那时候以为写博客离自己很遥远，觉得自己的水平低写不出什么东西来，但是现在仔细想想，不正是因为自己的水平低才更要写博客吗！</p>
+<p>通过写博客来做笔记并且加入自己的思考，摆脱以前一贯的只记忆不思考的习惯，一次又一次地修改完善，才能更好的提高自己的能力。</p>
+<p>在这特殊的一天，踏出新的一步，祝2018年大家越来越好！</p>
+]]></content>
+      <categories>
+        <category>日志</category>
+      </categories>
+      <tags>
+        <tag>日志</tag>
+      </tags>
+  </entry>
+</search>
