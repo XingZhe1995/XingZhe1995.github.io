@@ -500,6 +500,68 @@
       </tags>
   </entry>
   <entry>
+    <title>Redis的3种持久化方式</title>
+    <url>/posts/9589c4d2.html</url>
+    <content><![CDATA[<p>redis提供3种持久化机制用于在重启机器或者系统故障后重用数据（恢复场景）。</p>
+<span id="more"></span>
+
+
+<h1 id="方式一：RDB"><a href="#方式一：RDB" class="headerlink" title="方式一：RDB"></a>方式一：RDB</h1><p>RDB（snapshotting，快照，redis快照）某一时刻下redis的数据副本。默认的持久化方式。</p>
+<h1 id="方式二：AOF"><a href="#方式二：AOF" class="headerlink" title="方式二：AOF"></a>方式二：AOF</h1><p>AOF（append-only file，只追加文件）：只有会更改redis中的数据的执行命令才会写入硬盘中的AOF文件。AOF由三种保存策略：1.no（让操作系统决定何时写入AOF文件）；2.always（每次发生数据修改都会写入AOF文件，严重降低redis性能）；3.everysec（每秒钟一次写入AOF，可以一次性将多个写入个命令）。AOF持久化方式实时性更好，是主流的持久化方案，而且使用everysec的策略，能够兼顾数据和写入性能，性能几乎没有损失，即使系统储问题也只是丢失1秒内的数据。</p>
+<h1 id="方式三：RDB和AOF混合"><a href="#方式三：RDB和AOF混合" class="headerlink" title="方式三：RDB和AOF混合"></a>方式三：RDB和AOF混合</h1><p>RDB和AOF混合，在AOF重写时把RDB的内容写到AOF文件开头，好处是结合了RDB和AOF的有点，快速加载的同时避免丢失过多的数据，缺点是AOF的文件可读性较差。</p>
+<h1 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h1><p>AOF重写：redis生成一个新的AOF文件，其保存的数据状态和旧的AOF文件一致，但体积更小（进行了命令优化，排除了无效的命令）。重写期间，redis会维持一个aof重写缓冲区，记录服务器在重写的这段时间执行的修改数据的命令，重建完后，把缓冲区的数据追加到新的AOF文件的末尾，就是一个新的经过重写的AOF文件了，同时也能保持与服务器种的数据状态的一致了。</p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>缓存</tag>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis的5种基本数据类型</title>
+    <url>/posts/7b35ed44.html</url>
+    <content><![CDATA[<p>redis有5种基本数据类型：string，list，hash，set，sorted set。</p>
+<span id="more"></span>
+
+<p>使用场景如下：    </p>
+<p>string：简单的key-value类型，是二进制安全的。一般用在需要计数的场景，比如：用户的访问次数、热点文章的点赞转发数量等。</p>
+<p>list：链表（redis实现的是双向链表），一般应用于发布与订阅或者说消息队列、慢查询</p>
+<p>hash：是一个string类型的field和value的映射表。特别适用于存储对象，后续操作时，可以直接仅仅修改对象中某个字段的值。</p>
+<p>set：无序集合，集合中的元素没有先后顺序且没有重复数据。适用于存放的数据不能重复以及获取多个数据源交集和并集等场景。</p>
+<p>sorted set：与set相比增加了一个权重参数score，能使集合中的元素按照score进行有序排列，适用于需要对数据根据某个权重进行排序的场景，比如在直播系统中，实时排行信息包含直播间在线用户列表，各种礼物排行榜，弹幕消息（可以理解为消息维度的消息排行榜）等信息。</p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>缓存</tag>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis的淘汰策略</title>
+    <url>/posts/e0bb8399.html</url>
+    <content><![CDATA[<p>redis共有8种淘汰策略。具体可分成3种类型。</p>
+<span id="more"></span>
+
+<h1 id="淘汰策略"><a href="#淘汰策略" class="headerlink" title="淘汰策略"></a>淘汰策略</h1><p>类型一<br>no-eviction：禁止淘汰数据，当内存不足无法写入新数据时会报错，真实项目中应该没有人会使用。</p>
+<p>类型二（对所有数据而言）<br>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰<br>allkeys-lru（least recently used）：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的 key（这个是最常用的）<br>allkeys-lfu（least frequently used）：当内存不足以容纳新写入数据时，在键空间中，移除最不经常使用的 key</p>
+<p>类型三（对于设置了过期时间的数据而言）<br>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰<br>volatile-ttl（time to live）：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰<br>volatile-lru（least recently used）：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰<br>volatile-lfu（least frequently used）：从已设置过期时间的数据集(server.db[i].expires)中挑选最不经常使用的数据淘汰</p>
+<p>其中volatile-lfu和allkeys-lfu是4.0之后才加入的策略。</p>
+<h1 id="关于LFU和LRU的理解"><a href="#关于LFU和LRU的理解" class="headerlink" title="关于LFU和LRU的理解"></a>关于LFU和LRU的理解</h1><p>LFU按访问频次排序，一个数据被访问则频次+1，淘汰时，把频次最低的淘汰。<br>LRU按访问时间排序，淘汰时，把访问时间最旧的淘汰。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>淘汰策略分为了可淘汰和不可淘汰两部分。可淘汰中根据目标数据范围分为了：所有数据和设置了过期时间 这两类，主要的淘汰策略是：随机（random）、最近最少使用（lru）和最不经常使用（lfu），对于设置了过期时间的数据而言还有一个策略就是挑选将要过期的数据（ttl）。</p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>缓存</tag>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java常用名词</title>
     <url>/posts/b0269417.html</url>
     <content><![CDATA[<p>接触Java开发已经很长一段时间了，对于常见的名词，如：JMS、JDBC、JPA，也基本知道代表的是什么，而JNDI、JTA这些就不知道了，今天特意做个备忘录，记录下在Java中遇到的这些名词，并在后续中不断更新。</p>
@@ -632,7 +694,7 @@
       </tags>
   </entry>
   <entry>
-    <title>docker自启动</title>
+    <title>docker服务及其容器自启动</title>
     <url>/posts/f31ac7c3.html</url>
     <content><![CDATA[<p>服务器重启后docker服务和容器都会停止运行，如果每次都手动启动的话就很繁琐了，因此配置为自启动就很有必要了。</p>
 <span id="more"></span>
