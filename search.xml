@@ -305,63 +305,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MySQL存储IP地址</title>
-    <url>/posts/e38e4cbe.html</url>
-    <content><![CDATA[<p>在MySQL中，没有专门用于存储IP地址的数据类型，但是可以使用inet_aton()函数把IP地址转换成整型数值进行存储，使用inet_ntoa()函数把整型数值转换回IP地址。</p>
-<span id="more"></span>
-
-<h1 id="inet-aton-和inet-ntoa-函数"><a href="#inet-aton-和inet-ntoa-函数" class="headerlink" title="inet_aton()和inet_ntoa()函数"></a>inet_aton()和inet_ntoa()函数</h1><p>inet_aton()和inet_ntoa()是MySQL提供的一对函数，一般情况下都是互相配合使用的：</p>
-<ul>
-<li>inet_aton()：把IP地址转换成一个整型数值，其中的aton可以理解成 IP Address-&gt;Number</li>
-<li>inet_ntoa()：把整型数值转换成IP地址，其中的ntoa可以理解成Number-&gt;IP Address</li>
-</ul>
-<p>具体的流程：inet_aton(IP地址)—&gt;整型数值，inet_ntoa(整型数值)-&gt;IP地址</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_aton(<span class="string">&#x27;255.255.255.255&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 4294967295</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_ntoa(<span class="string">&#x27;4294967295&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 255.255.255.255</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_aton(<span class="string">&#x27;0.0.0.0&#x27;</span>);</span>  </span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_ntoa(<span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 0.0.0.0</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>在不知道inet_aton()和inet_ntoa()函数存在的情况下，我们会想到使用varchar解决IP地址长度不固定的存储问题。但是为了更高的性能，MySQL为我们提供了专用的函数。</p>
-<blockquote>
-<p>IP地址范围：0.0.0.0 - 255.255.255.255</p>
-</blockquote>
-<p>根据IP地址的范围，使用varchar类型，存储IP地址的最小值（0.0.0.0）要占用7个字符，存储IP地址的最大值（255.255.255.255）要占用15个字符，按照一般使用UTF-8编码计算，存储占用在<strong>22~46个字节</strong>之间。</p>
-<p>使用inet_aton()函数，IP地址的最大值（255.255.255.255）转换后产生的整型数值为<em>4294967295</em>，即只需要一个int类型即可存储，而一个int类型数据在数据库中只占用<strong>4个字节</strong>。</p>
-<p>通过以上的分析可以了解到，使用函数对IP地址转换后进行存储比直接存储字符串在存储空间上要节省得多，其次在运算上也有明显的优势。</p>
-<p>注意：因为没有在真实的场景中用IP地址进行过运算，这里没法给出例子，等以后以后遇到了再回来修改！</p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL开发时异常记录</title>
-    <url>/posts/a7ec3638.html</url>
-    <content><![CDATA[<p>记录开发过程中遇到过的MySQL异常。</p>
-<span id="more"></span>
-
-<h1 id="Unknown-error-1045"><a href="#Unknown-error-1045" class="headerlink" title="Unknown error 1045"></a>Unknown error 1045</h1><p>数据库的账号密码输入错误。</p>
-<h1 id="Data-truncation-22001"><a href="#Data-truncation-22001" class="headerlink" title="Data truncation: #22001"></a>Data truncation: #22001</h1><figure class="highlight"><table><tr><td class="code"><pre><span class="line">Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001</span><br></pre></td></tr></table></figure>
-
-<p>插入的数据值范围超过了字段在数据库中定义的范围。</p>
-<h1 id="The-server-time-zone-value-‘�й���׼ʱ��’-is-unrecognized-or-represents-more-than-one-time-zone"><a href="#The-server-time-zone-value-‘�й���׼ʱ��’-is-unrecognized-or-represents-more-than-one-time-zone" class="headerlink" title="The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone"></a>The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone</h1><p>在较新版本的<em>mysql-connector-java</em>里，需要在连接数据库的url上加入<em>serverTimeZone</em>参数</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># 需要注意serverTimeZone的大小写</span><br><span class="line">jdbc:mysql:<span class="comment">//localhost:3306/test?serverTimezone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br></pre></td></tr></table></figure>
-
-<p>一般情况使用参数<em>serverTimezone=Asia/Shanghai</em>，代表中国的时区（UTC+8）</p>
-<p>如果有多国的时差问题，直接使用<em>serverTimezone=UTC</em>，即全球标准时间</p>
-<p>可用参数参考：<a href="https://blog.csdn.net/Shezzer/article/details/80201264">mysql serverTimezone</a></p>
-<h1 id="java-sql-SQLException-HY000"><a href="#java-sql-SQLException-HY000" class="headerlink" title="java.sql.SQLException: #HY000"></a>java.sql.SQLException: #HY000</h1><p>字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。</p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Nginx开启Gzip压缩</title>
     <url>/posts/84bf135c.html</url>
     <content><![CDATA[<p>有些资源文件的体积比较大，开启nginx的gzip压缩，能够极大的提升传输的效率。</p>
@@ -936,6 +879,188 @@
       </categories>
       <tags>
         <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL存储IP地址</title>
+    <url>/posts/e38e4cbe.html</url>
+    <content><![CDATA[<p>在MySQL中，没有专门用于存储IP地址的数据类型，但是可以使用inet_aton()函数把IP地址转换成整型数值进行存储，使用inet_ntoa()函数把整型数值转换回IP地址。</p>
+<span id="more"></span>
+
+<h1 id="inet-aton-和inet-ntoa-函数"><a href="#inet-aton-和inet-ntoa-函数" class="headerlink" title="inet_aton()和inet_ntoa()函数"></a>inet_aton()和inet_ntoa()函数</h1><p>inet_aton()和inet_ntoa()是MySQL提供的一对函数，一般情况下都是互相配合使用的：</p>
+<ul>
+<li>inet_aton()：把IP地址转换成一个整型数值，其中的aton可以理解成 IP Address-&gt;Number</li>
+<li>inet_ntoa()：把整型数值转换成IP地址，其中的ntoa可以理解成Number-&gt;IP Address</li>
+</ul>
+<p>具体的流程：inet_aton(IP地址)—&gt;整型数值，inet_ntoa(整型数值)-&gt;IP地址</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_aton(<span class="string">&#x27;255.255.255.255&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 4294967295</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_ntoa(<span class="string">&#x27;4294967295&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 255.255.255.255</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_aton(<span class="string">&#x27;0.0.0.0&#x27;</span>);</span>  </span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> select inet_ntoa(<span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 0.0.0.0</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>在不知道inet_aton()和inet_ntoa()函数存在的情况下，我们会想到使用varchar解决IP地址长度不固定的存储问题。但是为了更高的性能，MySQL为我们提供了专用的函数。</p>
+<blockquote>
+<p>IP地址范围：0.0.0.0 - 255.255.255.255</p>
+</blockquote>
+<p>根据IP地址的范围，使用varchar类型，存储IP地址的最小值（0.0.0.0）要占用7个字符，存储IP地址的最大值（255.255.255.255）要占用15个字符，按照一般使用UTF-8编码计算，存储占用在<strong>22~46个字节</strong>之间。</p>
+<p>使用inet_aton()函数，IP地址的最大值（255.255.255.255）转换后产生的整型数值为<em>4294967295</em>，即只需要一个int类型即可存储，而一个int类型数据在数据库中只占用<strong>4个字节</strong>。</p>
+<p>通过以上的分析可以了解到，使用函数对IP地址转换后进行存储比直接存储字符串在存储空间上要节省得多，其次在运算上也有明显的优势。</p>
+<p>注意：因为没有在真实的场景中用IP地址进行过运算，这里没法给出例子，等以后以后遇到了再回来修改！</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL开发时异常记录</title>
+    <url>/posts/a7ec3638.html</url>
+    <content><![CDATA[<p>记录开发过程中遇到过的MySQL异常。</p>
+<span id="more"></span>
+
+<h1 id="Unknown-error-1045"><a href="#Unknown-error-1045" class="headerlink" title="Unknown error 1045"></a>Unknown error 1045</h1><p>数据库的账号密码输入错误。</p>
+<h1 id="Data-truncation-22001"><a href="#Data-truncation-22001" class="headerlink" title="Data truncation: #22001"></a>Data truncation: #22001</h1><figure class="highlight"><table><tr><td class="code"><pre><span class="line">Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: #22001</span><br></pre></td></tr></table></figure>
+
+<p>插入的数据值范围超过了字段在数据库中定义的范围。</p>
+<h1 id="The-server-time-zone-value-‘�й���׼ʱ��’-is-unrecognized-or-represents-more-than-one-time-zone"><a href="#The-server-time-zone-value-‘�й���׼ʱ��’-is-unrecognized-or-represents-more-than-one-time-zone" class="headerlink" title="The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone"></a>The server time zone value ‘�й���׼ʱ��’ is unrecognized or represents more than one time zone</h1><p>在较新版本的<em>mysql-connector-java</em>里，需要在连接数据库的url上加入<em>serverTimeZone</em>参数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># 需要注意serverTimeZone的大小写</span><br><span class="line">jdbc:mysql:<span class="comment">//localhost:3306/test?serverTimezone=Asia/Shanghai&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br></pre></td></tr></table></figure>
+
+<p>一般情况使用参数<em>serverTimezone=Asia/Shanghai</em>，代表中国的时区（UTC+8）</p>
+<p>如果有多国的时差问题，直接使用<em>serverTimezone=UTC</em>，即全球标准时间</p>
+<p>可用参数参考：<a href="https://blog.csdn.net/Shezzer/article/details/80201264">mysql serverTimezone</a></p>
+<h1 id="java-sql-SQLException-HY000"><a href="#java-sql-SQLException-HY000" class="headerlink" title="java.sql.SQLException: #HY000"></a>java.sql.SQLException: #HY000</h1><p>字段在数据库中定义为非空字段，但是插入数据时该字段对应的值却为空。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>事务操作和事务自动提交</title>
+    <url>/posts/11188dee.html</url>
+    <content><![CDATA[<p>写了这么久的SQL，怎么手动操作事务竟然快忘了，是时候复习一下了。</p>
+<span id="more"></span>
+
+
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>数据库：MySQL 8（注：一定要使用支持事务的引擎，例如：InnoDB，MyISAM是不支持事务的）</p>
+<h1 id="显式事务操作"><a href="#显式事务操作" class="headerlink" title="显式事务操作"></a>显式事务操作</h1><p>显式操作事务，无非就是3个动作：开启事务、提交、回滚 。</p>
+<p>开启事务有如下两个命令，其效果都是一样的</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">start</span> transaction</span><br></pre></td></tr></table></figure>
+
+<p>或</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br></pre></td></tr></table></figure>
+
+<p>提交命令如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">commit</span></span><br></pre></td></tr></table></figure>
+
+<p>回滚命令如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">rollback</span></span><br></pre></td></tr></table></figure>
+
+<p>例子</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 提交</span><br><span class="line"><span class="keyword">start</span> transaction;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line"></span><br><span class="line"># 回滚</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">rollback</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：这里只是简单的展示了使用方法，复杂的需要用到条件语句，从而判断是使用commit还是rollback。</strong></p>
+<h1 id="事务自动提交"><a href="#事务自动提交" class="headerlink" title="事务自动提交"></a>事务自动提交</h1><p>一般情况下数据库都是开启了事务自动提交的，因除非显式的开始一个事务，否则每个查询都被当做一个单独的事务执行。</p>
+<p>是否自动提交，可以通过参数<strong>autocommit</strong>设置。通过如下命令查看当前的状态</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;autocommit&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">Variable_name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">autocommit</td>
+<td>ON</td>
+</tr>
+</tbody></table>
+<p>ON表示开启自动提交；OFF表示关闭自动提交，需要手动输入<em>commit</em>或<em>rollback</em>才能让事务生效。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 开启自动提交</span><br><span class="line"><span class="keyword">set</span> autocommit<span class="operator">=</span><span class="number">1</span>;</span><br><span class="line"><span class="keyword">set</span> autocommit<span class="operator">=</span><span class="keyword">ON</span>;</span><br><span class="line"></span><br><span class="line"># 关闭自动提交</span><br><span class="line"><span class="keyword">set</span> autocommit<span class="operator">=</span><span class="number">0</span>;</span><br><span class="line"><span class="keyword">set</span> autocommit<span class="operator">=</span>OFF;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：设置的时候1和ON、0和OFF的效果是等同的。</strong></p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据库事务</title>
+    <url>/posts/5874180.html</url>
+    <content><![CDATA[<p>事务是数据库中经常碰到的一个概念，总结一下相关知识，汇总对事务的理解。</p>
+<span id="more"></span>
+
+<h1 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h1><p>事务是逻辑上的一组操作，要么都执行，要么都不执行。</p>
+<h1 id="事务的四大特性ACID"><a href="#事务的四大特性ACID" class="headerlink" title="事务的四大特性ACID"></a>事务的四大特性ACID</h1><ul>
+<li>原子性（Atomicity）：事务是最小的操作单位，不允许再分割，原子性确保了操作要么都执行要么都不执行。</li>
+<li>一致性（Consistency）：事务执行前后数据保持一致。理解上就是一个基本的转账操作，执行前后总额不变，不能多或少了。</li>
+<li>隔离性（Isolation）：并发访问数据库时，一个用户的事务不能被其它事务干扰。</li>
+<li>持久性（Durability）：事务提交后，对数据库中的数据的改变是持久的，即使数据库出现故障也不应该对其有任何影响。</li>
+</ul>
+<h1 id="并发事务带来的问题"><a href="#并发事务带来的问题" class="headerlink" title="并发事务带来的问题"></a>并发事务带来的问题</h1><p>为了提高性能，并发是必须的，多个事务经常会操作相同的数据来完成各自的任务，但会引发相关的问题：</p>
+<ul>
+<li>脏读（dirty-read）：一个事务修改了数据但还没进行提交，这时另一个事务则读取并使用了该数据，这就是脏读。这个数据可能只是一个中间结果，未提交前都是不准确的，依据这样的数据做的处理都是不正确的，对于另一个事务而言，这个数据就是“脏数据”。</li>
+<li>丢失修改（lost to modify）：一个事务修改了某个数据，然后另一个事务也紧接着进行了修改，这样第一个事务的修改结果就会丢失。</li>
+<li>不可重复读（Unrepeatable read）：一个事务内多次读取同一个数据，事务未结束时，另一个事务对该数据进行了修改，那么第一个事务在两次读取之中，读到了不一样的数据。</li>
+<li>幻读（phantom read）：与不可重复读类似，一个事务多次读取多行记录时，另一个事务插入或删除了几行数据，导致第一个事务两次读取之中，读到了不一样的数据。</li>
+</ul>
+<h3 id="不可重复读和幻读的区别"><a href="#不可重复读和幻读的区别" class="headerlink" title="不可重复读和幻读的区别"></a>不可重复读和幻读的区别</h3><p>不可重复读的重点是某行记录的修改，例如：多次读取某个数据，发现数据被修改了。</p>
+<p>幻读的重点是多行记录的新增或删除，例如：多次读取数据，返现记录增加或者减少了。</p>
+<h1 id="事务的四个隔离级别"><a href="#事务的四个隔离级别" class="headerlink" title="事务的四个隔离级别"></a>事务的四个隔离级别</h1><p>SQL标准定义了四个隔离级别</p>
+<p>读取未提交（read-uncommitted）：最低的隔离级别，允许读取尚未提交的数据变更，无法防止：脏读、不可重复读和幻读。</p>
+<p>读取已提交（read-committed）：允许读取事务已经提交的数据，可以防止脏读，但是仍无法防止：不可重复读和幻读。</p>
+<p>可重复读（repeatable-read）：对同一个数据的多此读取结果都是一样的，除非是被本身的事务所修改，可以防止：脏读、不可重复读，但是仍无法防止：幻读。</p>
+<p>串行化（serializable）：最高的隔离级别，所有事务逐个执行，这样事务间就不会互相干扰，但是性能也是最差的，可以防止：脏读、不可重复读以及幻读。</p>
+<table>
+<thead>
+<tr>
+<th><em><strong>*隔离级别*</strong></em></th>
+<th><em><strong>*脏读*</strong></em></th>
+<th><em><strong>*不可重复读*</strong></em></th>
+<th><em><strong>*幻读*</strong></em></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>READ-UNCOMMITTED</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>READ-COMMITTED</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>REPEATABLE-READ</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
