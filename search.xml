@@ -832,6 +832,148 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows下的包管理工具scoop</title>
+    <url>/posts/b4c6dbe7.html</url>
+    <content><![CDATA[<p>在Windows系统上，安装软件总是要到官网上去下载安装，又不想使用XX管家类的软件，因此如果有像Linux上的包管理工具就方便了，<em>scoop</em>就是Windows下的包管理工具！</p>
+<span id="more"></span>
+
+
+
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>scoop的安装很简单，官方提供了执行脚本让我们使用了，具体可看官网<a href="https://scoop.sh/">Installs in seconds</a>，步骤大概如下：</p>
+<p>安装要求：</p>
+<ol>
+<li>PowerShell 5 或更高的版本</li>
+<li>.NET Framework 4.5 或更高的版本</li>
+</ol>
+<p>安装命令如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Invoke-Expression (New-Object System.Net.WebClient).DownloadString(&#x27;https://get.scoop.sh&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">iwr -useb get.scoop.sh | iex</span><br></pre></td></tr></table></figure>
+
+<p>上面两条命令的效果是一样的。</p>
+<p>如果安装时抛出异常，可以尝试如下命令修改执行策略，然后再尝试重新安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned -scope CurrentUser</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="scoop文件结构"><a href="#scoop文件结构" class="headerlink" title="scoop文件结构"></a>scoop文件结构</h1><p>scoop是安装在当前用户的用户文件夹下的，例如当前用户是test，则在Windows的位置如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">C:\Users\test\scoop</span><br></pre></td></tr></table></figure>
+
+<p>scoop根目录下，有如下几个文件夹</p>
+<ul>
+<li>apps：应用安装区域，所有应用都会安装在这里，每个安装的软件都有一个以自己名字命名的文件夹，内部如下<ul>
+<li>以版本命名的文件夹，该文件夹下存放的是指定版本的该软件</li>
+<li>current：快捷方式，连接到当前使用的版本</li>
+</ul>
+</li>
+<li>buckets：安装源</li>
+<li>cache：下载缓存</li>
+<li>persist：应用的配置文件放置地方</li>
+<li>shims：映射应用的bin中的文件，集中存放应用命令的链接或调用脚本，自动加入 path 路径中（自动进行兼容性处理），方便命令行的使用，且这样 path 的定义就会比较简洁，也容易管理。</li>
+</ul>
+<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><p>安装完成后就可以开始使用了，打开cmd命令行界面输入所需命令即可。</p>
+<p>不知道怎么用？使用帮助，即可了解到所有的命令及其用法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop help</span><br></pre></td></tr></table></figure>
+
+<p>注：下面以软件potplayer为例</p>
+<p>输入关键字搜索想安装的软件，如果能安装则会显示可安装的软件列表，不能则会显示<em>Not Found</em>字眼</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop search potplayer</span><br></pre></td></tr></table></figure>
+
+<p>安装软件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop install potplayer</span><br></pre></td></tr></table></figure>
+
+<p>卸载软件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop uninstall potplayer</span><br></pre></td></tr></table></figure>
+
+<p>更新软件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop update potplayer</span><br></pre></td></tr></table></figure>
+
+<p>更新scoop本身</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop update</span><br></pre></td></tr></table></figure>
+
+<p>查看已安装软件列表</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop list</span><br></pre></td></tr></table></figure>
+
+<p>查看当前的软件状态（显示当前的版本信息和可更新的版本信息）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop status</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="添加bucket"><a href="#添加bucket" class="headerlink" title="添加bucket"></a>添加bucket</h1><p>bucket就是我们下载软件的源，查看scoop可以直接识别并添加的bucket</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop bucket known</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示如下</span></span><br><span class="line">main # 默认就有，但收录条件严格，软件较少</span><br><span class="line">extras # 这个最常用，软件最多</span><br><span class="line">versions</span><br><span class="line">nightlies</span><br><span class="line">nirsoft</span><br><span class="line">php</span><br><span class="line">nerd-fonts</span><br><span class="line">nonportable</span><br><span class="line">java</span><br><span class="line">games</span><br><span class="line">jetbrains</span><br></pre></td></tr></table></figure>
+
+<p>添加bucket（这里以extras为例）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop bucket add extras</span><br></pre></td></tr></table></figure>
+
+<p>展示已有的bucket</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop bucket list</span><br></pre></td></tr></table></figure>
+
+<p>移除bucket（这里以extras为例）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop bucket rm extras</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="添加第三方bucket"><a href="#添加第三方bucket" class="headerlink" title="添加第三方bucket"></a>添加第三方bucket</h2><p>上面添加的bucket是官方认证的，我们也可以添加自己的bucket或者别人制作的bucket，这里是一个按照 Github score（由 Star 数量、Fork 数量和 App 数量综合决定的 Github score）排列的 bucket 列表：<a href="https://github.com/rasa/scoop-directory/blob/master/by-score.md">Scoop buckets by Github score</a>。对于第三方的操作稍微有些不一样：</p>
+<p>添加第三方的bucket</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop bucket add &lt;仓库名&gt; &lt;仓库地址&gt;</span><br></pre></td></tr></table></figure>
+
+<p>安装第三方bucket的应用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop install &lt;仓库名&gt;/&lt;应用名&gt;</span><br></pre></td></tr></table></figure>
+
+<p>安装应用前，可以用关键词“应用名+scoop”搜索一下，看看存不存在对应的bucket。</p>
+<p>注：如果动手能力强的可以自己制作bucket。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>scoop允许我们对其进行配置，而我遇到过需要配置的就只有设置代理和aria2下载加速。</p>
+<p>设置配置方式如下，如果多次设置则以最新的为准</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config 配置名 配置值</span><br></pre></td></tr></table></figure>
+
+<p>查看已设置的配置（这里只能一个一个查看，没有列出所有的方法）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config 配置名</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果设置了的话会显示配置的值</span></span><br><span class="line">配置值</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果没有设置的话会显示如下信息</span></span><br><span class="line">配置名 is not set</span><br></pre></td></tr></table></figure>
+
+<p>移除配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config rm 配置名</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 成功移除显示如下信息</span></span><br><span class="line">配置名 has been removed</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h2><p>有时候在国内下载速度慢，可以通过设置代理来提高下载速度。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config proxy &#x27;127.0.0.1:8080&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>这里只列举了我知道的方式，还有其它的设置代理方式<a href="https://github.com/lukesampson/scoop/wiki/Using-Scoop-behind-a-proxy">Configuring Scoop to use your proxy</a></p>
+<h1 id="配置aria2下载加速"><a href="#配置aria2下载加速" class="headerlink" title="配置aria2下载加速"></a>配置aria2下载加速</h1><p>单纯的使用scoop下载速度可能不够快，这时候可以用scoop下载aria2来进一步提高下载速度，scoop会自动调用下载的aria2（注：一定要用scoop安装）</p>
+<p>安装aria2</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop install aria2</span><br></pre></td></tr></table></figure>
+
+<p>本身有默认参数值</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">aria2-enabled (default: true) # 是否使用aria2加速下载，开启true，关闭false</span><br><span class="line">aria2-retry-wait (default: 2)</span><br><span class="line">aria2-split (default: 5)</span><br><span class="line">aria2-max-connection-per-server (default: 5) # 同时下载的线程数</span><br><span class="line">aria2-min-split-size (default: 5M)</span><br></pre></td></tr></table></figure>
+
+<p>也可以自己进行参数设置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config aria2-max-connection-per-server 16</span><br><span class="line">scoop config aria2-split 16</span><br><span class="line">scoop config aria2-min-split-size 1M</span><br></pre></td></tr></table></figure>
+
+<p>具体的参考<a href="https://scoop-docs.now.sh/docs/misc/Multi-connection-downloads-with-aria2.html">Multi-connection downloads with <code>aria2</code></a></p>
+<h1 id="设置不同的开发环境版本"><a href="#设置不同的开发环境版本" class="headerlink" title="设置不同的开发环境版本"></a>设置不同的开发环境版本</h1><p>做程序开发的对于同一个开发环境可能需要安装不同的版本，例如：Java8和Java11、python2和python3，如果由自己做环境控制，就很麻烦了，通过scoop可以轻易的进行切换</p>
+<p>假设我安装了jdk8和jdk11</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop list</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 下面显示的是已安装的软件列表</span></span><br><span class="line">......</span><br><span class="line">openjdk11 11.0.2-9 </span><br><span class="line">openjdk8-redhat 8u282-b08</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>切换至jdk8</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop reset openjdk8-redhat</span><br></pre></td></tr></table></figure>
+
+<p>切换至jdk11</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop reset openjdk11</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="批量导入和导出"><a href="#批量导入和导出" class="headerlink" title="批量导入和导出"></a>批量导入和导出</h1><p>scoop安装了一系列软件后，换台设备还想继续使用这些软件，但是一个一个手动安装的话就太麻烦了，对于这方面scoop没有提供原生的支持，但是也有额外的方式能实现该要求：</p>
+<p><a href="https://github.com/lukesampson/scoop/issues/1543#issuecomment-308894312">方式一：通过记录应用列表来实现</a></p>
+<p><a href="%5BScoopBackup-pwsh%5D(https://github.com/Cologler/ScoopBackup-pwsh)">方式二：使用备份工具</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深入操作系统-01环境创建</title>
     <url>/posts/d1f7f56f.html</url>
     <content><![CDATA[<p>要开发一个操作系统，搭建开发环境是必不可少的，本篇文章就介绍如何使用Linux、bochs搭建开发环境。</p>
