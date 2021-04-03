@@ -2,9 +2,12 @@
 title: Conda
 categories:
   - 工具
+  - 开发工具
+  - Conda
 abbrlink: c3592b96
 date: 2018-05-20 10:34:06
 tags:
+  - Conda
 ---
 
 Conda是一个包管理、依赖管理和*环境管理*工具，虽然由Python程序创建，但它可以打包并分发任何语言的软件，例如：Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN。

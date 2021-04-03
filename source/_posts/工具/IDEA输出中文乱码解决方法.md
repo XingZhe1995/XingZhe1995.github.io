@@ -1,11 +1,13 @@
 ---
 title: IDEA输出中文乱码解决方法
 categories:
+  - 工具
   - 开发工具
+  - IDEA
 abbrlink: 3d0562c8
 date: 2019-10-23 21:37:47
 tags:
-  - DevOps
+  - IDEA
 ---
 
 

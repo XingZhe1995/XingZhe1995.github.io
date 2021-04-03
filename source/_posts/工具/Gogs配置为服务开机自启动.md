@@ -1,9 +1,11 @@
 ---
 title: Gogs配置为服务开机自启动
 tags:
-  - DevOps
+  - Gogs
 categories:
+  - 工具
   - 开发工具
+  - Gogs
 abbrlink: bdb89eee
 date: 2021-03-27 21:09:44
 ---

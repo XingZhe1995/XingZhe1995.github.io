@@ -1,9 +1,10 @@
 ---
 title: Windows下的包管理工具scoop
 tags:
-  - 工具
+  - scoop
 categories:
   - 工具
+  - scoop
 abbrlink: b4c6dbe7
 date: 2021-04-03 07:07:20
 ---
