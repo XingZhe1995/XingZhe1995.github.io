@@ -2,13 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.izhixing.icu/tags/index.html</loc>
-    
-    <lastmod>2021-04-03</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://blog.izhixing.icu/posts/b9577586.html</loc>
     
     <lastmod>2021-04-03</lastmod>
@@ -24,13 +17,6 @@
   
   <url>
     <loc>https://blog.izhixing.icu/posts/ab6871d9.html</loc>
-    
-    <lastmod>2021-04-03</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.izhixing.icu/posts/1eb05570.html</loc>
     
     <lastmod>2021-04-03</lastmod>
     
@@ -226,7 +212,14 @@
   </url>
   
   <url>
-    <loc>https://blog.izhixing.icu/404.html</loc>
+    <loc>https://blog.izhixing.icu/posts/daf2aad3.html</loc>
+    
+    <lastmod>2021-04-03</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.izhixing.icu/posts/201dbebe.html</loc>
     
     <lastmod>2021-04-03</lastmod>
     
@@ -234,6 +227,27 @@
   
   <url>
     <loc>https://blog.izhixing.icu/categories/index.html</loc>
+    
+    <lastmod>2021-04-03</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.izhixing.icu/tags/index.html</loc>
+    
+    <lastmod>2021-04-03</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.izhixing.icu/posts/1eb05570.html</loc>
+    
+    <lastmod>2021-04-03</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.izhixing.icu/404.html</loc>
     
     <lastmod>2021-04-03</lastmod>
     
@@ -402,6 +416,13 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://blog.izhixing.icu/tags/MyBatis/</loc>
+    <lastmod>2021-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -553,6 +574,20 @@
   
   <url>
     <loc>https://blog.izhixing.icu/categories/%E5%B7%A5%E5%85%B7/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/IDEA/</loc>
+    <lastmod>2021-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.izhixing.icu/categories/Java/%E6%A1%86%E6%9E%B6/</loc>
+    <lastmod>2021-04-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.izhixing.icu/categories/Java/%E6%A1%86%E6%9E%B6/MyBatis/</loc>
     <lastmod>2021-04-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

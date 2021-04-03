@@ -1297,4 +1297,97 @@
         <tag>日志</tag>
       </tags>
   </entry>
+  <entry>
+    <title>MyBatis的占位符</title>
+    <url>/posts/daf2aad3.html</url>
+    <content><![CDATA[<p>代码中访问数据库的时候，经常需要传输参数用作语句条件，这就不得不用到MyBatis提供的占位符。</p>
+<span id="more"></span>
+
+
+
+<h1 id="占位符：-和"><a href="#占位符：-和" class="headerlink" title="占位符：#{ } 和 ${ }"></a>占位符：#{ } 和 ${ }</h1><p>MyBatis中有两种占位符：**#{ }** 和 **${ }**，MyBatis对它们的处理方式是不同的：</p>
+<ul>
+<li>#{}是预编译处理：告诉 MyBatis 创建一个预处理语句（PreparedStatement）参数，在 JDBC 中，这样的一个参数在 SQL 中会由一个“?”来标识，并被传递到一个新的预处理语句中。</li>
+<li>${}是字符串替换：用于在SQL语句中插入一个不转义的字符串。MyBatis 不会修改或转义字符串。当 SQL 语句中的元数据（如表名或列名）是动态生成的时候，字符串替换将会非常有用。用这种方式接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击，因此要么不允许用户输入这些字段，要么自行转义并检验</li>
+</ul>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>两种占位符的用法基本上是一致的，在Java代码中使用注解*@Param*，通过注解定指可用的参数及其参数名，例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 参数是基本类型</span></span><br><span class="line"><span class="function">User <span class="title">findById</span><span class="params">(<span class="meta">@Param(&quot;demoId&quot;)</span> <span class="keyword">long</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数是对象</span></span><br><span class="line"><span class="function">List&lt;User&gt; <span class="title">find</span><span class="params">(<span class="meta">@Param(&quot;demoQuery&quot;)</span> Query query)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后在xml配置文件中通过占位符传入参数，对于参数是基本数据类型获取方式如下</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">select * from test where id = #&#123;demoId&#125;;</span><br><span class="line">select * from test where id = $&#123;demoId&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>对于参数是对象，需要显式指定需要传入的对象属性，例如</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">select * from test where id = #&#123;demoQuery.id&#125;;</span><br><span class="line">select * from test where id = $&#123;demoQuery.id&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>稍微要提一下的是，虽然**#{ }** 和 **${ }**均为通过参数名来获得对应的值，但使用上还是有细微差别的。</p>
+<p>对于参数是基本数据类型，**${ }<strong>的变量名必须为@Param注解中指定的参数名，</strong>#{ }**中的变量名可以是@Param注解中指定的参数名或者方法中的参数名，例如</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 参数是基本类型</span></span><br><span class="line"><span class="function">User <span class="title">findById</span><span class="params">(<span class="meta">@Param(&quot;demoId&quot;)</span> <span class="keyword">long</span> id)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- #&#123;&#125;中的变量名可以是@Param注解中指定的参数名或者方法中的参数名 --&gt;</span></span><br><span class="line">select * from test where id = #&#123;id&#125;;</span><br><span class="line">select * from test where id = #&#123;demoId&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- $&#123;&#125;的变量名必须为@Param注解中指定的参数名 --&gt;</span></span><br><span class="line">select * from test where id = $&#123;demoId&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="性能和安全"><a href="#性能和安全" class="headerlink" title="性能和安全"></a>性能和安全</h2><ul>
+<li>性能方面：**${ }<strong>是字符串替换，</strong>#{ }<strong>是预编译的，而相同的预编译SQL是可以重复利用的，因此</strong>#{}**性能更高。</li>
+<li>安全方面：由于**${ }<strong>是字符串替换，参数传入什么就使用的是什么，如果没有经过检查和转义的话会有SQL注入的风险，而预编译的</strong>#{ }**没有这方面的顾虑</li>
+</ul>
+<p>因此在实际开发中，能用**#{ }<strong>的就用</strong>#{ }**。</p>
+<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><h2 id="MyBatis中SQL执行顺序"><a href="#MyBatis中SQL执行顺序" class="headerlink" title="MyBatis中SQL执行顺序"></a>MyBatis中SQL执行顺序</h2><ol>
+<li><p>对SQL语句进行动态解析，主要包括：</p>
+<ul>
+<li>占位符的处理</li>
+<li>动态SQL的处理</li>
+<li>参数类型校验</li>
+</ul>
+</li>
+<li><p>SQL预编译</p>
+</li>
+</ol>
+<h2 id="SQL预编译"><a href="#SQL预编译" class="headerlink" title="SQL预编译"></a>SQL预编译</h2><p>MyBatis默认情况下，将对所有的 sql 进行预编译。</p>
+<p>SQL预编译指的是数据库驱动在发送SQL 语句和参数给 DBMS 之前对 SQL语句进行编译，这样 DBMS 执行 SQL时，就不需要重新编译。</p>
+<p>在Java中通过JDBC中的PreparedStatement实现预编译</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String selectPerson = <span class="string">&quot;SELECT * FROM PERSON WHERE ID=?&quot;</span>;</span><br><span class="line">PreparedStatement ps = conn.prepareStatement(selectPerson);</span><br><span class="line">ps.setInt(<span class="number">1</span>,id);</span><br></pre></td></tr></table></figure>
+
+<p>预编译有两个好处：</p>
+<ol>
+<li>优化SQl的执行：预编译之后的SQL多数情况下可以直接执行，DBMS 不需要再次编译，越复杂的SQL，编译的复杂度将越大，预编译阶段可以合并多次操作为一个操作。</li>
+<li>预编译语句对象可以重复利用：把一个SQL预编译后产生的 PreparedStatement 对象缓存下来，下次对于同一个SQL，可以直接使用这个缓存的 PreparedState 对象。</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://segmentfault.com/a/1190000004617028">https://segmentfault.com/a/1190000004617028</a></p>
+<p><a href="https://www.cnblogs.com/huanyou/p/7201480.html">https://www.cnblogs.com/huanyou/p/7201480.html</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis缓存机制</title>
+    <url>/posts/201dbebe.html</url>
+    <content><![CDATA[<p>MyBatis提供了强大的事务性查询缓存机制，用于提高查询性能！</p>
+<span id="more"></span>
+
+
+
+<p>MyBatis的缓存分为：本地缓存和二级缓存，另外还可以实现自己的缓存或者使用第三方的缓存机制。</p>
+<h1 id="本地缓存"><a href="#本地缓存" class="headerlink" title="本地缓存"></a>本地缓存</h1><p>MyBatis默认开启本地缓存，且无法手动关闭。</p>
+<p>本地缓存属于会话级别的（sqlsession），生命周期与sqlsession一致，只对同一个sqlsession有效，不同sqlsession之间不共享缓存，</p>
+<p>任何的修改操作（insert、update、delete）都会导致缓存清除，也可以通过配置使得查询前清空缓存。</p>
+<h1 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h1><p>二级缓存默认关闭，需要手动开启。</p>
+<p>二级缓存属于全局级别的（sqlsessionfactory），能够跨会话访问，弥补本地缓存无法跨会话访问的缺陷，开启后缓存使用时是先访问二级缓存再访问一级缓存。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于MyBatis的缓存机制只是流于表面，还没有更多的深入了解，且实现自己的缓存或使用第三方缓存机制这些也没有涉略，因此该篇文章仅做记录用。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>MyBatis</category>
+      </categories>
+      <tags>
+        <tag>MyBatis</tag>
+      </tags>
+  </entry>
 </search>
