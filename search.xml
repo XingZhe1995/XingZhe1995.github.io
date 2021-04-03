@@ -738,7 +738,64 @@
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>开发工具</category>
+        <category>Conda</category>
       </categories>
+      <tags>
+        <tag>Conda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git常见使用问题</title>
+    <url>/posts/36fb1fe.html</url>
+    <content><![CDATA[<p>Git是使用频率非常高的一个工具，在使用过程中遇到过不少的问题，现在汇总一下遇到过的问题以及对应的解决方法。</p>
+<span id="more"></span>
+
+
+
+<h1 id="无法访问Github"><a href="#无法访问Github" class="headerlink" title="无法访问Github"></a>无法访问Github</h1><p>Github服务器位于国外，因此经常出现无法访问的情况，影响了代码的拉取和提交等。要解决只能使用代理或者修改hosts文件。</p>
+<p>注：值得一提的就是，如果拉取代码的速度慢，也可以考虑通过设置代理来提高下载速度。</p>
+<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>使用代理是比较常见的方法，对于Github网页的访问，直接运行代理软件就可以了，对于Git工具就需要进行配置，对应的代理配置项是<em>http.proxy</em>和<em>https.proxy</em></p>
+<p>查看当前代理设置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看全局代理配置</span></span><br><span class="line">git config --global http.proxy</span><br><span class="line">git config --global https.proxy</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看当前项目代理配置</span></span><br><span class="line">git config --local http.proxy</span><br><span class="line">git config --local https.proxy</span><br></pre></td></tr></table></figure>
+
+<p>设置代理配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设置全局代理配置</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> http代理</span></span><br><span class="line">git config --global http.proxy &#x27;http://127.0.0.1:1080&#x27;</span><br><span class="line">git config --global https.proxy &#x27;https://127.0.0.1:1080&#x27;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置当前项目代理配置</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> http代理</span></span><br><span class="line">git config --local http.proxy &#x27;http://127.0.0.1:1080&#x27;</span><br><span class="line">git config --local https.proxy &#x27;https://127.0.0.1:1080&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>删除代理配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除全局代理配置</span></span><br><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除当前项目代理配置</span></span><br><span class="line">git config --local --unset http.proxy</span><br><span class="line">git config --local --unset https.proxy</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改hosts文件"><a href="#修改hosts文件" class="headerlink" title="修改hosts文件"></a>修改hosts文件</h2><p>这样方法没用过，请自行搜索解决方案。</p>
+<h1 id="不支持具有-socks5-方案的代理"><a href="#不支持具有-socks5-方案的代理" class="headerlink" title="不支持具有 socks5 方案的代理"></a>不支持具有 socks5 方案的代理</h1><p>Git提交代码到远程服务器，虽然提交成功，但显示异常信息，异常信息如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">fatal: NotSupportedException encountered.</span><br><span class="line">   ServicePointManager 不支持具有 socks5 方案的代理。</span><br></pre></td></tr></table></figure>
+
+<p>关键词：<em>socks5</em>和<em>代理</em>，这两个词有点熟悉，就是代理设置时经常遇到的字眼，先查看git配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global -l</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 显示信息如下</span></span><br><span class="line">......</span><br><span class="line">http.proxy=socks5://127.0.0.1:1080</span><br><span class="line">https.proxy=socks5://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p>问题就是这里了，<em>http.proxy</em>和<em>https.proxy</em>支持的都是http协议，不能使用socks协议。</p>
+<p>因此需要改回使用http协议的代理</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy &#x27;http://127.0.0.1:1080&#x27;</span><br><span class="line">git config --global https.proxy &#x27;https://127.0.0.1:1080&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>或者考虑不使用代理</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="拒绝访问-Connection-refused"><a href="#拒绝访问-Connection-refused" class="headerlink" title="拒绝访问 Connection refused"></a>拒绝访问 Connection refused</h1><p>提交代码到远程时遇到如下问题</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">fatal: unable to access &#x27;https://github.com/xxxxxxxxx.git/&#x27;: Failed to connect to 127.0.0.1 port 1080: Connection refused</span><br></pre></td></tr></table></figure>
+
+<p>这个问题很明显就是配置了代理信息，但是又忘记运行代理软件，导致无法连通远程服务器。</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>开发工具</category>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
   </entry>
   <entry>
     <title>Gogs配置为服务开机自启动</title>
@@ -786,10 +843,12 @@
 <p>因此怕麻烦不想修改脚本的，可以考虑新建一个git用户，不会新建的看这里<a href="https://www.zhixing.icu/archives/linux-cao-zuo-zhi-nan-01--xin-jian-yong-hu">Linux操作指南：01-新建用户</a>。</p>
 ]]></content>
       <categories>
+        <category>工具</category>
         <category>开发工具</category>
+        <category>Gogs</category>
       </categories>
       <tags>
-        <tag>DevOps</tag>
+        <tag>Gogs</tag>
       </tags>
   </entry>
   <entry>
@@ -825,10 +884,12 @@
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/sxdcgaq8080/p/7648400.html">重点在评论14楼</a></p>
 ]]></content>
       <categories>
+        <category>工具</category>
         <category>开发工具</category>
+        <category>IDEA</category>
       </categories>
       <tags>
-        <tag>DevOps</tag>
+        <tag>IDEA</tag>
       </tags>
   </entry>
   <entry>
@@ -968,9 +1029,10 @@
 ]]></content>
       <categories>
         <category>工具</category>
+        <category>scoop</category>
       </categories>
       <tags>
-        <tag>工具</tag>
+        <tag>scoop</tag>
       </tags>
   </entry>
   <entry>
