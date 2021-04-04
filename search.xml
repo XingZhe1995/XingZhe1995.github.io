@@ -505,6 +505,84 @@
       </tags>
   </entry>
   <entry>
+    <title>Java基本数据类型</title>
+    <url>/posts/c80e1ec8.html</url>
+    <content><![CDATA[<p>要用Java必然绕不开它的基本数据类型，</p>
+<span id="more"></span>
+
+
+
+<h1 id="8种基本数据类型"><a href="#8种基本数据类型" class="headerlink" title="8种基本数据类型"></a>8种基本数据类型</h1><p>Java的基本数据类型分为数值型、布尔值和字符三个大类，共计8种基本数据类型：byte、short、int、long、float、double、boolean、char。</p>
+<p><img src="/images/Java%E7%9A%848%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png" alt="Java的8种基本数据类型"></p>
+<p>基本数据类型对应的位数、字节和默认值如下</p>
+<table>
+<thead>
+<tr>
+<th>基本数据类型</th>
+<th>位数</th>
+<th>字节</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>8</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>short</td>
+<td>16</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>int</td>
+<td>32</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr>
+<td>long</td>
+<td>64</td>
+<td>8</td>
+<td>0L</td>
+</tr>
+<tr>
+<td>float</td>
+<td>32</td>
+<td>4</td>
+<td>0f</td>
+</tr>
+<tr>
+<td>double</td>
+<td>64</td>
+<td>8</td>
+<td>0d</td>
+</tr>
+<tr>
+<td>char</td>
+<td>16</td>
+<td>2</td>
+<td>u0000</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>1</td>
+<td></td>
+<td>false</td>
+</tr>
+</tbody></table>
+<p>注：对于boolean，官方文档未明确定义，它依赖于 JVM 厂商的具体实现。逻辑上理解是占用 1 位，但是实际中会考虑计算机高效存储因素。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java常用名词</title>
     <url>/posts/b0269417.html</url>
     <content><![CDATA[<p>接触Java开发已经很长一段时间了，对于常见的名词，如：JMS、JDBC、JPA，也基本知道代表的是什么，而JNDI、JTA这些就不知道了，今天特意做个备忘录，记录下在Java中遇到的这些名词，并在后续中不断更新。</p>
@@ -1265,6 +1343,26 @@
       <tags>
         <tag>数据库</tag>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>双向链表和双向循环链表</title>
+    <url>/posts/12626135.html</url>
+    <content><![CDATA[<p>双向链表是一种非常常用的数据结构，在双向链表的基础上还有一个双向循环链表。</p>
+<span id="more"></span>
+
+
+
+<h1 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h1><p>一个元素节点中包含两个额外的指针，一个prev指向前驱节点，一个next指向后继节点</p>
+<p><img src="/images/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.png" alt="双向链表"></p>
+<h1 id="双向循环链表"><a href="#双向循环链表" class="headerlink" title="双向循环链表"></a>双向循环链表</h1><p>在双向链表的基础上，尾部元素的next指向链表的头部，头部元素的prev指向链表的尾部</p>
+<p><img src="/images/%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8.png" alt="双向循环链表"></p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>

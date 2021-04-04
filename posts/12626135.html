@@ -24,18 +24,24 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"blog.izhixing.icu","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="韭零后一枚，技术菜鸟，喜欢做白日梦，热爱修仙，任职于一小公司里撸代码。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="知行">
-<meta property="og:url" content="https://blog.izhixing.icu/tags/scoop/index.html">
+<meta name="description" content="双向链表是一种非常常用的数据结构，在双向链表的基础上还有一个双向循环链表。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="双向链表和双向循环链表">
+<meta property="og:url" content="https://blog.izhixing.icu/posts/12626135.html">
 <meta property="og:site_name" content="知行">
-<meta property="og:description" content="韭零后一枚，技术菜鸟，喜欢做白日梦，热爱修仙，任职于一小公司里撸代码。">
+<meta property="og:description" content="双向链表是一种非常常用的数据结构，在双向链表的基础上还有一个双向循环链表。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.izhixing.icu/images/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.png">
+<meta property="og:image" content="https://blog.izhixing.icu/images/%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8.png">
+<meta property="article:published_time" content="2021-04-04T09:29:58.000Z">
+<meta property="article:modified_time" content="2021-04-04T09:33:09.457Z">
 <meta property="article:author" content="知行">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.izhixing.icu/images/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.png">
 
 
-<link rel="canonical" href="https://blog.izhixing.icu/tags/scoop/">
+<link rel="canonical" href="https://blog.izhixing.icu/posts/12626135.html">
 
 
 <script class="page-configurations">
@@ -43,11 +49,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
-<title>标签: scoop | 知行</title>
+<title>双向链表和双向循环链表 | 知行</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135887327-1"></script>
     <script>
@@ -181,7 +187,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -194,6 +200,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">双向链表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">双向循环链表</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -260,51 +267,113 @@
 </noscript>
 
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h2 class="collection-header">scoop
-          <small>标签</small>
-        </h2>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.izhixing.icu/posts/12626135.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/apple-touch-icon.png">
+      <meta itemprop="name" content="知行">
+      <meta itemprop="description" content="韭零后一枚，技术菜鸟，喜欢做白日梦，热爱修仙，任职于一小公司里撸代码。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="知行">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          双向链表和双向循环链表
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+
+      <time title="创建时间：2021-04-04 17:29:58 / 修改时间：17:33:09" itemprop="dateCreated datePublished" datetime="2021-04-04T17:29:58+08:00">2021-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/12626135.html" class="post-meta-item leancloud_visitors" data-flag-title="双向链表和双向循环链表" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>双向链表是一种非常常用的数据结构，在双向链表的基础上还有一个双向循环链表。</p>
+<span id="more"></span>
+
+
+
+<h1 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h1><p>一个元素节点中包含两个额外的指针，一个prev指向前驱节点，一个next指向后继节点</p>
+<p><img src="/images/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.png" alt="双向链表"></p>
+<h1 id="双向循环链表"><a href="#双向循环链表" class="headerlink" title="双向循环链表"></a>双向循环链表</h1><p>在双向链表的基础上，尾部元素的next指向链表的头部，头部元素的prev指向链表的尾部</p>
+<p><img src="/images/%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8.png" alt="双向循环链表"></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-04-03T07:07:20+08:00"
-              content="2021-04-03">
-          04-03
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/posts/b4c6dbe7.html" itemprop="url">
-            <span itemprop="name">Windows下的包管理工具scoop</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c80e1ec8.html" rel="prev" title="Java基本数据类型">
+                  <i class="fa fa-chevron-left"></i> Java基本数据类型
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
 
+
+
+
+
+    <div class="comments gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -454,6 +523,26 @@
   
 
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '37644037ac52d12cdd8a',
+      clientSecret: '09993925bc5a09337e2d13cc1225761ca099d39b',
+      repo        : 'izhixing.github.io',
+      owner       : 'izhixing',
+      admin       : ['izhixing'],
+      id          : 'c6ef1e045b11a72f70f10202b1989df5',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>
