@@ -778,6 +778,65 @@
       </tags>
   </entry>
   <entry>
+    <title>线程和线程池的关闭</title>
+    <url>/posts/c6b69b48.html</url>
+    <content><![CDATA[<p>为了最大限度的提高系统性能，线程和线程池的使用都是必不可少的，使用后往往面临一个相同的问题：关闭！</p>
+<span id="more"></span>
+
+
+
+<h1 id="线程的关闭"><a href="#线程的关闭" class="headerlink" title="线程的关闭"></a>线程的关闭</h1><p>由于不知道线程的运行状态，因此在运行途中直接关闭一个线程是非常危险的操作，JDK文档上就有这样一个例子：假如线程获取了某把锁，然后强制关闭了，会导致锁资源无法被释放的严重后果。因此Thread类上的<em>stop()<em>方法在Java版本1.2就</em>不推荐使用</em>了。</p>
+<p>运行途中线程何时能关闭，只有线程自己知道，开发者能做的就是调用中断方法*interrupt()*通知线程关闭。</p>
+<p>调用*interrupt()*方法，在不同的场景下会有不同的效果（版本：Java11）</p>
+<ul>
+<li><p>被<em>Object类的wait()、wait(long)、wait(long, int)方法</em>或者<em>Thread类的join()、join(long)、join(long, int)、sleep(long)、sleep(long, int)方法</em>调用而阻塞的线程，将会<strong>清除中断状态</strong>，同时<strong>抛出异常InterruptedException</strong></p>
+</li>
+<li><p>对于被IO阻塞的线程</p>
+<ul>
+<li>如果是被NIO中的channel操作而阻塞的，将会<strong>设置中断状态</strong>，同时<strong>抛出异常ClosedByInterruptException</strong></li>
+<li>如果是被NIO中的Selectorl操作而阻塞的，只会<strong>设置中断状态</strong></li>
+</ul>
+</li>
+<li><p>不符合以上条件的，就直接<strong>设置中断状态</strong></p>
+</li>
+<li><p>对于还没启动的线程或者线程已被销毁的，调用*interrupt()*方法是<strong>没有任何效果</strong>的</p>
+</li>
+</ul>
+<p>调用*interrupt()<em>方法后，如果抛出异常，我们就可以通过捕获异常来让线程正常退出了，如果没有抛出异常仅是设置了中断状态，就要依靠线程中的代码逻辑来判断了，在代码中的适当位置调用</em>isInterrupted()*来查看自己是否被中断，进而让线程正常退出。</p>
+<p>要注意的是：线程先调用*interrupt()*方法再被阻塞的话，就会抛出异常，但是捕获异常后再被阻塞的话，将不会再次抛出异常。</p>
+<p>Thread类还有一些其它类似的方法：</p>
+<ul>
+<li>isInterrupted()方法：测试当前线程是否被中断，但是不会修改中断状态。</li>
+<li>interrupted()方法：测试当前线程是否被中断，但是会清除中断状态，即原本是设置了中断状态的线程，调用该方法后，会变成没有将中断。</li>
+<li>isAlive()方法：测试当前线程是否存在（存在指的是：线程已启动且还没被销毁）。</li>
+<li>Thread.interrupted()静态方法：与*interrupted()*方法的效果一样，但是实现方式不同。</li>
+</ul>
+<h1 id="线程池的关闭"><a href="#线程池的关闭" class="headerlink" title="线程池的关闭"></a>线程池的关闭</h1><p>线程池提供了两个关闭线程池的方法：**shutdownNow()<strong>和</strong>shutdown()**。</p>
+<ul>
+<li><p>shutdownNow方法：尝试停止正在执行的任务，暂停等待任务的处理，并返回正在等待执行的任务列表，这个方法不保证能停止正在执行的任务。</p>
+</li>
+<li><p>shutdown方法：依次关闭之前提交执行的任务，并且拒绝接收新的任务，如果线程池已关闭但又调用了该方法将不会有任何影响。</p>
+</li>
+</ul>
+<p>调用**shutdownNow()<strong>或</strong>shutdown()*<em>方法后，线程池并不是立刻关闭的，要想等待线程池关闭，需要调用</em>awaitTermination()*方法来阻塞等待。</p>
+<h2 id="简单的源码分析"><a href="#简单的源码分析" class="headerlink" title="简单的源码分析"></a>简单的源码分析</h2><p>shutdownNow()关键源码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">advanceRunState(STOP);</span><br><span class="line">interruptWorkers();</span><br><span class="line">tasks = drainQueue();</span><br></pre></td></tr></table></figure>
+
+<p>第一段是设置线程池的状态为停止，第二段是遍历工作队列调用线程的调用*interrupt()*方法，第三段是返回任务队列。</p>
+<p>shutdown()关键源码是类似的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">advanceRunState(SHUTDOWN);</span><br><span class="line">interruptIdleWorkers();</span><br></pre></td></tr></table></figure>
+
+<p>第一段是设置线程池的状态为关闭，第二段是遍历工作队列调用线程的调用*interrupt()*方法。</p>
+<p><em>注意：上述源码分析非常粗浅，请自行查阅相关资料。</em></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker服务及其容器自启动</title>
     <url>/posts/f31ac7c3.html</url>
     <content><![CDATA[<p>服务器重启后docker服务和容器都会停止运行，如果每次都手动启动的话就很繁琐了，因此配置为自启动就很有必要了。</p>
