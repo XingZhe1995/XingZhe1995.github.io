@@ -24,23 +24,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"blog.izhixing.icu","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="开发中经常使用到foreach，现在是时候深入了解一下了。">
+<meta name="description" content="String是Java中使用频率极高的一个类，但由于其是不可变，因此有StringBuffer和StringBuilder两个类来弥补在大量修改场景下的不足。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java的foreach">
-<meta property="og:url" content="https://blog.izhixing.icu/posts/4c0b6fc5.html">
+<meta property="og:title" content="String、StringBuilder和StringBuffer">
+<meta property="og:url" content="https://blog.izhixing.icu/posts/2871eb40.html">
 <meta property="og:site_name" content="知行">
-<meta property="og:description" content="开发中经常使用到foreach，现在是时候深入了解一下了。">
+<meta property="og:description" content="String是Java中使用频率极高的一个类，但由于其是不可变，因此有StringBuffer和StringBuilder两个类来弥补在大量修改场景下的不足。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/e6dffef4gy1gaqphag66lj21bb0bqtjk.jpg">
-<meta property="article:published_time" content="2019-10-31T04:31:13.000Z">
+<meta property="article:published_time" content="2021-04-05T07:13:37.000Z">
 <meta property="article:modified_time" content="2021-04-05T07:26:53.709Z">
 <meta property="article:author" content="知行">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/e6dffef4gy1gaqphag66lj21bb0bqtjk.jpg">
 
 
-<link rel="canonical" href="https://blog.izhixing.icu/posts/4c0b6fc5.html">
+<link rel="canonical" href="https://blog.izhixing.icu/posts/2871eb40.html">
 
 
 <script class="page-configurations">
@@ -52,7 +50,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>Java的foreach | 知行</title>
+<title>String、StringBuilder和StringBuffer | 知行</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135887327-1"></script>
     <script>
@@ -199,7 +197,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%8D%E5%8E%86%E7%9A%84%E9%A1%BA%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">遍历的顺序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8iterator"><span class="nav-number">4.</span> <span class="nav-text">迭代器iterator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String"><span class="nav-number">1.</span> <span class="nav-text">String</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B9%E5%8F%98"><span class="nav-number">1.1.</span> <span class="nav-text">数据类型的改变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">不可变性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#StringBuilder%E5%92%8CStringBuffer"><span class="nav-number">2.</span> <span class="nav-text">StringBuilder和StringBuffer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BBAbstractStringBuilder"><span class="nav-number">2.1.</span> <span class="nav-text">抽象类AbstractStringBuilder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E5%92%8C%E6%80%A7%E8%83%BD"><span class="nav-number">2.2.</span> <span class="nav-text">线程安全和性能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -277,7 +275,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.izhixing.icu/posts/4c0b6fc5.html">
+    <link itemprop="mainEntityOfPage" href="https://blog.izhixing.icu/posts/2871eb40.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/apple-touch-icon.png">
@@ -290,7 +288,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Java的foreach
+          String、StringBuilder和StringBuffer
         </h1>
 
         <div class="post-meta-container">
@@ -300,16 +298,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2019-10-31 12:31:13" itemprop="dateCreated datePublished" datetime="2019-10-31T12:31:13+08:00">2019-10-31</time>
+      <time title="创建时间：2021-04-05 15:13:37 / 修改时间：15:26:53" itemprop="dateCreated datePublished" datetime="2021-04-05T15:13:37+08:00">2021-04-05</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-04-05 15:26:53" itemprop="dateModified" datetime="2021-04-05T15:26:53+08:00">2021-04-05</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -321,7 +313,7 @@
     </span>
 
   
-    <span id="/posts/4c0b6fc5.html" class="post-meta-item leancloud_visitors" data-flag-title="Java的foreach" title="阅读次数">
+    <span id="/posts/2871eb40.html" class="post-meta-item leancloud_visitors" data-flag-title="String、StringBuilder和StringBuffer" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -337,32 +329,58 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>开发中经常使用到foreach，现在是时候深入了解一下了。</p>
+        <p>String是Java中使用频率极高的一个类，但由于其是不可变，因此有StringBuffer和StringBuilder两个类来弥补在大量修改场景下的不足。</p>
 <span id="more"></span>
 
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>foreach是for的增强，基本语法结构：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里的collection 指数组或集合</span></span><br><span class="line"><span class="keyword">for</span>(T t : collection) &#123;</span><br><span class="line">  ... dosomething ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 数组</span><br><span class="line"><span class="keyword">int</span>[] a = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i : a) &#123;</span><br><span class="line">  System.out.println(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 集合</span><br><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList();</span><br><span class="line"><span class="keyword">for</span>(String str : list) &#123;</span><br><span class="line">  System.out.println(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h1><p>由上面的例子可以看到，在写法上foreach与for写法相比是简化了很多。</p>
-<p>要注意的一点是：使用foreach能遍历的，使用for也能遍历，反之则不一定能！！！</p>
-<p>其次还有一些缺点：</p>
+
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><p>当我们需要存储单一的字符时，使用的是基本数据类型<em>char</em>来进行存储，而要存储一连串的字符时，毫无疑问的是想到使用字符数组*char[]*来进行存储，如果代码中每次都要先声明数组才能存储字符串就显得非常冗余和烦琐了，因此贴心的Java为我们提供了String类。</p>
+<p>String类的数据结构如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span>[] value;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到String类确实就是用一个字符数组来存储字符串的，但这是Java版本1.9版本之前的内容。</p>
+<h2 id="数据类型的改变"><a href="#数据类型的改变" class="headerlink" title="数据类型的改变"></a>数据类型的改变</h2><p>在Java版本1.9之后，String类的数组的数据类型就由<em>char[]<em>改为了</em>byte[]</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br></pre></td></tr></table></figure>
+
+<p>博主由于对这个变化了解的不是很透彻，因此摘抄了别人的解释，具体可看<a target="_blank" rel="noopener" href="https://github.com/Snailclimb/JavaGuide/issues/675">这里</a>或者自行搜索相关内容。</p>
+<blockquote>
+<p>为什么使用byte字节而舍弃了char字符:</p>
+</blockquote>
+<blockquote>
+<p>节省内存占用，byte占一个字节(8位)，char占用2个字节（16），相较char节省一半的内存空间。节省gc压力。<br>针对初始化的字符，对字符长度进行判断选择不同的编码方式。如果是 LATIN-1 编码，则右移0位，数组长度即为字符串长度。而如果是 UTF16 编码，则右移1位，数组长度的二分之一为字符串长度。</p>
+</blockquote>
+<h2 id="不可变性"><a href="#不可变性" class="headerlink" title="不可变性"></a>不可变性</h2><p>String类的不可变性是由几个方面实现</p>
+<ol>
+<li><p>String类本身由final修饰符进行修饰</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span>&#123;</span><br></pre></td></tr></table></figure></li>
+<li><p>存储字符的属性值value由private修饰符修饰，且没有提供<em>setter</em>方法供外界进行修改</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br></pre></td></tr></table></figure></li>
+<li><p>虽然存储字符的属性值value使用了final修饰符进行修饰，但是仅能做到变量value对于数组的引用不变而已，而无法阻止数组元素的修改，<strong>通过查看String的源码其实可以发现，Java的开发者很小心的处理String类中的每一行代码，从而做到在细节上实现了不可变（即没有修改数组元素）</strong></p>
+</li>
+</ol>
+<p>通过以上的几个方面，实现了String类无法被继承且内部元素无法被修改，做到了String的不可变，由于其不可变性，可以理解为一个常量，因此<strong>String类是线程安全的</strong>。</p>
+<p>注：如果真的要破坏String类的不可变性，只能通过使用反射的方式进行破坏，强行进行修改了。</p>
+<h1 id="StringBuilder和StringBuffer"><a href="#StringBuilder和StringBuffer" class="headerlink" title="StringBuilder和StringBuffer"></a>StringBuilder和StringBuffer</h1><p>由于String类的不可变性，每一次修改为不同的字符串就会生成一个新的String对象，这明显不利于在需要大量修改字符串内容的场景，因此Java提供了StringBuilder类和StringBuffer类来实现字符串的动态修改，只有在最后修改完毕后才才调用*toString()*方法真正的生成String对象。</p>
+<h2 id="抽象类AbstractStringBuilder"><a href="#抽象类AbstractStringBuilder" class="headerlink" title="抽象类AbstractStringBuilder"></a>抽象类AbstractStringBuilder</h2><p>StringBuilder类和StringBuffer类都是继承自<em>抽象类AbstractStringBuilder</em>，部分代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractStringBuilder</span> <span class="keyword">implements</span> <span class="title">Appendable</span>, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The value is used for character storage.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">byte</span>[] value;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到注释，属性value就是存储字符串的地方，且没有使用final修饰符进行修饰，因此是可变的。</p>
+<p><em>AbstractStringBuilder</em>类本身提供且实现了大量的修改字符串内容的方法，如 <code>expandCapacity</code>、<code>append</code>、<code>insert</code>、<code>indexOf</code> 等公共方法，StringBuffer类和StringBuilder类的许多方法实现上都是直接调用的父类（AbstractStringBuilder）的方法。</p>
+<h2 id="线程安全和性能"><a href="#线程安全和性能" class="headerlink" title="线程安全和性能"></a>线程安全和性能</h2><p>虽说StringBuilder类和StringBuffer类都是继承自<em>抽象类AbstractStringBuilder</em>，整体上都是差不多，但是在性能和多线程操作处理上存在区别</p>
 <ul>
-<li>对于数组，在遍历过程中需要使用元素下标的，则无能为力。</li>
-<li>对于集合，在遍历过程中无法对元素进行增删，否则会报异常，因为我们没法获得迭代器进行操作。</li>
+<li><p>线程安全</p>
+<p>StringBuilder类并没有对方法做任何多线程方面的处理，因此是非线程安全的。</p>
+<p>StringBuffer类中大量的使用<strong>synchronized</strong>关键字对方法进行了加锁操作，因此是线程安全的。</p>
+</li>
+<li><p>性能</p>
+<p>StringBuffer类由于其方法上的加锁操作，因此性能要比StringBuilder类低。</p>
+</li>
 </ul>
-<h1 id="遍历的顺序"><a href="#遍历的顺序" class="headerlink" title="遍历的顺序"></a>遍历的顺序</h1><p>有时候我们可能对元素的遍历顺序有要求，那么使用foreach与for的遍历顺序是一致的吗？</p>
-<p>答案是一样的！！</p>
-<p>通过阅读官方的文档可以知道，对数组使用foreach写法，等同于下面的写法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>而对于集合而言，就和使用迭代器进行遍历一样：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Iterator iterator = collection.iterator(); iterator.hasNext(); ) &#123;</span><br><span class="line">  iterator.next <span class="keyword">do</span> something......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="迭代器iterator"><a href="#迭代器iterator" class="headerlink" title="迭代器iterator"></a>迭代器iterator</h1><p>对于集合而言，使用foreach的遍历，其实就是在使用迭代器进行遍历，这点通过Java的规范文档可以了解到，也可以通过对Java的class文件反编译观察到，如下图所示：</p>
-<p><img src="http://ww1.sinaimg.cn/large/e6dffef4gy1gaqphag66lj21bb0bqtjk.jpg" alt="foreach与迭代器.png"></p>
-<p>但是与直接使用iterator不同，使用foreach的过程中，是无法对元素进行增删的，因为iterator是隐含的仅存在于编译后的class文件中，即开发中无法直接获取iterator，因而也就无法执行增删操作。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/81cec83541be">Java中的foreach遍历顺序</a></p>
-<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-14.html#jls-14.14.2">Java规范文档-看14.14.2. The enhanced for statement部分</a></p>
+<p><strong>总结：需要考虑线程安全的就用StringBuffer，无线程安全问题且重视性能的就用StringBuilder，无脑操作就选StringBuffer。</strong></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/cd72099051f9">String类的不可变性</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Snailclimb/JavaGuide/issues/675">Java 9 之后，String 类的实现改用 byte 数组存储字符串</a></li>
+</ul>
 
     </div>
 
@@ -379,14 +397,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/35b60266.html" rel="prev" title="Map的N种遍历方法">
-                  <i class="fa fa-chevron-left"></i> Map的N种遍历方法
+                <a href="/posts/12626135.html" rel="prev" title="双向链表和双向循环链表">
+                  <i class="fa fa-chevron-left"></i> 双向链表和双向循环链表
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/1eb05570.html" rel="next" title="Linux操作指南：01-新建用户">
-                  Linux操作指南：01-新建用户 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -559,7 +574,7 @@ NexT.utils.loadComments('.gitalk-container', () => {
       repo        : 'izhixing.github.io',
       owner       : 'izhixing',
       admin       : ['izhixing'],
-      id          : 'e4716cdc05c1a3fec0e3ba46bb9f6103',
+      id          : '6943ca1f9a5757b7f7c363b4a0a67e6d',
       proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
         language: '',
       distractionFreeMode: true

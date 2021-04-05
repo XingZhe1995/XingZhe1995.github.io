@@ -715,6 +715,69 @@
       </tags>
   </entry>
   <entry>
+    <title>String、StringBuilder和StringBuffer</title>
+    <url>/posts/2871eb40.html</url>
+    <content><![CDATA[<p>String是Java中使用频率极高的一个类，但由于其是不可变，因此有StringBuffer和StringBuilder两个类来弥补在大量修改场景下的不足。</p>
+<span id="more"></span>
+
+
+
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><p>当我们需要存储单一的字符时，使用的是基本数据类型<em>char</em>来进行存储，而要存储一连串的字符时，毫无疑问的是想到使用字符数组*char[]*来进行存储，如果代码中每次都要先声明数组才能存储字符串就显得非常冗余和烦琐了，因此贴心的Java为我们提供了String类。</p>
+<p>String类的数据结构如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span>[] value;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到String类确实就是用一个字符数组来存储字符串的，但这是Java版本1.9版本之前的内容。</p>
+<h2 id="数据类型的改变"><a href="#数据类型的改变" class="headerlink" title="数据类型的改变"></a>数据类型的改变</h2><p>在Java版本1.9之后，String类的数组的数据类型就由<em>char[]<em>改为了</em>byte[]</em></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br></pre></td></tr></table></figure>
+
+<p>博主由于对这个变化了解的不是很透彻，因此摘抄了别人的解释，具体可看<a href="https://github.com/Snailclimb/JavaGuide/issues/675">这里</a>或者自行搜索相关内容。</p>
+<blockquote>
+<p>为什么使用byte字节而舍弃了char字符:</p>
+</blockquote>
+<blockquote>
+<p>节省内存占用，byte占一个字节(8位)，char占用2个字节（16），相较char节省一半的内存空间。节省gc压力。<br>针对初始化的字符，对字符长度进行判断选择不同的编码方式。如果是 LATIN-1 编码，则右移0位，数组长度即为字符串长度。而如果是 UTF16 编码，则右移1位，数组长度的二分之一为字符串长度。</p>
+</blockquote>
+<h2 id="不可变性"><a href="#不可变性" class="headerlink" title="不可变性"></a>不可变性</h2><p>String类的不可变性是由几个方面实现</p>
+<ol>
+<li><p>String类本身由final修饰符进行修饰</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span>&#123;</span><br></pre></td></tr></table></figure></li>
+<li><p>存储字符的属性值value由private修饰符修饰，且没有提供<em>setter</em>方法供外界进行修改</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] value;</span><br></pre></td></tr></table></figure></li>
+<li><p>虽然存储字符的属性值value使用了final修饰符进行修饰，但是仅能做到变量value对于数组的引用不变而已，而无法阻止数组元素的修改，<strong>通过查看String的源码其实可以发现，Java的开发者很小心的处理String类中的每一行代码，从而做到在细节上实现了不可变（即没有修改数组元素）</strong></p>
+</li>
+</ol>
+<p>通过以上的几个方面，实现了String类无法被继承且内部元素无法被修改，做到了String的不可变，由于其不可变性，可以理解为一个常量，因此<strong>String类是线程安全的</strong>。</p>
+<p>注：如果真的要破坏String类的不可变性，只能通过使用反射的方式进行破坏，强行进行修改了。</p>
+<h1 id="StringBuilder和StringBuffer"><a href="#StringBuilder和StringBuffer" class="headerlink" title="StringBuilder和StringBuffer"></a>StringBuilder和StringBuffer</h1><p>由于String类的不可变性，每一次修改为不同的字符串就会生成一个新的String对象，这明显不利于在需要大量修改字符串内容的场景，因此Java提供了StringBuilder类和StringBuffer类来实现字符串的动态修改，只有在最后修改完毕后才才调用*toString()*方法真正的生成String对象。</p>
+<h2 id="抽象类AbstractStringBuilder"><a href="#抽象类AbstractStringBuilder" class="headerlink" title="抽象类AbstractStringBuilder"></a>抽象类AbstractStringBuilder</h2><p>StringBuilder类和StringBuffer类都是继承自<em>抽象类AbstractStringBuilder</em>，部分代码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractStringBuilder</span> <span class="keyword">implements</span> <span class="title">Appendable</span>, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The value is used for character storage.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">byte</span>[] value;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到注释，属性value就是存储字符串的地方，且没有使用final修饰符进行修饰，因此是可变的。</p>
+<p><em>AbstractStringBuilder</em>类本身提供且实现了大量的修改字符串内容的方法，如 <code>expandCapacity</code>、<code>append</code>、<code>insert</code>、<code>indexOf</code> 等公共方法，StringBuffer类和StringBuilder类的许多方法实现上都是直接调用的父类（AbstractStringBuilder）的方法。</p>
+<h2 id="线程安全和性能"><a href="#线程安全和性能" class="headerlink" title="线程安全和性能"></a>线程安全和性能</h2><p>虽说StringBuilder类和StringBuffer类都是继承自<em>抽象类AbstractStringBuilder</em>，整体上都是差不多，但是在性能和多线程操作处理上存在区别</p>
+<ul>
+<li><p>线程安全</p>
+<p>StringBuilder类并没有对方法做任何多线程方面的处理，因此是非线程安全的。</p>
+<p>StringBuffer类中大量的使用<strong>synchronized</strong>关键字对方法进行了加锁操作，因此是线程安全的。</p>
+</li>
+<li><p>性能</p>
+<p>StringBuffer类由于其方法上的加锁操作，因此性能要比StringBuilder类低。</p>
+</li>
+</ul>
+<p><strong>总结：需要考虑线程安全的就用StringBuffer，无线程安全问题且重视性能的就用StringBuilder，无脑操作就选StringBuffer。</strong></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.jianshu.com/p/cd72099051f9">String类的不可变性</a></li>
+<li><a href="https://github.com/Snailclimb/JavaGuide/issues/675">Java 9 之后，String 类的实现改用 byte 数组存储字符串</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker服务及其容器自启动</title>
     <url>/posts/f31ac7c3.html</url>
     <content><![CDATA[<p>服务器重启后docker服务和容器都会停止运行，如果每次都手动启动的话就很繁琐了，因此配置为自启动就很有必要了。</p>
