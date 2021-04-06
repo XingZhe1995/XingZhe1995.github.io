@@ -778,62 +778,140 @@
       </tags>
   </entry>
   <entry>
-    <title>线程和线程池的关闭</title>
-    <url>/posts/c6b69b48.html</url>
-    <content><![CDATA[<p>为了最大限度的提高系统性能，线程和线程池的使用都是必不可少的，使用后往往面临一个相同的问题：关闭！</p>
+    <title>CAP理论和BASE理论</title>
+    <url>/posts/7ae49b47.html</url>
+    <content><![CDATA[<p>说起分布式肯定绕不开两个理论：CAP理论和BASE理论。限于水平有限，本篇文章仅作记录用。</p>
 <span id="more"></span>
 
 
 
-<h1 id="线程的关闭"><a href="#线程的关闭" class="headerlink" title="线程的关闭"></a>线程的关闭</h1><p>由于不知道线程的运行状态，因此在运行途中直接关闭一个线程是非常危险的操作，JDK文档上就有这样一个例子：假如线程获取了某把锁，然后强制关闭了，会导致锁资源无法被释放的严重后果。因此Thread类上的<em>stop()<em>方法在Java版本1.2就</em>不推荐使用</em>了。</p>
-<p>运行途中线程何时能关闭，只有线程自己知道，开发者能做的就是调用中断方法*interrupt()*通知线程关闭。</p>
-<p>调用*interrupt()*方法，在不同的场景下会有不同的效果（版本：Java11）</p>
-<ul>
-<li><p>被<em>Object类的wait()、wait(long)、wait(long, int)方法</em>或者<em>Thread类的join()、join(long)、join(long, int)、sleep(long)、sleep(long, int)方法</em>调用而阻塞的线程，将会<strong>清除中断状态</strong>，同时<strong>抛出异常InterruptedException</strong></p>
-</li>
-<li><p>对于被IO阻塞的线程</p>
-<ul>
-<li>如果是被NIO中的channel操作而阻塞的，将会<strong>设置中断状态</strong>，同时<strong>抛出异常ClosedByInterruptException</strong></li>
-<li>如果是被NIO中的Selectorl操作而阻塞的，只会<strong>设置中断状态</strong></li>
-</ul>
-</li>
-<li><p>不符合以上条件的，就直接<strong>设置中断状态</strong></p>
-</li>
-<li><p>对于还没启动的线程或者线程已被销毁的，调用*interrupt()*方法是<strong>没有任何效果</strong>的</p>
-</li>
-</ul>
-<p>调用*interrupt()<em>方法后，如果抛出异常，我们就可以通过捕获异常来让线程正常退出了，如果没有抛出异常仅是设置了中断状态，就要依靠线程中的代码逻辑来判断了，在代码中的适当位置调用</em>isInterrupted()*来查看自己是否被中断，进而让线程正常退出。</p>
-<p>要注意的是：线程先调用*interrupt()*方法再被阻塞的话，就会抛出异常，但是捕获异常后再被阻塞的话，将不会再次抛出异常。</p>
-<p>Thread类还有一些其它类似的方法：</p>
-<ul>
-<li>isInterrupted()方法：测试当前线程是否被中断，但是不会修改中断状态。</li>
-<li>interrupted()方法：测试当前线程是否被中断，但是会清除中断状态，即原本是设置了中断状态的线程，调用该方法后，会变成没有将中断。</li>
-<li>isAlive()方法：测试当前线程是否存在（存在指的是：线程已启动且还没被销毁）。</li>
-<li>Thread.interrupted()静态方法：与*interrupted()*方法的效果一样，但是实现方式不同。</li>
-</ul>
-<h1 id="线程池的关闭"><a href="#线程池的关闭" class="headerlink" title="线程池的关闭"></a>线程池的关闭</h1><p>线程池提供了两个关闭线程池的方法：**shutdownNow()<strong>和</strong>shutdown()**。</p>
-<ul>
-<li><p>shutdownNow方法：尝试停止正在执行的任务，暂停等待任务的处理，并返回正在等待执行的任务列表，这个方法不保证能停止正在执行的任务。</p>
-</li>
-<li><p>shutdown方法：依次关闭之前提交执行的任务，并且拒绝接收新的任务，如果线程池已关闭但又调用了该方法将不会有任何影响。</p>
-</li>
-</ul>
-<p>调用**shutdownNow()<strong>或</strong>shutdown()*<em>方法后，线程池并不是立刻关闭的，要想等待线程池关闭，需要调用</em>awaitTermination()*方法来阻塞等待。</p>
-<h2 id="简单的源码分析"><a href="#简单的源码分析" class="headerlink" title="简单的源码分析"></a>简单的源码分析</h2><p>shutdownNow()关键源码如下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">advanceRunState(STOP);</span><br><span class="line">interruptWorkers();</span><br><span class="line">tasks = drainQueue();</span><br></pre></td></tr></table></figure>
-
-<p>第一段是设置线程池的状态为停止，第二段是遍历工作队列调用线程的调用*interrupt()*方法，第三段是返回任务队列。</p>
-<p>shutdown()关键源码是类似的</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">advanceRunState(SHUTDOWN);</span><br><span class="line">interruptIdleWorkers();</span><br></pre></td></tr></table></figure>
-
-<p>第一段是设置线程池的状态为关闭，第二段是遍历工作队列调用线程的调用*interrupt()*方法。</p>
-<p><em>注意：上述源码分析非常粗浅，请自行查阅相关资料。</em></p>
+<h1 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h1><p>C即一致性，A即可用性，P即分区容错性。<br>CAP理论指出了三者中只能同时做到其中的两个，无法同时满足三个要求。<br>CAP理论是针对分布式数据库环境提出的，因此P属性是必须的。如果选择了A，那么分区间的数据可能会不一致；如果选择了C，则为了保持数据一致性而导致服务不可用。</p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>Spring cloud中的eureka 属于AP，zookeeper属于CP。</p>
+<h1 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h1><p>BA（基本可用，Basically Available）、S（软状态，Soft-state）、C（最终一致性，Eventually Consistent）<br>BASE理论是由CAP理论发展而来，是一致性和可用性权衡的结果，即牺牲一致性来满足系统的可用性，然后在后续的过程中达到最终一致。</p>
 ]]></content>
       <categories>
-        <category>Java</category>
+        <category>分布式</category>
       </categories>
       <tags>
-        <tag>Java</tag>
+        <tag>分布式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CAS操作和ABA问题</title>
+    <url>/posts/ce4f4d1f.html</url>
+    <content><![CDATA[<p>多线程开发中，通常会加锁做并发控制，但是加锁会让性能降低，因此有了CAS操作，但CAS操作会引发ABA问题。</p>
+<span id="more"></span>
+
+
+
+<h1 id="什么是CAS"><a href="#什么是CAS" class="headerlink" title="什么是CAS"></a>什么是CAS</h1><p>CAS（Compare and Swap，比较和交换），是一种乐观锁（同时操作同一个对象的概率非常小，因此大部分加锁操作做的都是无用功）的实现方式，是以一种无锁的方式实现并发控制，即在多线程环境下，以不加锁的方式对数据进行修改。</p>
+<h2 id="CAS的操作过程"><a href="#CAS的操作过程" class="headerlink" title="CAS的操作过程"></a>CAS的操作过程</h2><p>CAS（V，E，N），V表示要更新变量的值（变量当前值），E表示预期值（变量的旧值），N表示新值。</p>
+<p>仅当 V值等于E值时，才会将V的值设为N，如果V值和E值不同，则说明已经有其他线程做更新，则当前线程则什么都不做。</p>
+<p>最后，CAS 返回当前V的真实值。</p>
+<h1 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h1><p>ABA问题，是指CAS操作中，其它线程把变量的值进行了修改但是修改的值与原始值一致，使CAS的比较判断出错，即无法感知数据被修改过，导致程序异常。</p>
+<p>避免方法：加入版本号进行记录，CAS操作时比较一下版本号就能判断出是不是属于自己的那次CAS操作了。</p>
+]]></content>
+      <categories>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>临界段</title>
+    <url>/posts/c3329247.html</url>
+    <content><![CDATA[<p>临界段即多线程互斥使用共享资源的代码段，是一种加锁的机制，在任意时刻一个共享资源只能被一个线程使用。</p>
+<p>Java中使用关键字synchronized定义临界段，能对共享对象进行加锁操作。</p>
+]]></content>
+      <categories>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线程间的互斥和同步</title>
+    <url>/posts/6117b918.html</url>
+    <content><![CDATA[<p>多线程间是互相协助和互相联系的，因此多线程间存在互斥和同步。</p>
+<!-- more  -->
+
+<h1 id="互斥和同步"><a href="#互斥和同步" class="headerlink" title="互斥和同步"></a>互斥和同步</h1><p>多线程间存在并发访问共享资源（修改资源）时就会出现互斥，保证共享数据在同一时刻只被一个线程使用。</p>
+<p>多线程同步是指一个线程由于某种原因（等待对象释放之类的）需要等待另一个线程执行完才能继续执行的现象，即线程间互相等待。</p>
+<p>互斥和同步是不可分离的，互斥是实现同步的一种手段，临界区、互斥量和信号量都是主要的互斥实现方式，互斥是因，同步是果，互斥是方法，同步是目的。</p>
+<h1 id="Java中的实现"><a href="#Java中的实现" class="headerlink" title="Java中的实现"></a>Java中的实现</h1><p>Java中wait()、notify()、notifyAll()三个方法就是用来实现线程同步的。</p>
+<p>wait()处于等待队列，或超时结束等待。notify()通知第一个处于等待的线程，notifyAll()则唤醒所有等待线程一起竞争cpu。</p>
+<p>Java中最基本的互斥同步手段就是synchronized。</p>
+]]></content>
+      <categories>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>进程间的通信方式</title>
+    <url>/posts/44e8cd7.html</url>
+    <content><![CDATA[<p><strong>进程通信(Interprocess Communication，IPC)是一个进程与另一个进程间共享消息的一种通信方式</strong>。消息(message)是发送进程形成的一个消息块，将消息内容传送给接收进程。</p>
+<span id="more"></span>
+
+
+
+<h1 id="进程间通信的目的"><a href="#进程间通信的目的" class="headerlink" title="进程间通信的目的"></a>进程间通信的目的</h1><ul>
+<li><p>数据传输<br> 一个进程需要将其数据发送给另一进程，发送的数据量在一个字节到几M字节之间。</p>
+</li>
+<li><p>共享数据<br> 多个进程操作共享数据</p>
+</li>
+<li><p>事件通知<br> 一个进程需要向另一个或一组进程发送消息，通知它（它们）发生了某种事件（如进程终止时要通知父进程）。</p>
+</li>
+<li><p>资源共享<br> 多个进程之间共享同样的资源。<strong>为了作到这一点，需要内核提供锁和同步机制</strong>。</p>
+</li>
+<li><p>进程控制<br> 有些进程希望完全控制另一个进程的执行（如Debug进程），此时控制进程希望能够拦截另一个进程的所有陷入和异常，并能够及时知道它的状态改变。</p>
+</li>
+</ul>
+<h1 id="8种通信方式"><a href="#8种通信方式" class="headerlink" title="8种通信方式"></a>8种通信方式</h1><ol>
+<li><p>匿名管道</p>
+<p>是一种半双工的通信方式（即数据只能单向流动），且只能在具有亲缘关系的进程间使用（亲缘关系指的父子进程或者兄弟子进程），该管道只存在于内存之中。</p>
+</li>
+<li><p>流管道</p>
+<p>是一种全双工的通信方式（即数据能双向流动）</p>
+<p>注：对该方法不熟悉，请自行搜索更多相关内容</p>
+</li>
+<li><p>命名管道</p>
+<p>与匿名管道一样是一种半双工的通信方式（即数据只能单向流动），但<em>克服了匿名管道只能在具有亲缘关系的进程间使用的限制</em>，允许无亲缘关系的进程间使用，管道以一种特殊设备文件形式存在于文件系统中。</p>
+</li>
+<li><p>信号</p>
+<p>信号是一种比较复杂的通信方式，用于通知接收进程某个事件已经发生。</p>
+</li>
+<li><p>消息队列</p>
+<p>是消息的链表，存放在内核中，一个消息队列由一个标识符（即队列ID）来标识。</p>
+<p>消息队列是面向记录的，其中的消息具有特定的格式以及特定的优先级。</p>
+<p>消息队列独立于发送与接收进程。进程终止时，消息队列及其内容并不会被删除。</p>
+<p>消息队列可以实现消息的随机查询,消息不一定要以先进先出的次序读取,也可以按消息的类型读取。</p>
+</li>
+<li><p>共享内存</p>
+<p>两个或多个进程共享一个给定的存储区，是最快的一种 IPC，因为进程是直接对内存进行存取。</p>
+<p>因为多个进程可以同时操作，所以需要进行同步。</p>
+<p>信号量+共享内存通常结合在一起使用，信号量用来同步对共享内存的访问。</p>
+</li>
+<li><p>信号量</p>
+<p>信号量是一个计数器，用于实现进程间的互斥与同步，若要在进程间传递数据需要结合共享内存。</p>
+<p>信号量是基于操作系统的PV操作，程序对信号量的操作都是原子操作。</p>
+<p>每次对信号量的 PV 操作不仅限于对信号量值加 1 或减 1，而且可以加减任意正整数。</p>
+<p>支持信号量组。</p>
+</li>
+<li><p>套接字，即socket通信，与其他通信机制不同的是，它可用于不同机器间的进程通信。</p>
+</li>
+</ol>
+<h1 id="进程间的通信和线程间的通信的区别"><a href="#进程间的通信和线程间的通信的区别" class="headerlink" title="进程间的通信和线程间的通信的区别"></a>进程间的通信和线程间的通信的区别</h1><p>只有进程间需要通信，线程间由于共享进程的地址空间，因此没有通信必要，但要做好同步和互斥，保护共享的变量。</p>
+]]></content>
+      <categories>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
       </tags>
   </entry>
   <entry>
@@ -855,6 +933,26 @@
       </categories>
       <tags>
         <tag>容器</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>微服务的启动</title>
+    <url>/posts/ce090114.html</url>
+    <content><![CDATA[<p>由于项目由单体变成了微服务的形式，因此项目的启动由一次变成了多次，但是单体项目与微服务有个不同点，就是微服务的服务之间存在依赖关系，不当的启动顺序会导致服务启动失败。</p>
+<p>PS：以下仅作记录，没有真实使用过，</p>
+<span id="more"></span>
+
+<h1 id="手动启动"><a href="#手动启动" class="headerlink" title="手动启动"></a>手动启动</h1><p>按照依赖顺序依次启动服务，但是微服务架构的项目，单个服务的实例的次数都不止一个，更不要说整个项目了，手动启动的话肯定是不允许的。</p>
+<h1 id="wait-for-it-sh和服务健康检查"><a href="#wait-for-it-sh和服务健康检查" class="headerlink" title="wait-for-it.sh和服务健康检查"></a>wait-for-it.sh和服务健康检查</h1><p>为了便于微服务的分发和管理，使用Docker打包然后分发是一个很好的实践。</p>
+<p>对于微服务间的服务依赖，Docker官方给出的建议是：通过wait-for-it.sh脚本来控制，即通过脚本探测某个依赖的服务的tcp端口是否开放，否则一直等待，直到端口探测成功，才会启动后面的命令；也可以通过服务健康检查来实现。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://docs.docker.com/compose/startup-order/">https://docs.docker.com/compose/startup-order/</a></p>
+<p><a href="https://stackoverflow.com/questions/48684609/control-startup-order-in-docker-compose">https://stackoverflow.com/questions/48684609/control-startup-order-in-docker-compose</a></p>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
         <tag>Docker</tag>
       </tags>
   </entry>
@@ -1518,6 +1616,92 @@
       </tags>
   </entry>
   <entry>
+    <title>wait()和sleep()方法的区别</title>
+    <url>/posts/9a65c93a.html</url>
+    <content><![CDATA[<p>多线程开发中，让线程暂停执行是常见场景，Java提供了*sleep()<em>和</em>wait()*两种实现方法，但在具体使用上又有稍微差别。</p>
+<span id="more"></span>
+
+
+
+<h1 id="异同"><a href="#异同" class="headerlink" title="异同"></a>异同</h1><ul>
+<li>相同点：*sleep()<em>和</em>wait()*的作用都是暂停线程的执行，进入阻塞状态，让出CPU时间片段。</li>
+<li>区别<ul>
+<li>锁资源的释放：*sleep()<em>方法调用后线程不会释放锁资源；</em>wait()*方法调用后线程会释放锁资源。</li>
+<li>使用场景：*sleep()<em>仅用于线程暂停执行；</em>wait()*通常用于线程间交互或通信；</li>
+<li>线程唤醒：*sleep()*调用后线程会自动唤醒（由系统调度器唤醒，时间到了被调度）；wait()调用后，线程不会自动唤醒(需要其它线程使用同一个对象上的notify()或者notifyAll()方法唤醒)，也可以使用带有超时设置的wait()方法超时后自动唤醒。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线程和线程池的关闭</title>
+    <url>/posts/c6b69b48.html</url>
+    <content><![CDATA[<p>为了最大限度的提高系统性能，线程和线程池的使用都是必不可少的，使用后往往面临一个相同的问题：关闭！</p>
+<span id="more"></span>
+
+
+
+<h1 id="线程的关闭"><a href="#线程的关闭" class="headerlink" title="线程的关闭"></a>线程的关闭</h1><p>由于不知道线程的运行状态，因此在运行途中直接关闭一个线程是非常危险的操作，JDK文档上就有这样一个例子：假如线程获取了某把锁，然后强制关闭了，会导致锁资源无法被释放的严重后果。因此Thread类上的<em>stop()<em>方法在Java版本1.2就</em>不推荐使用</em>了。</p>
+<p>运行途中线程何时能关闭，只有线程自己知道，开发者能做的就是调用中断方法*interrupt()*通知线程关闭。</p>
+<p>调用*interrupt()*方法，在不同的场景下会有不同的效果（版本：Java11）</p>
+<ul>
+<li><p>被<em>Object类的wait()、wait(long)、wait(long, int)方法</em>或者<em>Thread类的join()、join(long)、join(long, int)、sleep(long)、sleep(long, int)方法</em>调用而阻塞的线程，将会<strong>清除中断状态</strong>，同时<strong>抛出异常InterruptedException</strong></p>
+</li>
+<li><p>对于被IO阻塞的线程</p>
+<ul>
+<li>如果是被NIO中的channel操作而阻塞的，将会<strong>设置中断状态</strong>，同时<strong>抛出异常ClosedByInterruptException</strong></li>
+<li>如果是被NIO中的Selectorl操作而阻塞的，只会<strong>设置中断状态</strong></li>
+</ul>
+</li>
+<li><p>不符合以上条件的，就直接<strong>设置中断状态</strong></p>
+</li>
+<li><p>对于还没启动的线程或者线程已被销毁的，调用*interrupt()*方法是<strong>没有任何效果</strong>的</p>
+</li>
+</ul>
+<p>调用*interrupt()<em>方法后，如果抛出异常，我们就可以通过捕获异常来让线程正常退出了，如果没有抛出异常仅是设置了中断状态，就要依靠线程中的代码逻辑来判断了，在代码中的适当位置调用</em>isInterrupted()*来查看自己是否被中断，进而让线程正常退出。</p>
+<p>要注意的是：线程先调用*interrupt()*方法再被阻塞的话，就会抛出异常，但是捕获异常后再被阻塞的话，将不会再次抛出异常。</p>
+<p>Thread类还有一些其它类似的方法：</p>
+<ul>
+<li>isInterrupted()方法：测试当前线程是否被中断，但是不会修改中断状态。</li>
+<li>interrupted()方法：测试当前线程是否被中断，但是会清除中断状态，即原本是设置了中断状态的线程，调用该方法后，会变成没有将中断。</li>
+<li>isAlive()方法：测试当前线程是否存在（存在指的是：线程已启动且还没被销毁）。</li>
+<li>Thread.interrupted()静态方法：与*interrupted()*方法的效果一样，但是实现方式不同。</li>
+</ul>
+<h1 id="线程池的关闭"><a href="#线程池的关闭" class="headerlink" title="线程池的关闭"></a>线程池的关闭</h1><p>线程池提供了两个关闭线程池的方法：**shutdownNow()<strong>和</strong>shutdown()**。</p>
+<ul>
+<li><p>shutdownNow方法：尝试停止正在执行的任务，暂停等待任务的处理，并返回正在等待执行的任务列表，这个方法不保证能停止正在执行的任务。</p>
+</li>
+<li><p>shutdown方法：依次关闭之前提交执行的任务，并且拒绝接收新的任务，如果线程池已关闭但又调用了该方法将不会有任何影响。</p>
+</li>
+</ul>
+<p>调用**shutdownNow()<strong>或</strong>shutdown()*<em>方法后，线程池并不是立刻关闭的，要想等待线程池关闭，需要调用</em>awaitTermination()*方法来阻塞等待。</p>
+<h2 id="简单的源码分析"><a href="#简单的源码分析" class="headerlink" title="简单的源码分析"></a>简单的源码分析</h2><p>shutdownNow()关键源码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">advanceRunState(STOP);</span><br><span class="line">interruptWorkers();</span><br><span class="line">tasks = drainQueue();</span><br></pre></td></tr></table></figure>
+
+<p>第一段是设置线程池的状态为停止，第二段是遍历工作队列调用线程的调用*interrupt()*方法，第三段是返回任务队列。</p>
+<p>shutdown()关键源码是类似的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">advanceRunState(SHUTDOWN);</span><br><span class="line">interruptIdleWorkers();</span><br></pre></td></tr></table></figure>
+
+<p>第一段是设置线程池的状态为关闭，第二段是遍历工作队列调用线程的调用*interrupt()*方法。</p>
+<p><em>注意：上述源码分析非常粗浅，请自行查阅相关资料。</em></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>多线程</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis的占位符</title>
     <url>/posts/daf2aad3.html</url>
     <content><![CDATA[<p>代码中访问数据库的时候，经常需要传输参数用作语句条件，这就不得不用到MyBatis提供的占位符。</p>
@@ -1608,6 +1792,34 @@
       </categories>
       <tags>
         <tag>MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>注解@Autowired和@Resource区别</title>
+    <url>/posts/f6f32af4.html</url>
+    <content><![CDATA[<p>Spring提供了注解@Autowired用于依赖注入，同时也支持使用Java本身提供的注解@Resource用于依赖注入，这两个注解有什么异同呢？</p>
+<span id="more"></span>
+
+
+
+<h1 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h1><p><em>@Autowired</em>和*@Resource*都是用来装配bean的，都可以注解在字段上和setter方法上</p>
+<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><ul>
+<li>归属上：*@Autowired<em>是属于Spring的，</em>@Resource*是属于Java的。</li>
+<li>装配方式：<ul>
+<li><em>@Autowired</em>默认按照类型装配（默认情况下依赖对象必须存在，如果允许null，可以设置required属性为false），如果需要按照名称匹配需要结合@Qualifier使用。要注意只能有一个实现类否则存在多个候选对象会报错。</li>
+<li>@Resource默认按照名称装配，名称通过name属性指定（不指定时取字段名或者setter方法上的属性名），当根据名称找不到时会按照类型进行装配，如果name一旦指定就只会按照名称进行装配。使用@Resource能较少代码耦合。</li>
+</ul>
+</li>
+</ul>
+<p>注：速度上，这两种方式都是直接指定name是最快的。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
       </tags>
   </entry>
 </search>
