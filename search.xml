@@ -3013,6 +3013,26 @@
       </tags>
   </entry>
   <entry>
+    <title>Interceptor和filter区别</title>
+    <url>/posts/7c2ed01f.html</url>
+    <content><![CDATA[<p>Spring种filter和Interceptor傻傻分不清，因此简单的做个记录</p>
+<span id="more"></span>
+
+<p><em>filter</em>即过滤器，是属于Java的。</p>
+<p><em>Interceptor</em>即拦截器，是属于Spring的，是用于面向切面编程的（指定用于web开发中）。</p>
+<p>在执行上，<em>filter</em>的执行靠server（例如：tomcat），<em>Interceptor</em>的执行靠Spring容器，且执行顺序方面：<em>filter</em>要早于<em>Interceptor</em>执行。</p>
+<p>在能力上，Spring项目中<em>Interceptor</em>能做到<em>filter</em>能做的且能力强于filter，因此Spring项目种要优先使用<em>filter</em>。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MyBatis的占位符</title>
     <url>/posts/daf2aad3.html</url>
     <content><![CDATA[<p>代码中访问数据库的时候，经常需要传输参数用作语句条件，这就不得不用到MyBatis提供的占位符。</p>
@@ -3341,6 +3361,61 @@
       </categories>
       <tags>
         <tag>Spring Boot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring中Bean的作用域</title>
+    <url>/posts/fcf7a352.html</url>
+    <content><![CDATA[<p>Spring中把每个组件都看作一个Bean进行管理，使用时多次请求同一个Bean，这个Bean对象究竟是同一个还是每次请求都会生成一个新的呢？这是由Bean的作用域进行控制的。</p>
+<span id="more"></span>
+
+
+
+<h1 id="5种作用域"><a href="#5种作用域" class="headerlink" title="5种作用域"></a>5种作用域</h1><p>Spring中的Bean共有5种作用域，如下图所示</p>
+<table>
+<thead>
+<tr>
+<th>作用域</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Singleton（默认）</td>
+<td>单例，在spring容器中仅存在一个bean实例</td>
+</tr>
+<tr>
+<td>Prototype</td>
+<td>多例，每次从spring容器中调用bean时，都会返回一个新的实例，即每次调用getBean时，都相当于new一个实例</td>
+</tr>
+<tr>
+<td>Request</td>
+<td>每次http请求就会创建一个新的bean</td>
+</tr>
+<tr>
+<td>Session</td>
+<td>同一个http session共享一个bean，不同session使用不同的bean</td>
+</tr>
+<tr>
+<td>Global Session</td>
+<td>用于portlet应用环境，只有portlet才定义了globalsession</td>
+</tr>
+</tbody></table>
+<p>注：Request和Session都只能用于webapplicationcontext环境中（就是常见的web开发环境）；而Global Session只能用于portlet context环境中（这个环境没见过，不太懂，请自行搜索相关资料）。</p>
+<h1 id="设置作用域"><a href="#设置作用域" class="headerlink" title="设置作用域"></a>设置作用域</h1><p>在Spring中设置Bean的作用域，是通过使用*@Scope*注解来实现的，具体使用方式如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">demo</span> </span>&#123;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体的参数如下所示，分别对应了4种作用域</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">ConfigurableBeanFactory#SCOPE_PROTOTYPE</span><br><span class="line">ConfigurableBeanFactory#SCOPE_SINGLETON</span><br><span class="line">org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST</span><br><span class="line">org.springframework.web.context.WebApplicationContext#SCOPE_SESSION</span><br></pre></td></tr></table></figure>
+
+<p><em>注意：Global Session这个作用域没有找到，不知道放在哪里！</em></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>框架</category>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
