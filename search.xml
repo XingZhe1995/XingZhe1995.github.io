@@ -144,6 +144,39 @@
       </tags>
   </entry>
   <entry>
+    <title>shadowsocks安装指南</title>
+    <url>/posts/ee1d977a.html</url>
+    <content><![CDATA[<p>有时候想访问国外的网站，但是却访问不了，这时候就需要使用代理访问的方式进行访问。<em>shadowsocks</em>就是能提供这么一种服务的工具。</p>
+<span id="more"></span>
+
+<h1 id="shadowsocks服务"><a href="#shadowsocks服务" class="headerlink" title="shadowsocks服务"></a>shadowsocks服务</h1><p>要使用shadowsocks，首先需要一台安装了shadowsokcs服务的服务器，有两种获得方法：</p>
+<ul>
+<li>购买别人的shadowsokcs服务</li>
+<li>自建shadowsokcs服务</li>
+</ul>
+<p>第一种很好理解，就是花钱买服务，优点是省心而且有多个服务器进行网速优化，但是缺点也很明显：价格偏高、市场上提供的服务质量参差不齐，且容易跑路（建议一个月一个月的买），这部分博主不太熟悉，只能读者们自己去搜索相关信息了，在这里主要说的第二种方法。</p>
+<p>要自建shadowsocks服务，先要有一台服务器，需要注意的是这台服务器一定要在国外的，起码要在香港、澳门这些地方，因为一般来说使用shadowsocks主要是访问国内无法访问的网站，所以如果服务器在国内的话就无法访问了。</p>
+<h1 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h1><p>shadowsokcs最开始是使用python进行开发的，后续有许多贡献者开发出了不同的版本，我见过的版本如下：</p>
+<ul>
+<li>shadowsocks-libev：c语言开发，内存占用少，没有多用户管理的功能，其它更多的功能不清楚，我一直用的是这个版本。</li>
+<li>shadowsocks-python：python语言开发，应该是最初的版本一直开发下来，能进行多用户管理。</li>
+<li>shadowsocks-go：go语言开发，这个没用过，请自行搜索。</li>
+</ul>
+<h1 id="一键安装脚本"><a href="#一键安装脚本" class="headerlink" title="一键安装脚本"></a>一键安装脚本</h1><p>安装shadowsocks-libev版本</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev.sh</span><br><span class="line">chmod +x shadowsocks-libev.sh</span><br><span class="line">./shadowsocks-libev.sh 2&gt;&amp;1 | tee shadowsocks-libev.log</span><br></pre></td></tr></table></figure>
+
+<p>多语言合一版（包含：libev、python、go）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh</span><br><span class="line">chmod +x shadowsocks-all.sh</span><br><span class="line">./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>shadowsocks</category>
+      </categories>
+      <tags>
+        <tag>shadowsocks</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客之2019</title>
     <url>/posts/87daa986.html</url>
     <content><![CDATA[<p>2019年的第三个月即将过去了，现在才写这篇文章好像迟了一点，不过种一棵树最好的时间是十年前，其次是现在，这样子安慰自己的话，好像还不算晚。</p>
@@ -214,6 +247,51 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AQS</title>
+    <url>/posts/dfdb52be.html</url>
+    <content><![CDATA[<p>AQS即同步器，用于构建锁和同步器的抽象类，使用AQS能简单且高效地构建出应用广泛的大量的同步器。</p>
+<span id="more"></span>
+
+
+
+<h1 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h1><p>AQS核心思想：如果被请求的共享资源空闲，则把当前请求的线程设置为有效的线程，并且把共享资源的状态设置为锁定。如果被请求的共享资源被占用，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制是用CLH队列锁实现的，即将暂时获取不到锁的线程加入到队列中。</p>
+<h2 id="关键成员变量state"><a href="#关键成员变量state" class="headerlink" title="关键成员变量state"></a>关键成员变量state</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state; <span class="comment">//共享变量，使用volatile修饰保证线程可见性</span></span><br></pre></td></tr></table></figure>
+
+<p>AQS通过volatile int成员变量<strong>state</strong>来标识同步状态，使用CAS对该同步状态进行原子操作实现值的修改。通过FIFO队列来完成获取资源线程的排队工作</p>
+<h2 id="CLH队列"><a href="#CLH队列" class="headerlink" title="CLH队列"></a>CLH队列</h2><p>CLH（Craig,Landin,and Hagersten）队列是一个虚拟的双向队列，即不存在队列实例，仅存在节点间的关联关系。AQS把每条请求共享资源的线程封装成一个CLH锁队列的一个节点来实现锁的分配。</p>
+<h1 id="独占和共享"><a href="#独占和共享" class="headerlink" title="独占和共享"></a>独占和共享</h1><p>AQS定义了两种资源共享的方式：独占（只有一个线程能够执行）、共享（多个线程可以同时执行）。</p>
+<p>独占可以分为公平锁和非公平锁</p>
+<ul>
+<li>公平锁：按照线程在队列中的顺序，先到者先拿到锁；</li>
+<li>非公平锁：无视队列顺序，谁抢到就是谁的。</li>
+</ul>
+<h2 id="两对方法"><a href="#两对方法" class="headerlink" title="两对方法"></a>两对方法</h2><p>使用AQS实现自己的锁，依据资源的共享方式，需要实现不同的方法。</p>
+<p>资源共享的方式为<strong>独占</strong>，则需要实现的方法如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">tryAcquire(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>尝试获取资源，成功则返回true，失败则返回false。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">tryRelease(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>尝试释放资源，成功则返回true，失败则返回false。</p>
+<p>资源共享的方式为<strong>共享</strong>，需要实现的方法如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">tryAcquireShared(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">tryReleaseShared(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>尝试释放资源，成功则返回true，失败则返回false。</p>
+<p>*<em>总结：独占模式下主要实现：</em>tryAcquire()<em>和</em>tryRelease()<em>方法，共享模式下主要实现</em>tryAcquireAndShared()<em>和</em>tryReleaseShared()<em>方法，这些方法一般都是成对使用，但也有同时实现使用情形，例如：ReentrantReadWriteLock。</em>*</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+        <category>编程语言</category>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
