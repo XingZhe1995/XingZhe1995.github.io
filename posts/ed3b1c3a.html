@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#222">
+  <meta name="google-site-verification" content="cCGIgodGvlMoVATcXs4p7kl8BVhmqW8u1kcPBZfD2qw">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.izhixing.icu","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="Redis常用命令汇总。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis常用命令">
+<meta property="og:url" content="https://blog.izhixing.icu/posts/ed3b1c3a.html">
+<meta property="og:site_name" content="知行">
+<meta property="og:description" content="Redis常用命令汇总。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-07T04:59:05.000Z">
+<meta property="article:modified_time" content="2021-04-07T05:53:39.488Z">
+<meta property="article:author" content="知行">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.izhixing.icu/posts/ed3b1c3a.html">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>Redis常用命令 | 知行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135887327-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-135887327-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">知行</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="知行"
+      src="/images/apple-touch-icon.png">
+  <p class="site-author-name" itemprop="name">知行</p>
+  <div class="site-description" itemprop="description">韭零后一枚，技术菜鸟，喜欢做白日梦，热爱修仙，任职于一小公司里撸代码。</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/izhixing" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;izhixing" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3137650480@qq.com" title="E-Mail → mailto:3137650480@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/izhixing" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.izhixing.icu/posts/ed3b1c3a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/apple-touch-icon.png">
+      <meta itemprop="name" content="知行">
+      <meta itemprop="description" content="韭零后一枚，技术菜鸟，喜欢做白日梦，热爱修仙，任职于一小公司里撸代码。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="知行">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis常用命令
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-04-07 12:59:05 / 修改时间：13:53:39" itemprop="dateCreated datePublished" datetime="2021-04-07T12:59:05+08:00">2021-04-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E7%BC%93%E5%AD%98/" itemprop="url" rel="index"><span itemprop="name">缓存</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E7%BC%93%E5%AD%98/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/posts/ed3b1c3a.html" class="post-meta-item leancloud_visitors" data-flag-title="Redis常用命令" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Redis常用命令汇总。</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">键命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">DEL key</td>
+<td align="left">该命令用于在 key 存在时删除 key</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">DUMP key</td>
+<td align="left">序列化给定 key ，并返回被序列化的值</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">EXISTS key</td>
+<td align="left">检查给定 key 是否存在</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">EXPIRE key seconds</td>
+<td align="left">为给定 key 设置过期时间，以秒计</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">EXPIREAT key timestamp</td>
+<td align="left">EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳(unix timestamp)</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">PEXPIRE key milliseconds</td>
+<td align="left">设置 key 的过期时间以毫秒计</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">PEXPIREAT key milliseconds-timestamp</td>
+<td align="left">设置 key 过期时间的时间戳(unix timestamp) 以毫秒计</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">KEYS pattern</td>
+<td align="left">查找所有符合给定模式( pattern)的 key</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">MOVE key db</td>
+<td align="left">将当前数据库的 key 移动到给定的数据库 db 当中</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="left">PERSIST key</td>
+<td align="left">移除 key 的过期时间，key 将持久保持</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="left">TTL key</td>
+<td align="left">以秒为单位，返回给定 key 的剩余生存时间(TTL, time to live)</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="left">PTTL key</td>
+<td align="left">以毫秒为单位返回 key 的剩余的过期时间</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="left">RANDOMKEY</td>
+<td align="left">从当前数据库中随机返回一个 key</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="left">RENAME key newkey</td>
+<td align="left">修改 key 的名称</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="left">RENAMENX key newkey</td>
+<td align="left">仅当 newkey 不存在时，将 key 改名为 newkey</td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="left">TYPE key</td>
+<td align="left">返回 key 所储存的值的类型</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">字符串命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">SET key value</td>
+<td align="left">设置指定 key 的值</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">GET key</td>
+<td align="left">获取指定 key 的值</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">GETRANGE key start end</td>
+<td align="left">返回 key 中字符串值的子字符</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">GETSET key value</td>
+<td align="left">将给定 key 的值设为 value ，并返回 key 的旧值(old value)</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">GETBIT key offset</td>
+<td align="left">对 key 所储存的字符串值，获取指定偏移量上的位(bit)</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">MGET key1 [key2..]</td>
+<td align="left">获取所有(一个或多个)给定 key 的值</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">SETBIT key offset value</td>
+<td align="left">对 key 所储存的字符串值，设置或清除指定偏移量上的位(bit)</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">SETEX key seconds value</td>
+<td align="left">将值 value 关联到 key ，并将 key 的过期时间设为 seconds (以秒为单位)</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">SETNX key value</td>
+<td align="left">只有在 key 不存在时设置 key 的值</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="left">SETRANGE key offset value</td>
+<td align="left">用 value 参数覆写给定 key 所储存的字符串值，从偏移量 offset 开始</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="left">STRLEN key</td>
+<td align="left">返回 key 所储存的字符串值的长度</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="left">MSET key value [key value …]</td>
+<td align="left">同时设置一个或多个 key-value 对</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="left">MSETNX key value [key value …]</td>
+<td align="left">同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="left">PSETEX key milliseconds value</td>
+<td align="left">这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="left">INCR key</td>
+<td align="left">将 key 中储存的数字值增一</td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="left">INCRBY key increment</td>
+<td align="left">将 key 所储存的值加上给定的增量值（increment）</td>
+</tr>
+<tr>
+<td align="center">17</td>
+<td align="left">NCRBYFLOAT key increment</td>
+<td align="left">将 key 所储存的值加上给定的浮点增量值（increment）</td>
+</tr>
+<tr>
+<td align="center">18</td>
+<td align="left">DECR key</td>
+<td align="left">将 key 中储存的数字值减一</td>
+</tr>
+<tr>
+<td align="center">19</td>
+<td align="left">DECRBY key decrement</td>
+<td align="left">key 所储存的值减去给定的减量值（decrement）</td>
+</tr>
+<tr>
+<td align="center">20</td>
+<td align="left">APPEND key value</td>
+<td align="left">如果 key 已经存在并且是一个字符串， APPEND 命令将指定的 value 追加到该 key 原来值（value）的末尾</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">哈希命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">HDEL key field1 [field2]</td>
+<td align="left">删除一个或多个哈希表字段</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">HEXISTS key field</td>
+<td align="left">查看哈希表 key 中，指定的字段是否存在</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">HGET key field</td>
+<td align="left">获取存储在哈希表中指定字段的值</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">HGETALL key</td>
+<td align="left">获取在哈希表中指定 key 的所有字段和值</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">HINCRBY key field increment</td>
+<td align="left">为哈希表 key 中的指定字段的整数值加上增量 increment</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">HINCRBYFLOAT key field increment</td>
+<td align="left">为哈希表 key 中的指定字段的浮点数值加上增量 increment</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">HKEYS key</td>
+<td align="left">获取所有哈希表中的字段</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">HLEN key</td>
+<td align="left">获取哈希表中字段的数量</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">HMGET key field1 [field2]</td>
+<td align="left">获取所有给定字段的值</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="left">HMSET key field1 value1 [field2 value2 ]</td>
+<td align="left">同时将多个 field-value (域-值)对设置到哈希表 key 中</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="left">HSET key field value</td>
+<td align="left">将哈希表 key 中的字段 field 的值设为 value</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="left">HSETNX key field value</td>
+<td align="left">只有在字段 field 不存在时，设置哈希表字段的值</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="left">HVALS key</td>
+<td align="left">获取哈希表中所有值</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="left">HSCAN key cursor [MATCH pattern] [COUNT count]</td>
+<td align="left">迭代哈希表中的键值对</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">列表命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">BLPOP key1 [key2 ] timeout</td>
+<td align="left">移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">BRPOP key1 [key2 ] timeout</td>
+<td align="left">移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">BRPOPLPUSH source destination timeout</td>
+<td align="left">从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">LINDEX key index</td>
+<td align="left">通过索引获取列表中的元素</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">LINSERT key BEFORE&#124;AFTER pivot value</td>
+<td align="left">在列表的元素前或者后插入元素</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">LLEN key</td>
+<td align="left">获取列表长度</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">LPOP key</td>
+<td align="left">移出并获取列表的第一个元素</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">LPUSH key value1 [value2]</td>
+<td align="left">将一个或多个值插入到列表头部</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">LPUSHX key value</td>
+<td align="left">将一个值插入到已存在的列表头部</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="left">LRANGE key start stop</td>
+<td align="left">获取列表指定范围内的元素</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="left">LREM key count value</td>
+<td align="left">根据参数 COUNT 的值，移除列表中与参数 VALUE 相等的元素。<br/>COUNT 的值可以是以下几种：<br/>count &gt; 0 : 从表头开始向表尾搜索，移除与 VALUE 相等的元素，数量为 COUNT ；<br/>count &lt; 0 : 从表尾开始向表头搜索，移除与 VALUE 相等的元素，数量为 COUNT 的绝对值；<br/>count = 0 : 移除表中所有与 VALUE 相等的值。</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="left">LSET key index value</td>
+<td align="left">通过索引设置列表元素的值</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="left">LTRIM key start stop</td>
+<td align="left">对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="left">RPOP key</td>
+<td align="left">移除列表的最后一个元素，返回值为移除的元素</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="left">RPOPLPUSH source destination</td>
+<td align="left">移除列表的最后一个元素，并将该元素添加到另一个列表并返回</td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="left">RPUSH key value1 [value2]</td>
+<td align="left">在列表中添加一个或多个值</td>
+</tr>
+<tr>
+<td align="center">17</td>
+<td align="left">RPUSHX key value</td>
+<td align="left">为已存在的列表添加值</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">集合命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">SADD key member1 [member2]</td>
+<td align="left">向集合添加一个或多个成员</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">SCARD key</td>
+<td align="left">获取集合的成员数</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">SDIFF key1 [key2]</td>
+<td align="left">返回给定所有集合的差集</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">SDIFFSTORE destination key1 [key2]</td>
+<td align="left">返回给定所有集合的差集并存储在 destination 中</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">SINTER key1 [key2]</td>
+<td align="left">返回给定所有集合的交集</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">SINTERSTORE destination key1 [key2]</td>
+<td align="left">返回给定所有集合的交集并存储在 destination 中</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">SISMEMBER key member</td>
+<td align="left">判断 member 元素是否是集合 key 的成员</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">SMEMBERS key</td>
+<td align="left">返回集合中的所有成员</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">SMOVE source destination member</td>
+<td align="left">将 member 元素从 source 集合移动到 destination 集合</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="left">SPOP key</td>
+<td align="left">移除并返回集合中的一个随机元素</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="left">SRANDMEMBER key [count]</td>
+<td align="left">返回集合中一个或多个随机数</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="left">SREM key member1 [member2]</td>
+<td align="left">移除集合中一个或多个成员</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="left">SUNION key1 [key2]</td>
+<td align="left">返回所有给定集合的并集</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="left">SUNIONSTORE destination key1 [key2]</td>
+<td align="left">所有给定集合的并集存储在 destination 集合中</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="left">SSCAN key cursor [MATCH pattern] [COUNT count]</td>
+<td align="left">迭代集合中的元素</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">有序集合命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">ZADD key score1 member1 [score2 member2]</td>
+<td align="left">向有序集合添加一个或多个成员，或者更新已存在成员的分数</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">ZCARD key</td>
+<td align="left">获取有序集合的成员数</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">ZCOUNT key min max</td>
+<td align="left">计算在有序集合中指定区间分数的成员数</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">ZINCRBY key increment member</td>
+<td align="left">有序集合中对指定成员的分数加上增量 increment</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">ZINTERSTORE destination numkeys key [key …]</td>
+<td align="left">计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">ZLEXCOUNT key min max</td>
+<td align="left">在有序集合中计算指定字典区间内成员数量</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">ZRANGE key start stop [WITHSCORES]</td>
+<td align="left">通过索引区间返回有序集合成指定区间内的成员</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">ZRANGEBYLEX key min max [LIMIT offset count]</td>
+<td align="left">通过字典区间返回有序集合的成员</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]</td>
+<td align="left">通过分数返回有序集合指定区间内的成员</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="left">ZRANK key member</td>
+<td align="left">返回有序集合中指定成员的索引</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="left">ZREM key member [member …]</td>
+<td align="left">移除有序集合中的一个或多个成员</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="left">ZREMRANGEBYLEX key min max</td>
+<td align="left">移除有序集合中给定的字典区间的所有成员</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="left">ZREMRANGEBYRANK key start stop</td>
+<td align="left">移除有序集合中给定的排名区间的所有成员</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="left">ZREMRANGEBYSCORE key min max</td>
+<td align="left">移除有序集合中给定的分数区间的所有成员</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="left">ZREVRANGE key start stop [WITHSCORES]</td>
+<td align="left">返回有序集中指定区间内的成员，通过索引，分数从高到底</td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="left">ZREVRANGEBYSCORE key max min [WITHSCORES]</td>
+<td align="left">返回有序集中指定分数区间内的成员，分数从高到低排序</td>
+</tr>
+<tr>
+<td align="center">17</td>
+<td align="left">ZREVRANK key member</td>
+<td align="left">返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序</td>
+</tr>
+<tr>
+<td align="center">18</td>
+<td align="left">ZSCORE key member</td>
+<td align="left">返回有序集中，成员的分数值</td>
+</tr>
+<tr>
+<td align="center">19</td>
+<td align="left">ZUNIONSTORE destination numkeys key [key …]</td>
+<td align="left">计算给定的一个或多个有序集的并集，并存储在新的 key 中</td>
+</tr>
+<tr>
+<td align="center">20</td>
+<td align="left">ZSCAN key cursor [MATCH pattern] [COUNT count]</td>
+<td align="left">迭代有序集合中的元素（包括元素成员和元素分值）</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/d2906cb4.html" rel="prev" title="修改Linux网络配置">
+                  <i class="fa fa-chevron-left"></i> 修改Linux网络配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/d703ab8b.html" rel="next" title="SQL语言分类">
+                  SQL语言分类 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">知行</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      const visitors = document.querySelector('.leancloud_visitors');
+      const url = decodeURI(visitors.id);
+      const title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            const counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      const visitors = document.querySelectorAll('.leancloud_visitors');
+      const entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            const target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    const { app_id, app_key, server_url } = {"enable":true,"app_id":"EVuNVQdwjVVETLVOGGdClySN-gzGzoHsz","app_key":"UBIufuTIEV1gHcdJIx6IOmyN","server_url":null,"security":true};
+    function fetchData(api_server) {
+      const Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    const api_server = app_id.slice(-9) === '-MdYXbMMI' ? `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com` : server_url;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+  
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '37644037ac52d12cdd8a',
+      clientSecret: '09993925bc5a09337e2d13cc1225761ca099d39b',
+      repo        : 'izhixing.github.io',
+      owner       : 'izhixing',
+      admin       : ['izhixing'],
+      id          : '9fac120b41b0a0f199eb8f4762053f62',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
