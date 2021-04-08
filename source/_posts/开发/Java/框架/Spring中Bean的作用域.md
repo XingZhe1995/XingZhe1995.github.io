@@ -3,6 +3,8 @@ title: Spring中Bean的作用域
 tags:
   - Spring
 categories:
+  - 开发
+  - 编程语言
   - Java
   - 框架
   - Spring
