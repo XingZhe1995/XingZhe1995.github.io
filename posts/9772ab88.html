@@ -24,21 +24,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"blog.izhixing.icu","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="MyBatis提供了强大的事务性查询缓存机制，用于提高查询性能！">
+<meta name="description" content="数据库操作中事务是必不可少的，而在Spring框架中提供了7种事务传播机制。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MyBatis缓存机制">
-<meta property="og:url" content="https://blog.izhixing.icu/posts/201dbebe.html">
+<meta property="og:title" content="Spring事务传播机制">
+<meta property="og:url" content="https://blog.izhixing.icu/posts/9772ab88.html">
 <meta property="og:site_name" content="知行">
-<meta property="og:description" content="MyBatis提供了强大的事务性查询缓存机制，用于提高查询性能！">
+<meta property="og:description" content="数据库操作中事务是必不可少的，而在Spring框架中提供了7种事务传播机制。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-03T14:31:18.000Z">
+<meta property="article:published_time" content="2021-04-08T13:57:44.000Z">
 <meta property="article:modified_time" content="2021-04-08T14:00:10.139Z">
 <meta property="article:author" content="知行">
-<meta property="article:tag" content="MyBatis">
+<meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://blog.izhixing.icu/posts/201dbebe.html">
+<link rel="canonical" href="https://blog.izhixing.icu/posts/9772ab88.html">
 
 
 <script class="page-configurations">
@@ -50,7 +50,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>MyBatis缓存机制 | 知行</title>
+<title>Spring事务传播机制 | 知行</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135887327-1"></script>
     <script>
@@ -197,7 +197,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">本地缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="nav-number">2.</span> <span class="nav-text">二级缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD"><span class="nav-number">1.</span> <span class="nav-text">事务传播</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7%E7%A7%8D%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">7种事务传播机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NEVER"><span class="nav-number">2.1.</span> <span class="nav-text">NEVER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRED"><span class="nav-number">2.2.</span> <span class="nav-text">REQUIRED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRED-NEW"><span class="nav-number">2.3.</span> <span class="nav-text">REQUIRED_NEW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MANDATORY"><span class="nav-number">2.4.</span> <span class="nav-text">MANDATORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUPPORTS"><span class="nav-number">2.5.</span> <span class="nav-text">SUPPORTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-SUPPORTED"><span class="nav-number">2.6.</span> <span class="nav-text">NOT_SUPPORTED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NETSTED"><span class="nav-number">2.7.</span> <span class="nav-text">NETSTED</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -275,7 +275,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.izhixing.icu/posts/201dbebe.html">
+    <link itemprop="mainEntityOfPage" href="https://blog.izhixing.icu/posts/9772ab88.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/apple-touch-icon.png">
@@ -288,7 +288,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          MyBatis缓存机制
+          Spring事务传播机制
         </h1>
 
         <div class="post-meta-container">
@@ -298,16 +298,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-04-03 22:31:18" itemprop="dateCreated datePublished" datetime="2021-04-03T22:31:18+08:00">2021-04-03</time>
+      <time title="创建时间：2021-04-08 21:57:44 / 修改时间：22:00:10" itemprop="dateCreated datePublished" datetime="2021-04-08T21:57:44+08:00">2021-04-08</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-04-08 22:00:10" itemprop="dateModified" datetime="2021-04-08T22:00:10+08:00">2021-04-08</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -330,12 +324,12 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E6%A1%86%E6%9E%B6/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E6%A1%86%E6%9E%B6/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
         </span>
     </span>
 
   
-    <span id="/posts/201dbebe.html" class="post-meta-item leancloud_visitors" data-flag-title="MyBatis缓存机制" title="阅读次数">
+    <span id="/posts/9772ab88.html" class="post-meta-item leancloud_visitors" data-flag-title="Spring事务传播机制" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -351,18 +345,82 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>MyBatis提供了强大的事务性查询缓存机制，用于提高查询性能！</p>
+        <p>数据库操作中事务是必不可少的，而在Spring框架中提供了7种事务传播机制。</p>
 <span id="more"></span>
 
 
 
-<p>MyBatis的缓存分为：本地缓存和二级缓存，另外还可以实现自己的缓存或者使用第三方的缓存机制。</p>
-<h1 id="本地缓存"><a href="#本地缓存" class="headerlink" title="本地缓存"></a>本地缓存</h1><p>MyBatis默认开启本地缓存，且无法手动关闭。</p>
-<p>本地缓存属于会话级别的（sqlsession），生命周期与sqlsession一致，只对同一个sqlsession有效，不同sqlsession之间不共享缓存，</p>
-<p>任何的修改操作（insert、update、delete）都会导致缓存清除，也可以通过配置使得查询前清空缓存。</p>
-<h1 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a>二级缓存</h1><p>二级缓存默认关闭，需要手动开启。</p>
-<p>二级缓存属于全局级别的（sqlsessionfactory），能够跨会话访问，弥补本地缓存无法跨会话访问的缺陷，开启后缓存使用时是先访问二级缓存再访问一级缓存。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于MyBatis的缓存机制只是流于表面，还没有更多的深入了解，且实现自己的缓存或使用第三方缓存机制这些也没有涉略，因此该篇文章仅做记录用。</p>
+<h1 id="事务传播"><a href="#事务传播" class="headerlink" title="事务传播"></a>事务传播</h1><p>什么是事务传播？</p>
+<p>以*@Transaction*注解的方法表示要使用事务，当多个这样的事务方法相互调用时，事务在这些方法间如何传播，一个方法有没有事务以及对事务的要求，会影响另一个事务方法的调用或者被调用的执行，这种影响是由事务传播类型决定。</p>
+<h1 id="7种事务传播机制"><a href="#7种事务传播机制" class="headerlink" title="7种事务传播机制"></a>7种事务传播机制</h1><table>
+<thead>
+<tr>
+<th>传播类型</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NEVER</td>
+<td>不使用事务，如果当前事务存在，则抛出异常</td>
+</tr>
+<tr>
+<td>REQUIRED（默认）</td>
+<td>如果当前没有事务，则自己新建一个事务，如果当前存在事务，则加入这个事务</td>
+</tr>
+<tr>
+<td>REQUIRES_NEW</td>
+<td>创建一个新事务，如果存在当前事务，则挂起该事务</td>
+</tr>
+<tr>
+<td>MANDATORY</td>
+<td>当前存在事务，则加入当前事务，如果当前事务不存在，则抛出异常</td>
+</tr>
+<tr>
+<td>SUPPORTS</td>
+<td>当前存在事务，则加入当前事务，如果当前没有事务，就以非事务方法执行</td>
+</tr>
+<tr>
+<td>NOT_SUPPORTED</td>
+<td>始终以非事务方式执行，如果当前存在事务，则挂起当前事务</td>
+</tr>
+<tr>
+<td>NESTED</td>
+<td>如果当前事务存在，则在嵌套事务中执行，否则REQUIRED的操作一样（开启一个事务）</td>
+</tr>
+</tbody></table>
+<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><p>不支持事务，机制是：如果当前存在事务或者被事务操作（即被带有事务方法调用或者调用带有事务的方法），就会抛出异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoService</span> </span>&#123;</span><br><span class="line">    ......</span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">        demoService.methodB(); <span class="comment">//抛出异常</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional(propagation = Propagation.NEVER)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional(propagation = Propagation.NEVER)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodC</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">        demoService.methodD(); <span class="comment">//抛出异常</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodD</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><p>支持事务，默认的事务传播机制，如果当前没有事务，则自己新建一个事务，如果当前存在事务，则加入这个事务。</p>
+<p>即事务方法必须运行在事务中，且事务是一个整体，要么一起提交，要么一起回滚。</p>
+<h2 id="REQUIRED-NEW"><a href="#REQUIRED-NEW" class="headerlink" title="REQUIRED_NEW"></a>REQUIRED_NEW</h2><p>支持事务，机制是：创建一个新事务，如果存在当前事务，则挂起该事务。</p>
+<p>即存在两个事务，调用方的外层事务，被调用方的内层事务。内层事务的执行与外层事务无关，内层事务如果因异常回滚，外层事务方法中需要看情况进行异常捕获处理，如果处理则外层事务不会回滚，如果没处理则内外事务一起回滚。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoService</span> </span>&#123;</span><br><span class="line">    ......</span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">        demoService.methodB(); <span class="comment">//methodA()的事务挂起，methodB()新建一个事务</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional(propagation = Propagation.REQUIRED_NEW)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodC</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">        demoService.methodD();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional(propagation = Propagation.REQUIRED_NEW)</span> <span class="comment">//创建一个新事务</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">methodD</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><p>强制要求事务，机制是：当前存在事务，则加入当前事务，如果当前事务不存在，则抛出异常。</p>
+<p>即事务方法必须运行在事务中，且不会自己创建事务，只能加入已有的事务，事务是一个整体，要么一起提交，要么一起回滚。</p>
+<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><p>支持事务，机制是：当前存在事务，则加入当前事务，如果当前没有事务，就以非事务方法执行</p>
+<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><p>不支持事务，机制是：始终以非事务方式执行，如果当前存在事务，则挂起当前事务。</p>
+<p>即使用该种事务传播机制的事务方法，永远不会使用事务，但不会影响调用方的事务。</p>
+<h2 id="NETSTED"><a href="#NETSTED" class="headerlink" title="NETSTED"></a>NETSTED</h2><p>嵌套事务，机制是：如果当前事务存在，则在嵌套事务中执行，否则REQUIRED的操作一样（开启一个事务）。</p>
+<p>即存在两个事务，调用方的外层事务，被调用方的嵌套事务（子事务），需要注意的有：</p>
+<ol>
+<li><p>外层事务会影响嵌套事务，嵌套事务结束需要等待外层事务的操作结果，外层事务回滚或提交，嵌套事务也会跟着回滚或提交。</p>
+</li>
+<li><p>相反，外层事务不会受到嵌套事务的影响，嵌套事务是独立回滚的，外层事务不会受到影响，即嵌套事务的异常，外层事务可以选择回滚（不捕获处理）或者回滚（捕获处理）。</p>
+<p>注：这个嵌套事务回滚不影响外层事务的特性是有前提的，否则内外都回滚。</p>
+<p>使用前提：</p>
+<ul>
+<li>JDK版本要在1.4以上，有java.sql.Savepoint。因为nested就是用savepoint来实现的。</li>
+<li>事务管理器的nestedTransactionAllowed属性为true。</li>
+<li>外层事务方法try-catch嵌套事务方法的异常。</li>
+</ul>
+</li>
+</ol>
 
     </div>
 
@@ -372,20 +430,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/MyBatis/" rel="tag"># MyBatis</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/posts/36fb1fe.html" rel="prev" title="Git常见使用问题">
-                  <i class="fa fa-chevron-left"></i> Git常见使用问题
+                <a href="/posts/ba4518b0.html" rel="prev" title="Spring事务失效">
+                  <i class="fa fa-chevron-left"></i> Spring事务失效
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/posts/daf2aad3.html" rel="next" title="MyBatis的占位符">
-                  MyBatis的占位符 <i class="fa fa-chevron-right"></i>
+                <a href="/posts/58f9dd24.html" rel="next" title="Python之Matplotlib">
+                  Python之Matplotlib <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -559,7 +617,7 @@ NexT.utils.loadComments('.gitalk-container', () => {
       repo        : 'izhixing.github.io',
       owner       : 'izhixing',
       admin       : ['izhixing'],
-      id          : '343f5061f664ec5e1750710f313c3759',
+      id          : 'fcc1ee3f98db883436ffdc9a4ecea7ad',
       proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
         language: '',
       distractionFreeMode: true
