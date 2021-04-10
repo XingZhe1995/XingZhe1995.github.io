@@ -231,7 +231,7 @@ scoop config rm 配置名
 有时候在国内下载速度慢，可以通过设置代理来提高下载速度。
 
 ``` shell
-scoop config proxy '127.0.0.1:8080'
+scoop config proxy '127.0.0.1:1080'
 ```
 
 这里只列举了我知道的方式，还有其它的设置代理方式[Configuring Scoop to use your proxy](https://github.com/lukesampson/scoop/wiki/Using-Scoop-behind-a-proxy)
@@ -258,15 +258,7 @@ aria2-max-connection-per-server (default: 5) # 同时下载的线程数
 aria2-min-split-size (default: 5M)
 ```
 
-也可以自己进行参数设置
-
-``` shell
-scoop config aria2-max-connection-per-server 16
-scoop config aria2-split 16
-scoop config aria2-min-split-size 1M
-```
-
-具体的参考[Multi-connection downloads with `aria2`](https://scoop-docs.now.sh/docs/misc/Multi-connection-downloads-with-aria2.html)
+当然也可以自己进行参数设置，具体的参考[Multi-connection downloads with `aria2`](https://scoop-docs.now.sh/docs/misc/Multi-connection-downloads-with-aria2.html)
 
 
 
