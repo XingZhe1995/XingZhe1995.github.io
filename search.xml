@@ -105,7 +105,7 @@
 
 
 <h2 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h2><p>有时候在国内下载速度慢，可以通过设置代理来提高下载速度。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config proxy &#x27;127.0.0.1:8080&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config proxy &#x27;127.0.0.1:1080&#x27;</span><br></pre></td></tr></table></figure>
 
 <p>这里只列举了我知道的方式，还有其它的设置代理方式<a href="https://github.com/lukesampson/scoop/wiki/Using-Scoop-behind-a-proxy">Configuring Scoop to use your proxy</a></p>
 <h1 id="配置aria2下载加速"><a href="#配置aria2下载加速" class="headerlink" title="配置aria2下载加速"></a>配置aria2下载加速</h1><p>单纯的使用scoop下载速度可能不够快，这时候可以用scoop下载aria2来进一步提高下载速度，scoop会自动调用下载的aria2（注：一定要用scoop安装）</p>
@@ -115,10 +115,7 @@
 <p>本身有默认参数值</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">aria2-enabled (default: true) # 是否使用aria2加速下载，开启true，关闭false</span><br><span class="line">aria2-retry-wait (default: 2)</span><br><span class="line">aria2-split (default: 5)</span><br><span class="line">aria2-max-connection-per-server (default: 5) # 同时下载的线程数</span><br><span class="line">aria2-min-split-size (default: 5M)</span><br></pre></td></tr></table></figure>
 
-<p>也可以自己进行参数设置</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop config aria2-max-connection-per-server 16</span><br><span class="line">scoop config aria2-split 16</span><br><span class="line">scoop config aria2-min-split-size 1M</span><br></pre></td></tr></table></figure>
-
-<p>具体的参考<a href="https://scoop-docs.now.sh/docs/misc/Multi-connection-downloads-with-aria2.html">Multi-connection downloads with <code>aria2</code></a></p>
+<p>当然也可以自己进行参数设置，具体的参考<a href="https://scoop-docs.now.sh/docs/misc/Multi-connection-downloads-with-aria2.html">Multi-connection downloads with <code>aria2</code></a></p>
 <h1 id="设置不同的开发环境版本"><a href="#设置不同的开发环境版本" class="headerlink" title="设置不同的开发环境版本"></a>设置不同的开发环境版本</h1><p>做程序开发的对于同一个开发环境可能需要安装不同的版本，例如：Java8和Java11、python2和python3，如果由自己做环境控制，就很麻烦了，通过scoop可以轻易的进行切换</p>
 <p>假设我安装了jdk8和jdk11</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scoop list</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 下面显示的是已安装的软件列表</span></span><br><span class="line">......</span><br><span class="line">openjdk11 11.0.2-9 </span><br><span class="line">openjdk8-redhat 8u282-b08</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
@@ -2988,6 +2985,78 @@
       </categories>
       <tags>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>索引失效</title>
+    <url>/posts/6df5e6f5.html</url>
+    <content><![CDATA[<p>索引是数据库中提高查询性能必不可少的一环，当SQL语句中使用不当时会导致索引失效，现在把知道的导致索引失效的原因记录下来。</p>
+<span id="more"></span>
+
+
+
+<h1 id="不使用索引"><a href="#不使用索引" class="headerlink" title="不使用索引"></a>不使用索引</h1><p>表中建立了索引，但是完全不会使用索引的情况</p>
+<ul>
+<li><p>当没有查询条件时，是获取全表的数据，因此是直接走的全表扫描</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test</span><br></pre></td></tr></table></figure></li>
+<li><p>提示不使用索引，当SQL语句中明确指定不使用某个列上的索引的话，数据库也是不会使用该索引的，<em>idx_col</em>指代某个建立了索引的索引列</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test ignore index(idx_col)</span><br></pre></td></tr></table></figure></li>
+<li><p>查询条件没有建立索引</p>
+</li>
+<li><p>查询条件没有使用到索引列</p>
+</li>
+</ul>
+<h1 id="索引失效"><a href="#索引失效" class="headerlink" title="索引失效"></a>索引失效</h1><p>表中建立了索引，查询条件中也有索引列，但是索引依然失效的几种情况</p>
+<ul>
+<li><p>（重要）数据库引擎cost成本分析走索引的成本更高，认为全表扫描好过使用索引，可能出现的场景：表的数据量过少、索引建立不合理导致通过索引查询出来的数据太多</p>
+</li>
+<li><p>索引列上做操作</p>
+<ul>
+<li><p>索引列进行了数学运算</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> id <span class="operator">+</span> <span class="number">1</span> <span class="operator">=</span> <span class="number">1997</span></span><br></pre></td></tr></table></figure></li>
+<li><p>索引列使用了函数</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> name <span class="operator">=</span> <span class="built_in">upper</span>(name)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>查询条件中，索引列的类型和传入的参数类型不一致，需要类型转换，例如：索引列id类型是int，但传入的参数类型是char；字符串条件没有使用引号</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> id <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> name <span class="operator">=</span> <span class="number">999</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>复合索引未符合最左匹配原则，例如：符合索引由A、B、C三个列组成，但查询时where条件中没有A列的条件</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> b <span class="operator">=</span> param_b <span class="keyword">and</span> c <span class="operator">=</span> param_c</span><br></pre></td></tr></table></figure></li>
+<li><p>索引列中的模糊搜索like以通配符*%*开头，类似于查字典中按偏旁查找但是不记得第一个偏旁一样，是无从下手找不到的</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;%abc&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>相反如果是以通配符*%*结尾是会走索引的</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;abc%&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>使用了不等于（!=、&lt;&gt;），MySQL中使用不等于（!=、&lt;&gt;）时无法使用索引，但覆盖索引除外</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> age <span class="operator">!=</span> <span class="number">20</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> age <span class="operator">&lt;&gt;</span> <span class="number">20</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>IS NULL、IS NOT NULL条件</p>
+<p>IS NULL、IS NOT NULL都是可以走索引的，主要和数据库引擎分析得出的成本有关，成本低就走，成本高就不走。</p>
+<p>注：MySQL中的二级索引是会记录空值的，空值放在B+树的最左侧，</p>
+</li>
+<li><p>查询条件中包含or（尽量少用）</p>
+<ul>
+<li><p>or左右两则的索引列相同（命中同一个索引列），在较早期的版本是不走索引的，但是在新的版本（8.0）是走索引的（索引合并）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">199</span> <span class="keyword">or</span> id <span class="operator">=</span> <span class="number">200</span></span><br></pre></td></tr></table></figure></li>
+<li><p>or左右两则的索引列不相同或者有一则不是索引列，是不会走索引的</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> key1 <span class="operator">=</span> <span class="number">199</span> <span class="keyword">or</span> key2 <span class="operator">=</span> <span class="string">&#x27;demo&#x27;</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> key1 <span class="operator">=</span> <span class="number">199</span> <span class="keyword">or</span> col <span class="operator">=</span> <span class="string">&#x27;demo&#x27;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>IN条件</p>
+<p>在MySQL4.0以下是不走索引的，在4.1版本以上才走索引，但是如果<em>IN</em>后面跟的条件太多可能会不走索引，用的时候最后看一下执行计划</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> id <span class="keyword">in</span> (<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>); #走索引</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test <span class="keyword">where</span> id <span class="keyword">in</span> (<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>......); #条件太多可能不走索引</span><br></pre></td></tr></table></figure></li>
+<li><p>NOT IN条件</p>
+<p>查询提条件中包含NOT IN是不会走索引的，可以这样理解：不知道一条数据是不是NOT IN条件，只能查出来再判断，因此是不走索引的。</p>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>MySQL下索引失效的情况比较复杂，特别是查询条件中的or、in、not in、exists、not exists，因此用explain看一下执行计划比较稳当。上面写的可能也不是全对的，后面再深入了解一下，回头再完善。</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+        <category>数据库</category>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
